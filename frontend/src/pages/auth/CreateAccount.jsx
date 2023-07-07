@@ -20,7 +20,7 @@ const CreateAccount = () => {
     e.preventDefault()
     try {
       setSubmitting(true)
-      if(!password != confirmPassword){
+      if(password != confirmPassword){
         throw new Error('Passwords do not match!')
       }
       await createAccount({ email, password, orgName, termsAndConditionsAgreed }, dispatch)

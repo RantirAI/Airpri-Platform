@@ -1,5 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import CreateAccount from './pages/auth/CreateAccount'
 import ForgotPassword from './pages/auth/ForgotPassword'
@@ -7,9 +7,37 @@ import ResetPassword from './pages/auth/ResetPassword'
 import SignIn from './pages/auth/SignIn'
 import Dashboard from './pages/main/Dashboard'
 import NotFound from './pages/NotFound'
+import { useLayoutEffect } from 'react';
+import jwtDecode from 'jwt-decode';
+import { authenticate } from './redux/features/authSlice';
+import { setAxiosToken } from './config/axios'
 
 const index = () => {
-    const { user } = useSelector(state => state.auth)
+
+    const { user, loading } = useSelector((state) => state.auth)
+
+    const dispatch = useDispatch()
+
+    useLayoutEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token) {
+            const user = jwtDecode(token)
+            if (user) {
+                setAxiosToken(token)
+                dispatch(authenticate(user))
+            }
+        } else {
+            dispatch(authenticate(null))
+        }
+    }, [])
+
+
+    if (loading) {
+        return <div>
+            Loading...
+        </div>
+    }
+
     return (
         <BrowserRouter>
             <Routes>
@@ -17,15 +45,16 @@ const index = () => {
                     user ?
                         <>
                             <Route path='/sign-in' element={<Navigate replace to={'/dashboard'} />} />
-                            <Route path='/create-account' element={<Navigate replace to={'dashboard'} />} />
+                            <Route path='/create-account' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/dashboard' element={<Dashboard />} />
                         </>
                         :
                         <>
-                            <Route path='/'  element={<Navigate replace to={'/sign-in'} />} />
+                            <Route path='/' element={<Navigate replace to={'/sign-in'} />} />
+                            <Route path='/dashboard' element={<Navigate replace to={'/sign-in'} />} />
                             <Route path='/sign-in' element={<SignIn />} />
-                            <Route path='/create-account' element={<CreateAccount/>} />
+                            <Route path='/create-account' element={<CreateAccount />} />
                             <Route path='/forgot-password' element={<ForgotPassword />} />
                             <Route path='/reset-password' element={<ResetPassword />} />
                         </>

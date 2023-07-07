@@ -16,7 +16,7 @@ const TokenSchema = new Schema({
         type: Date,
         default: Date.now,
         expires: 3600,
-    }, status: {
+    }, used: {
         type: Boolean,
         required: false,
         default: false

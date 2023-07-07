@@ -30,9 +30,9 @@ export const createAccount = async (data, dispatch) => {
     }
 }
 
-export const requestPasswordReset = async (emailAddress) => {
+export const requestPasswordReset = async (email) => {
     try {
-        await Axios.patch('request-password-reset', {emailAddress})
+        await Axios.patch('request-password-reset', {email})
     } catch (error) {
         throw new Error(error?.response?.data?.message || error.message)
     }

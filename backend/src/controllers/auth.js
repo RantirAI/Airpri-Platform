@@ -90,7 +90,7 @@ const requestPasswordReset = async (req, res) => {
 
     const user = await User.findOne({ email })
     if (!user) {
-      return res.status(400).json({ message: 'User not found' })
+      return res.status(404).json({ message: 'User not found' })
     }
 
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -470,8 +470,59 @@ const requestPasswordReset = async (req, res) => {
   }
 }
 
+const resetPassword = async (req, res) => {
+  try {
+    const { email, password, token } = req.body
+
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' })
+    }
+    if (!password) {
+      return res.status(400).json({ message: 'New password is required' })
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password should be atleast 6 characters long' })
+    }
+    if (!token) {
+      return res.status(400).json({ message: 'Password reset token is required' })
+    }
+
+    const user = await User.findOne({ email }).select('+password')
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' })
+    }
+
+    const tokenObj = await Token.findOne({ token })
+    if (!tokenObj) {
+      return res.status(400).json({ message: 'Invalid or expired token' })
+    }
+
+    if(tokenObj.purpose != 'password-reset'){
+      return res.status(400).json({message: 'Invalid token'})
+    }
+
+    if (tokenObj.used) {
+      return res.status(400).json({ message: 'Used token' })
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10)
+    user.password = hashedPassword
+
+    await user.save()
+
+    await tokenObj.deleteOne()
+
+    res.status(200).json({message: 'Password reset successful'})
+
+  } catch (error) {
+    console.log(error.message)
+    res.status(500).json({ message: 'Something went wrong' })
+  }
+}
+
 module.exports = {
   createAccount,
   signIn,
-  requestPasswordReset
+  requestPasswordReset,
+  resetPassword
 }

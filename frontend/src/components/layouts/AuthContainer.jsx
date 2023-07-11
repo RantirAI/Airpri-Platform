@@ -1,5 +1,5 @@
 import React from 'react'
-import authImage from '../../assets/auth-image.svg'
+import authImage from '../../assets/auth-image.png'
 import authDarkModeLogo from '../../assets/auth-dark-mode-logo.svg'
 import authLightModeLogo from '../../assets/auth-light-mode-logo.svg'
 import { Link } from 'react-router-dom'

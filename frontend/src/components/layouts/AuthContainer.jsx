@@ -2,6 +2,7 @@ import React from 'react'
 import authImage from '../../assets/auth-image.svg'
 import authDarkModeLogo from '../../assets/auth-dark-mode-logo.svg'
 import authLightModeLogo from '../../assets/auth-light-mode-logo.svg'
+import { Link } from 'react-router-dom'
 
 const AuthContainer = ({ children, title }) => {
   return (
@@ -11,8 +12,11 @@ const AuthContainer = ({ children, title }) => {
           <img src={authImage} className='rounded-tl-[16px] rounded-bl-[16px] h-full w-full object-cover' />
         </div>
         <div className='p-[16px] md:p-[32px] lg:p-[60px] w-full lg:w-[65%] rounded-tr-[16px] rounded-br-[16px]'>
-          <img src={authDarkModeLogo} className='mt-[23px] hidden dark:block mx-auto lg:mx-0 mb-[23px] lg:mb-0' />
-          <img src={authLightModeLogo} className='mt-[23px] block dark:hidden mx-auto lg:mx-0 mb-[18px]' />
+          <Link to='/' className='mt-[23px] block mx-auto lg:mx-0 mb-[23px]'>
+            <img src={authDarkModeLogo} className='hidden dark:block' />
+            <img src={authLightModeLogo} className='block dark:hidden' />
+          </Link>
+
           <h2 className='text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white'>
             {title}
           </h2>

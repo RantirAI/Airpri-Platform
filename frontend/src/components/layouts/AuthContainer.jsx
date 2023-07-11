@@ -1,6 +1,6 @@
 import React from 'react'
 import authImage from '../../assets/auth-image.svg'
-import authDarkModeLogo from '../../assets/auth-dark-mode-logo.png'
+import authDarkModeLogo from '../../assets/auth-dark-mode-logo.svg'
 import authLightModeLogo from '../../assets/auth-light-mode-logo.png'
 
 const AuthContainer = ({ children, title }) => {

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 const AuthContainer = ({ children, title }) => {
   return (
-    <div className='flex justify-center items-center min-h-screen bg-gray-300 dark:bg-gray-700 font-inter'>
+    <div className='flex justify-center items-center min-h-screen bg-gray-300 dark:bg-[#101016] font-inter'>
       <div className='w-5/6 md:w-4/5 lg:w-2/3 max-w-5xl flex rounded-[16px] bg-gray-50 dark:bg-gray-600'>
         <div className='w-[35%] hidden lg:block rounded-tl-[16px] rounded-bl-[16px] min-h-full'>
           <img src={authImage} className='rounded-tl-[16px] rounded-bl-[16px] h-full w-full object-cover' />

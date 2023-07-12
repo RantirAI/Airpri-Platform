@@ -3,7 +3,7 @@ import Footer from './Footer'
 import Header from './Header'
 import LeftPane from './LeftPane'
 
-const index = ({ children }) => {
+const MainContainer = ({ children }) => {
     return (
         <div>
             <Header />
@@ -16,4 +16,4 @@ const index = ({ children }) => {
     )
 }
 
-export default index
+export default MainContainer

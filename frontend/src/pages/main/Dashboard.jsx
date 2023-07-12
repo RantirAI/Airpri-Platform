@@ -3,6 +3,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import MainContainer from '../../components/layouts/MainContainer'
 import { signOut } from '../../redux/features/authSlice'
 
 const Dashboard = () => {

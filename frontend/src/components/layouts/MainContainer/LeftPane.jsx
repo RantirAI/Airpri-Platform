@@ -9,8 +9,8 @@ import { MdWorkspaces } from 'react-icons/md';
 import { RiDeleteBin6Fill, RiOpenSourceFill } from 'react-icons/ri';
 import { TbMessageChatbot } from 'react-icons/tb';
 import { TfiGallery } from 'react-icons/tfi';
-import {CgLoadbarDoc} from 'react-icons/cg'
-import {BiSolidHelpCircle} from 'react-icons/bi'
+import { CgLoadbarDoc } from 'react-icons/cg'
+import { BiSolidHelpCircle } from 'react-icons/bi'
 
 
 const LeftPane = () => {
@@ -46,6 +46,14 @@ const LeftPane = () => {
             icon={MdWorkspaces}
             label="Workspace name"
           >
+            <Sidebar.Item
+              href="#"
+              icon={HiChartPie}
+            >
+              <p>
+                Overview
+              </p>
+            </Sidebar.Item>
             <Sidebar.Item href="#" icon={LuSheet}>
               Spreadsheets
             </Sidebar.Item>

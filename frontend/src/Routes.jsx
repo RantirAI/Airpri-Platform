@@ -11,6 +11,7 @@ import { useLayoutEffect } from 'react';
 import jwtDecode from 'jwt-decode';
 import { authenticate } from './redux/features/authSlice';
 import { setAxiosToken } from './config/axios'
+import Workspace from './pages/main/Workspace'
 
 const index = () => {
 
@@ -48,6 +49,7 @@ const index = () => {
                             <Route path='/create-account' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/dashboard' element={<Dashboard />} />
+                            <Route path='/workspace' element={<Workspace />} />
                         </>
                         :
                         <>

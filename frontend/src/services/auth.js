@@ -12,7 +12,7 @@ export const signIn = async (data, dispatch) => {
         localStorage.removeItem('token')
         localStorage.setItem('token', token)
     } catch (error) {
-        throw new Error(error?.response?.data?.message || error.message)
+        throw new Error(error)
     }
 }
 
@@ -26,15 +26,15 @@ export const createAccount = async (data, dispatch) => {
         localStorage.removeItem('token')
         localStorage.setItem('token', token)
     } catch (error) {
-        throw new Error(error?.response?.data?.message || error.message)
+        throw new Error(error)
     }
 }
 
 export const requestPasswordReset = async (email) => {
     try {
-        await Axios.post('request-password-reset', {email})
+        await Axios.post('request-password-reset', { email })
     } catch (error) {
-        throw new Error(error?.response?.data?.message || error.message)
+        throw new Error(error)
     }
 }
 
@@ -42,6 +42,6 @@ export const resetPassword = async (data) => {
     try {
         await Axios.patch('reset-password', data)
     } catch (error) {
-        throw new Error(error?.response?.data?.message || error.message)
+        throw new Error(error)
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import ArchiveWorkspaceModal from '../../modals/ArchiveWorkspaceModal'
 import DeleteWorkspaceModal from '../../modals/DeleteWorkspaceModal'
 import NewWorkspaceModal from '../../modals/NewWorkspaceModal'
 import Footer from './Footer'
@@ -18,6 +19,7 @@ const MainContainer = ({ children }) => {
 
                 <NewWorkspaceModal />
                 <DeleteWorkspaceModal />
+                <ArchiveWorkspaceModal />
             </div>
         </div>
     )

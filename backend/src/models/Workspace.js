@@ -5,7 +5,7 @@ const WorkspaceSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }, 
+    },
     description: {
         type: String,
         required: true
@@ -19,8 +19,12 @@ const WorkspaceSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    archived: {
+        type: Boolean,
+        default: false,
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 const Workspace = model('Workspace', WorkspaceSchema)
 

@@ -1,18 +1,57 @@
-import { Button, Dropdown, Label, Modal, Textarea, TextInput } from 'flowbite-react'
-import React, { useState } from 'react'
+import { Button, Dropdown, Label, Modal, Spinner, Textarea, TextInput } from 'flowbite-react'
+import React, { useEffect, useRef, useState } from 'react'
 import { TbClipboardList } from 'react-icons/tb'
+import { toast } from 'react-toastify'
+import { getOrgMembers } from '../../services/user'
+import { createWorkspace } from '../../services/workspace'
+import { BsCheckLg } from 'react-icons/bs'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectWorkspace } from '../../redux/features/workspaceSlice'
 
 const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
-    const [name, setName] = useState('')
+    const nameRef = useRef(null)
+    const descriptionRef = useRef(null)
     const [members, setMembers] = useState([])
-    const [description, setDescription] = useState('')
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [submitting, setSubmitting] = useState(false)
-    // const []
 
-    const handleSubmit = async () => {
+    const [orgMembers, setOrgMembers] = useState([])
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        try {
+            setSubmitting(true)
+            const workspace = await createWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members })
+            dispatch(selectWorkspace(workspace))
+            navigate('/workspace')
+        } catch (error) {
+            toast.error(error.message)
+        } finally {
+            setSubmitting(false)
+        }
     }
+
+
+    useEffect(() => {
+        if (openModal) {
+            (
+                async () => {
+                    try {
+                        const _members = await getOrgMembers()
+                        setOrgMembers(_members)
+                    } catch (error) {
+                        toast.error(error.message)
+                    }
+                }
+            )()
+        }
+
+    }, [openModal])
+
 
     return (
         <Modal dismissible show={openModal} onClose={() => setOpenModal(false)} size='md'>
@@ -24,10 +63,7 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
                         placeholder='Set a Workspace Name'
                         required
                         type='text'
-                        value={name}
-                        onChange={(e) => {
-                            setName(e.target.value)
-                        }}
+                        ref={nameRef}
                     />
 
                     <div className="mb-2 block">
@@ -41,22 +77,25 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
                     <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 text-gray-500 leading-tight text-sm font-normal'>
                         <Dropdown
                             inline
-                            label={members.length > 0 ? members.join(' , ') : 'Choose from your Organization'}
+                            label={members.length > 0 ? members.map((member) => member.email).join(' , ') : 'Choose from your Organization'}
                             className='bg-transparent z-20 bg-white'
                         >
                             {
-                                ['hi@test.com', 'hello@test.com'].map((email) => (
-
+                                orgMembers.map(({ email, _id }) => (
                                     <Dropdown.Item onClick={() => {
-                                        if (members.includes(email)) {
-                                            setMembers(members.filter((member) => (
-                                                member != email
-                                            )))
+                                        const memberSelected = members.findIndex((member) => member._id == _id)
+                                        if (memberSelected == -1) {
+                                            setMembers([...members, { email, _id }])
                                         } else {
-                                            setMembers([...members, email])
+                                            setMembers(members.filter((member) => (
+                                                member._id != _id
+                                            )))
                                         }
                                     }} >
                                         {email}
+                                        {
+                                            members.findIndex((member) => member._id == _id) == -1 ? '' : <BsCheckLg />
+                                        }
                                     </Dropdown.Item>
                                 ))
                             }
@@ -76,14 +115,25 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
                         placeholder="I made some wireframes that we would like you to follow since we are building it in Rantir’s next generation spreadsheet & AI module that is open to the public... "
                         required
                         rows={4}
+                        ref={descriptionRef}
                     />
-                    <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] flex justify-center w-full' type='submit' onClick={() => {
-                        console.log('hii')
-                    }}>
-                        <TbClipboardList className='mr-2 text-xl ' />
-                        <span>
-                            Start a New Workspace
-                        </span>
+                    <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] flex justify-center w-full' type='submit' onClick={handleSubmit}>
+                        {
+                            submitting ?
+                                <>
+                                    <Spinner aria-label="Creating workspace" />
+                                    <span className="pl-3">
+                                        Loading...
+                                    </span>
+                                </>
+                                :
+                                <>
+                                    <TbClipboardList className='mr-2 text-xl ' />
+                                    <span>
+                                        Start a New Workspace
+                                    </span>
+                                </>
+                        }
                     </Button>
                 </form>
 

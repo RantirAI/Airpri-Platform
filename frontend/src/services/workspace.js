@@ -16,3 +16,11 @@ export const deleteWorkspace = async (id) => {
         throw new Error(error)
     }
 }
+
+export const archiveWorkspace = async (id) => {
+    try {
+        await Axios.patch(`workspace/${id}`)
+    } catch (error) {
+        throw new Error(error)
+    }
+}

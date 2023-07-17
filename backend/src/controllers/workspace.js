@@ -49,11 +49,11 @@ const archiveWorkspace = async (req, res) => {
     }
 }
 
-
 const getWorkspaces = async (req, res) => {
     try{
-        const workspaces = await Workspace.find({orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: false})
-
+        const {archived} = req.query
+        const workspaces = await Workspace.find({orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: archived ? true: false})
+        
         res.status(200).json({workspaces})
 
     } catch(error) {
@@ -62,9 +62,8 @@ const getWorkspaces = async (req, res) => {
     }
 }
 
-
 module.exports = {
     createWorkspace,
     archiveWorkspace,
-    getWorkspaces
+    getWorkspaces,
 }

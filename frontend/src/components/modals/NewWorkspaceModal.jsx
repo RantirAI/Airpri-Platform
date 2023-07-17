@@ -8,8 +8,12 @@ import { BsCheckLg } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectWorkspace } from '../../redux/features/workspaceSlice'
+import { toggleNewWorkspaceModal } from '../../redux/features/modalsSlice'
 
-const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
+const NewWorkspaceModal = () => {
+
+    const { showNewWorkspaceModal } = useSelector(state => state.modals)
+
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
     const [members, setMembers] = useState([])
@@ -27,6 +31,7 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
             setSubmitting(true)
             const workspace = await createWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members })
             toast.success('Workspace successfully created!')
+            dispatch(toggleNewWorkspaceModal(false))
             dispatch(selectWorkspace(workspace))
             navigate('/workspace')
         } catch (error) {
@@ -38,7 +43,7 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
 
 
     useEffect(() => {
-        if (openModal) {
+        if (showNewWorkspaceModal) {
             (
                 async () => {
                     try {
@@ -51,11 +56,11 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
             )()
         }
 
-    }, [openModal])
+    }, [showNewWorkspaceModal])
 
 
     return (
-        <Modal dismissible show={openModal} onClose={() => setOpenModal(false)} size='md'>
+        <Modal dismissible show={showNewWorkspaceModal} onClose={() => dispatch(toggleNewWorkspaceModal(false))} size='md'>
             <Modal.Header>Add a New Workspace</Modal.Header>
             <Modal.Body>
                 <form onSubmit={handleSubmit}>

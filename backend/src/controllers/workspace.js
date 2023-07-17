@@ -23,6 +23,7 @@ const createWorkspace = async (req, res) => {
         res.status(201).json({ message: 'Workspace created', workspace })
     }
     catch (error) {
+        console.log(error.message)
         res.status(500).json({ message: 'Something went wrong' })
     }
 }
@@ -30,7 +31,7 @@ const createWorkspace = async (req, res) => {
 const archiveWorkspace = async (req, res) => {
     try{
         const {id} =  req.params
-
+                
         const workspace = await Workspace.findById(id)
 
         if(!workspace){

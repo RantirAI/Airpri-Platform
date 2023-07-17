@@ -111,9 +111,9 @@ const Workspace = () => {
             </div>
 
             <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
-                <WorkspaceItemCard type={'spreadsheets'} />
-                <WorkspaceItemCard type={'forms'} />
-                <WorkspaceItemCard type={'gallery'} />
+                <WorkspaceItemCard type={'spreadsheets'} time={workspace.updatedAt} />
+                <WorkspaceItemCard type={'forms'} time={workspace.updatedAt} />
+                <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} />
             </div>
 
 

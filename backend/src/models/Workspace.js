@@ -18,7 +18,6 @@ const WorkspaceSchema = new Schema({
     orgName: {
         type: String,
         required: true,
-        unique: true
     },
     archived: {
         type: Boolean,

@@ -26,6 +26,7 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
         try {
             setSubmitting(true)
             const workspace = await createWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members })
+            toast.success('Workspace successfully created!')
             dispatch(selectWorkspace(workspace))
             navigate('/workspace')
         } catch (error) {

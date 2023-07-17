@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
@@ -13,11 +13,22 @@ import { FiSettings } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
 import workspaceImage from '../../assets/image-workspace.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { getDateAndTime } from '../../utils/formatDate'
 
 const Workspace = () => {
 
     const [showOptions, setShowOptions] = useState(false)
+    const { workspace } = useSelector(state => state.workspace)
 
+    const navigate = useNavigate()
+
+    useLayoutEffect(() => {
+        if (!workspace) {
+            navigate('/dashboard')
+        }
+    }, [])
 
     return (
         <MainContainer>
@@ -75,21 +86,21 @@ const Workspace = () => {
             </div>
 
             <div className='gap-[16px] flex items-center mt-[24px]'>
-                <div className='w-[720px] '>
+                <div className='max-w-[720px] max-h-[200px]'>
                     <img src={workspaceImage} className='h-full w-full object-contain' />
                 </div>
                 <div>
                     <div className='mb-[12px] flex items-center gap-[16px]'>
                         <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
                         <p className='text-2xl font-semibold text-gray-900'>
-                            {name} Drivers
+                            {workspace?.name}
                         </p>
                     </div>
                     <p className='text-gray-500 text-sm my-[16px] font-bold'>
-                        Last Edited:  June 20th, 2024
+                        {getDateAndTime(workspace?.updatedAt)}
                     </p>
                     <p className='text-base font-normal leading-[150%] text-gray-500'>
-                        This should be a demo on the capabilitiesWhen we speak of free software, we are referring to freedom, not price. Our General Public Licenses are designed to make sure that you have the freedom to distribute copies of free software (and charge for them if you wish), that you receive source code or can get it if you want it, that you can change the software or use pieces of it in new free programs, and that you know you can do these things.
+                        {workspace?.description}
                     </p>
                 </div>
 

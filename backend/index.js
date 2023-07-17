@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const authRouter = require('./src/routes/auth')
 const workspaceRouter = require('./src/routes/workspace')
+const usersRouter = require('./src/routes/user')
 const cors = require('cors')
 const notFound = require('./src/middlewares/notFound')
 const authenticate = require('./src/middlewares/authenticate')
@@ -15,6 +16,7 @@ app.use(express.urlencoded({extended: true}))
 
 app.use('/api/v1', authRouter)
 app.use('/api/v1/workspace', authenticate, workspaceRouter)
+app.use('/api/v1', usersRouter)
 
 app.use(notFound)
 

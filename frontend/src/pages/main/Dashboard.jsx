@@ -10,10 +10,17 @@ import { workspaces } from '../../../data'
 import { MdOpenInNew } from 'react-icons/md'
 import WorkspaceItemCard from '../../components/cards/WorkspaceItemCard'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
+import { useSelector } from 'react-redux'
+import useFetch from '../../hooks/useFetch'
 
 const Dashboard = () => {
 
+  const { workspace } = useSelector(state => state.workspace)
+
   const [showNewWorkspaceModal, setShowNewWorkspaceModal] = useState(false)
+
+  const workspaces = useFetch('workspace', [showNewWorkspaceModal])
+
 
   return (
     <>
@@ -68,7 +75,7 @@ const Dashboard = () => {
 
 
           {
-            workspaces.length > 0 ?
+            workspaces.data?.workspaces?.length > 0 ?
               <div>
                 <div className='flex justify-between my-[12px]'>
                   <p className='text-3xl font-bold text-gray-900'>
@@ -84,7 +91,7 @@ const Dashboard = () => {
 
                 <div>
                   {
-                    workspaces.map(({ name, spreadsheets, forms, gallery }) => (
+                    workspaces?.data?.workspaces?.map(({ name, spreadsheets, forms, gallery }) => (
                       <div>
                         <div className='mb-[12px] flex items-center gap-[16px]'>
                           <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
@@ -97,9 +104,9 @@ const Dashboard = () => {
                         </p>
 
                         <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
-                          <WorkspaceItemCard type={'spreadsheets'} time={spreadsheets.time} />
-                          <WorkspaceItemCard type={'forms'} time={forms.time} />
-                          <WorkspaceItemCard type={'gallery'} time={gallery.time} />
+                          <WorkspaceItemCard type={'spreadsheets'} time={'spreadsheets.time'} />
+                          <WorkspaceItemCard type={'forms'} time={'forms.time'} />
+                          <WorkspaceItemCard type={'gallery'} time={'gallery.time'} />
 
                         </div>
 

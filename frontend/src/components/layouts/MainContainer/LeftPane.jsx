@@ -76,8 +76,11 @@ const LeftPane = () => {
                         dispatch(selectWorkspace(workspace))
                       }}>
                         <Sidebar.Item
-                          onClick={() => {
+                          href=''
+                          onClick={(e) => {
+                            e.preventDefault()
                             navigate('/workspace')
+
                           }}
                           icon={HiChartPie}
                         >

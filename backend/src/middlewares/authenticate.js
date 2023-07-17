@@ -18,8 +18,6 @@ const authenticate = async (req, res, next) => {
             return res.status(401).json({ message: 'Unauthorized' })
         }
 
-        console.log(decodedUser)
-
         const user = await User.findOne({ _id: decodedUser._id })
         
         if(!user){

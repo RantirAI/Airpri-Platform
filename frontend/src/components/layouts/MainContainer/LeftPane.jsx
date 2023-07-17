@@ -1,4 +1,4 @@
-import { Sidebar } from 'flowbite-react';
+import { Sidebar, Spinner } from 'flowbite-react';
 import React from 'react';
 import { FaWpforms } from 'react-icons/fa';
 import { HiChartPie, HiOutlinePlusCircle, HiViewBoards } from 'react-icons/hi';
@@ -11,9 +11,19 @@ import { TbMessageChatbot } from 'react-icons/tb';
 import { TfiGallery } from 'react-icons/tfi';
 import { CgLoadbarDoc } from 'react-icons/cg'
 import { BiSolidHelpCircle } from 'react-icons/bi'
+import useFetch from '../../../hooks/useFetch';
+import { useDispatch } from 'react-redux';
+import { selectWorkspace } from '../../../redux/features/workspaceSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 const LeftPane = () => {
+
+  const workspaces = useFetch('workspace', [])
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   return (
     <Sidebar aria-label="Left pane" className='h-[calc(100%-64px)]  fixed top-16 left-0 w-1/6'>
       <Sidebar.Items>
@@ -42,37 +52,56 @@ const LeftPane = () => {
             </p>
           </Sidebar.Item>
 
-          <Sidebar.Collapse
-            icon={MdWorkspaces}
-            label="Workspace name"
-          >
-            <Sidebar.Item
-              href="#"
-              icon={HiChartPie}
-            >
-              <p>
-                Overview
-              </p>
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={LuSheet}>
-              Spreadsheets
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={FaWpforms}>
-              Forms
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={TfiGallery}>
-              Gallery
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={LuNetwork}>
-              Automation
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={TbMessageChatbot}>
-              AI Chat
-            </Sidebar.Item>
-            <Sidebar.Item href="#" icon={IoIosPeople}>
-              Members
-            </Sidebar.Item>
-          </Sidebar.Collapse>
+          {
+            workspaces.loading ?
+              <Spinner aria-label="Fetching workspaces" className='mx-auto block' />
+              :
+              <>
+                {
+                  workspaces.data?.workspaces?.map((workspace) => (
+                    <Sidebar.Collapse
+                      icon={MdWorkspaces}
+                      label={workspace.name}
+                    >
+                      <div onClick={() => {
+                        dispatch(selectWorkspace(workspace))
+                      }}>
+                        <Sidebar.Item
+                          onClick={() => {
+                            navigate('/workspace')
+                          }}
+                          icon={HiChartPie}
+                        >
+                          <p>
+                            Overview
+                          </p>
+                        </Sidebar.Item>
+                        <Sidebar.Item href="#" icon={LuSheet}>
+                          Spreadsheets
+                        </Sidebar.Item>
+                        <Sidebar.Item href="#" icon={FaWpforms}>
+                          Forms
+                        </Sidebar.Item>
+                        <Sidebar.Item href="#" icon={TfiGallery}>
+                          Gallery
+                        </Sidebar.Item>
+                        <Sidebar.Item href="#" icon={LuNetwork}>
+                          Automation
+                        </Sidebar.Item>
+                        <Sidebar.Item href="#" icon={TbMessageChatbot}>
+                          AI Chat
+                        </Sidebar.Item>
+                        <Sidebar.Item href="#" icon={IoIosPeople}>
+                          Members
+                        </Sidebar.Item>
+                      </div>
+                    </Sidebar.Collapse>
+                  ))
+                }
+              </>
+          }
+
+
 
         </Sidebar.ItemGroup>
 

@@ -40,7 +40,7 @@ const createAccount = async (req, res) => {
 
     const user = await User.create({ email, password: hashedPassword, orgName })
 
-    const token = jwt.sign({ email, orgName }, process.env.JWT_SECRET)
+    const token = jwt.sign({_id : user._id, email, orgName }, process.env.JWT_SECRET)
 
     res.status(201).json({ message: 'Account created successfully', token })
 
@@ -70,7 +70,7 @@ const signIn = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' })
     }
 
-    const token = jwt.sign({ user: user.email, orgName: user.orgName }, process.env.JWT_SECRET)
+    const token = jwt.sign({_id: user._id, user: user.email, orgName: user.orgName }, process.env.JWT_SECRET)
 
     res.status(200).json({ token })
 

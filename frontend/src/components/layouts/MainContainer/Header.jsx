@@ -9,18 +9,38 @@ import genie from '../../../assets/genie.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../../../redux/features/authSlice'
 import { toast } from 'react-toastify'
+import { IoMdClose } from 'react-icons/io'
+import { unselectWorkspace } from '../../../redux/features/workspaceSlice'
 
 const Header = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  
+
+  const { workspace } = useSelector(state => state.workspace)
+
   return (
     <header className='flex justify-between items-center py-[10px] px-[20px] bg-white dark:bg-[#111928] border-solid border-gray-200 dark:border-gray-700 border-0 border-b-2 fixed top-0 right-0 left-0 w-full z-10'>
-      <div>
+      <div className='flex gap-[15px]'>
         <Link to='/' className='block w-[40px] h-[40px] '>
           <img src={darkModeLogo} className='hidden dark:block object-cover w-full h-full' />
           <img src={lightModeLogo} className='block dark:hidden object-cover w-full h-full' />
         </Link>
+        {
+          workspace &&
+          <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] bg-gray-50 text-gray-500 leading-tight text-sm font-normal flex items-center gap-2' >
+            <p>
+              {
+                workspace.name
+              }
+            </p>
+            <button onClick={() => {
+              dispatch(unselectWorkspace())
+              navigate('/dashboard')
+            }}>
+              <IoMdClose />
+            </button>
+          </div>
+        }
       </div>
 
       <nav className='flex gap-3 text-gray-900 dark:text-white'>

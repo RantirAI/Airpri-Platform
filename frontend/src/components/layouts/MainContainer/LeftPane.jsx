@@ -12,12 +12,15 @@ import { TfiGallery } from 'react-icons/tfi';
 import { CgLoadbarDoc } from 'react-icons/cg'
 import { BiSolidHelpCircle } from 'react-icons/bi'
 import useFetch from '../../../hooks/useFetch';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkspace } from '../../../redux/features/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
+import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 
 
 const LeftPane = () => {
+
+  const currentWorkspace = useSelector(state => state.workspace)
 
   const workspaces = useFetch('workspace', [])
 
@@ -32,7 +35,11 @@ const LeftPane = () => {
         <Sidebar.ItemGroup>
 
           <Sidebar.Item
-            href="#"
+            href=''
+            onClick={(e) => {
+              e.preventDefault()
+              navigate('/dashboard')
+            }}
             icon={HiChartPie}
           >
             <p>
@@ -41,11 +48,12 @@ const LeftPane = () => {
           </Sidebar.Item>
 
           <Sidebar.Item
-            icon={HiOutlinePlusCircle}
+            href=''
             onClick={(e) => {
               e.preventDefault()
-              console.log('hiiiiii')
+              dispatch(toggleNewWorkspaceModal(true))
             }}
+            icon={HiOutlinePlusCircle}
           >
             <p>
               Add a New Workspace
@@ -62,6 +70,7 @@ const LeftPane = () => {
                     <Sidebar.Collapse
                       icon={MdWorkspaces}
                       label={workspace.name}
+                      className={currentWorkspace.workspace?.name == workspace.name ? 'bg-gray-200' : ''}
                     >
                       <div onClick={() => {
                         dispatch(selectWorkspace(workspace))

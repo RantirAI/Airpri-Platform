@@ -27,6 +27,29 @@ const createWorkspace = async (req, res) => {
     }
 }
 
+const archiveWorkspace = async (req, res) => {
+    try{
+        const {id} =  req.params
+
+        const workspace = await Workspace.findById(id)
+
+        if(workspace.archived){
+            return res.status(400).json({message: 'Workspace already archived'})
+        }
+
+        workspace.archived = true
+
+        await workspace.save()
+
+        res.status(200).json({message: 'Workspace archived successfully'})
+
+    } catch(error) {
+        console.log(error.message)
+        res.status(500).json({message: 'Something went wrong'})
+    }
+}
+
 module.exports = {
-    createWorkspace
+    createWorkspace,
+    archiveWorkspace
 }

@@ -12,12 +12,13 @@ import WorkspaceItemCard from '../../components/cards/WorkspaceItemCard'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
 import { useSelector } from 'react-redux'
 import useFetch from '../../hooks/useFetch'
+import { toggleNewWorkspaceModal } from '../../redux/features/modalsSlice'
 
 const Dashboard = () => {
 
   const { workspace } = useSelector(state => state.workspace)
 
-  const [showNewWorkspaceModal, setShowNewWorkspaceModal] = useState(false)
+  const {showNewWorkspaceModal} = useSelector(state => state.modals)
 
   const workspaces = useFetch('workspace', [showNewWorkspaceModal])
 
@@ -38,7 +39,7 @@ const Dashboard = () => {
                 Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
               </p>
               <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] block' type='button' onClick={() => {
-                setShowNewWorkspaceModal(true)
+                dispatch(toggleNewWorkspaceModal(true))
               }}>
                 <HiOutlinePlusCircle className='mr-2 text-xl ' />
                 <span>
@@ -135,7 +136,6 @@ const Dashboard = () => {
         </div>
 
       </MainContainer>
-      <NewWorkspaceModal openModal={showNewWorkspaceModal} setOpenModal={setShowNewWorkspaceModal} />
     </>
   )
 }

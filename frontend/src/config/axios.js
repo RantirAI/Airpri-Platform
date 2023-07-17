@@ -19,5 +19,9 @@ export const setAxiosToken = (token) => {
     ))
 }
 
+Axios.interceptors.response.use(
+  async (response) => response,
+  (error) => Promise.reject(error.response.data.message)
+);
 
 export default Axios

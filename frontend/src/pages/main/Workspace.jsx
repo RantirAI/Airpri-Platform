@@ -3,11 +3,6 @@ import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
 import { HiDownload, HiOutlinePlusCircle } from 'react-icons/hi'
-import { AiFillEye } from 'react-icons/ai'
-import emptyDashboardIllustration from '../../assets/empty-dashboard-illustration.svg'
-import NewWorkspaceModal from '../../components/modals/NewWorkspaceModal'
-import { workspaces } from '../../../data'
-import { MdOpenInNew } from 'react-icons/md'
 import WorkspaceItemCard from '../../components/cards/WorkspaceItemCard'
 import { FiSettings } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
@@ -16,6 +11,7 @@ import workspaceImage from '../../assets/image-workspace.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
+import { toggleDeleteWorkspaceModal } from '../../redux/features/modalsSlice'
 
 const Workspace = () => {
 
@@ -23,8 +19,9 @@ const Workspace = () => {
     const { workspace } = useSelector(state => state.workspace)
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         if (!workspace) {
             navigate('/dashboard')
         }
@@ -51,14 +48,18 @@ const Workspace = () => {
                         </button>
                         {
                             showOptions &&
-                            <div className='absolute w-full bg-white shadow-sm rounded-[6px]'>
+                            <div className='absolute w-full bg-white shadow-sm rounded-[6px]' onClick={() => {
+                                setShowOptions(false)
+                            }}>
                                 <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left'>
                                     Duplicate Workspace
                                 </button>
                                 <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left'>
                                     Archive Workspace
                                 </button>
-                                <button className='border-gray-200 border-0 border-solid border-t-[1px] text-red-500 w-full text-sm font-normal py-[8px] px-[16px] text-left'>
+                                <button className='border-gray-200 border-0 border-solid border-t-[1px] text-red-500 w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
+                                    dispatch(toggleDeleteWorkspaceModal(true))
+                                }}>
                                     Delete Workspace (Forever)
                                 </button>
                             </div>

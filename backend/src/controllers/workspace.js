@@ -33,6 +33,10 @@ const archiveWorkspace = async (req, res) => {
 
         const workspace = await Workspace.findById(id)
 
+        if(!workspace){
+            return res.status(404).json({message: 'Workspace not found'})
+        }
+
         if(workspace.archived){
             return res.status(400).json({message: 'Workspace already archived'})
         }

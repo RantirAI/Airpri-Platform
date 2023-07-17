@@ -123,7 +123,7 @@ const CreateAccount = () => {
           {
             submitting ?
               <>
-                <Spinner aria-label="Spinner button example" />
+                <Spinner aria-label="Creating account" />
                 <span className="pl-3">
                   Loading...
                 </span>

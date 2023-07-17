@@ -111,7 +111,7 @@ const ResetPassword = () => {
           {
             submitting ?
               <>
-                <Spinner aria-label="Spinner button example" />
+                <Spinner aria-label="Resetting password" />
                 <span className="pl-3">
                   Loading...
                 </span>

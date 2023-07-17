@@ -15,7 +15,7 @@ import { BiSolidHelpCircle } from 'react-icons/bi'
 
 const LeftPane = () => {
   return (
-    <Sidebar aria-label="Sidebar with content separator example" className='h-[calc(100%-64px)]  fixed top-16 left-0 w-1/6'>
+    <Sidebar aria-label="Left pane" className='h-[calc(100%-64px)]  fixed top-16 left-0 w-1/6'>
       <Sidebar.Items>
 
 

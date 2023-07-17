@@ -81,7 +81,7 @@ const SignIn = () => {
           {
             submitting ?
               <>
-                <Spinner aria-label="Spinner button example" />
+                <Spinner aria-label="Signing in" />
                 <span className="pl-3">
                   Loading...
                 </span>

@@ -1,9 +1,11 @@
-import { Button, Label, Modal, Textarea, TextInput } from 'flowbite-react'
+import { Button, Dropdown, Label, Modal, Textarea, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { TbClipboardList } from 'react-icons/tb'
 
 const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
-    const [workspaceName, setWorkspaceName] = useState('')
+    const [name, setName] = useState('')
+    const [members, setMembers] = useState([])
+    const [description, setDescription] = useState('')
 
     const [submitting, setSubmitting] = useState(false)
     // const []
@@ -22,8 +24,45 @@ const NewWorkspaceModal = ({ openModal, setOpenModal }) => {
                         placeholder='Set a Workspace Name'
                         required
                         type='text'
-                        value={workspaceName}
+                        value={name}
+                        onChange={(e) => {
+                            setName(e.target.value)
+                        }}
                     />
+
+                    <div className="mb-2 block">
+                        <Label
+                            htmlFor="workspace-members"
+                            value="Invite Members"
+                            className='text-lg font-semibold text-gray-900 my-[20px] block'
+                        />
+                    </div>
+
+                    <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 text-gray-500 leading-tight text-sm font-normal'>
+                        <Dropdown
+                            inline
+                            label={members.length > 0 ? members.join(' , ') : 'Choose from your Organization'}
+                            className='bg-transparent z-20 bg-white'
+                        >
+                            {
+                                ['hi@test.com', 'hello@test.com'].map((email) => (
+
+                                    <Dropdown.Item onClick={() => {
+                                        if (members.includes(email)) {
+                                            setMembers(members.filter((member) => (
+                                                member != email
+                                            )))
+                                        } else {
+                                            setMembers([...members, email])
+                                        }
+                                    }} >
+                                        {email}
+                                    </Dropdown.Item>
+                                ))
+                            }
+                        </Dropdown>
+                    </div>
+
 
                     <div className="mb-2 block">
                         <Label

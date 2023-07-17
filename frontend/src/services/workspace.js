@@ -9,3 +9,10 @@ export const createWorkspace = async (data) => {
     }
 }
 
+export const deleteWorkspace = async (id) => {
+    try {
+        await Axios.delete(`workspace/${id}`)
+    } catch (error) {
+        throw new Error(error)
+    }
+}

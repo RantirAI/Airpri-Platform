@@ -9,6 +9,15 @@ export const createWorkspace = async (data) => {
     }
 }
 
+export const editWorkspace = async (data, id) => {
+    try {
+        const response = await Axios.put(`workspace/${id}`, data)
+        return response.data.workspace
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
 export const deleteWorkspace = async (id) => {
     try {
         await Axios.delete(`workspace/${id}`)

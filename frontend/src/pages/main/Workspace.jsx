@@ -30,14 +30,14 @@ const Workspace = () => {
     return (
         <MainContainer>
 
-            <div className='p-[15px] bg-white dark:bg-[#111928] flex justify-between  items-center'>
+            <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center'>
                 <div className='flex gap-[15px] items-center min-w-max'>
                     <TextInput
                         id='workspace-search'
                         placeholder='Search inside the entire Workspace'
                         required
                         type='search'
-                        className='min-w-[500px]'
+                        className='min-w-[250px] lg:min-w-[500px] flex-1'
                     />
                     <button className='border-none outline-none text-gray-900 dark:text-white' onClick={() => {
                         dispatch(toggleWorkspaceSettingsModal(true))
@@ -75,7 +75,7 @@ const Workspace = () => {
 
                     </div>
                 </div>
-                <div className='gap-[10px] flex flex-row items-center'>
+                <div className='gap-[10px] flex flex-row flex-wrap items-center '>
                     <Button className='bg-[#1ABFAB] text-white dark:text-gray-900   block' type='button' onClick={() => {
                     }}>
                         <HiDownload className='mr-2 text-xl ' />
@@ -95,7 +95,7 @@ const Workspace = () => {
             </div>
 
             <div className='gap-[16px] flex items-center mt-[24px]'>
-                <div className='max-w-[720px] max-h-[200px]'>
+                <div className='max-w-[100px] lg:max-w-[720px] max-h-[150px] lg:max-h-[200px]'>
                     <img src={workspaceImage} className='h-full w-full object-contain' />
                 </div>
                 <div>

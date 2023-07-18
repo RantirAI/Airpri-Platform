@@ -1,8 +1,8 @@
-import { Sidebar, Spinner } from 'flowbite-react';
+import { Button, Sidebar, Spinner } from 'flowbite-react';
 import React from 'react';
 import { FaWpforms } from 'react-icons/fa';
-import { HiChartPie, HiOutlinePlusCircle, HiViewBoards } from 'react-icons/hi';
-import { IoIosPeople } from 'react-icons/io';
+import { HiChartPie, HiLightningBolt, HiOutlinePlusCircle, HiViewBoards } from 'react-icons/hi';
+import { IoIosPeople, IoMdClose } from 'react-icons/io';
 import { LiaFileInvoiceDollarSolid } from 'react-icons/lia';
 import { LuNetwork, LuSheet } from 'react-icons/lu';
 import { MdWorkspaces } from 'react-icons/md';
@@ -16,9 +16,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkspace } from '../../../redux/features/workspaceSlice';
 import { useNavigate } from 'react-router-dom';
 import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
+import { BsFileSpreadsheet } from 'react-icons/bs';
+import { HiSquare2Stack } from 'react-icons/hi2'
 
-
-const LeftPane = () => {
+const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
   const currentWorkspace = useSelector(state => state.workspace)
   const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal } = useSelector(state => state.modals)
@@ -29,9 +30,54 @@ const LeftPane = () => {
   const navigate = useNavigate()
 
   return (
-    <Sidebar aria-label="Left pane" className='h-[calc(100%-64px)]  fixed top-16 left-0 w-1/6'>
-      <Sidebar.Items>
+    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-1/5 z-10 ${!showLeftPane && 'hidden'}`}>
+      <Button color='failure' size='xs' onClick={() => {
+        setShowLeftPane(false)
+      }} className='absolute top-2 right-2 px-0 lg:hidden' >
+        <IoMdClose />
+      </Button>
 
+      <Sidebar.Items className='pt-4 lg:pt-unset'>
+
+
+        <Sidebar.ItemGroup>
+
+          <Sidebar.Item
+            href=''
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+            icon={BsFileSpreadsheet}
+          >
+            <p>
+              Data
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Item
+            href=''
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+            icon={HiSquare2Stack}
+          >
+            <p>
+              Apps
+            </p>
+          </Sidebar.Item>
+          <Sidebar.Item
+            href=''
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+            icon={HiLightningBolt}
+          >
+            <p>
+              AI
+            </p>
+          </Sidebar.Item>
+
+
+        </Sidebar.ItemGroup>
 
         <Sidebar.ItemGroup>
 

@@ -11,8 +11,9 @@ import { signOut } from '../../../redux/features/authSlice'
 import { toast } from 'react-toastify'
 import { IoMdClose } from 'react-icons/io'
 import { unselectWorkspace } from '../../../redux/features/workspaceSlice'
+import { GiHamburgerMenu } from 'react-icons/gi'
 
-const Header = () => {
+const Header = ({ showLeftPane, setShowLeftPane }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -43,7 +44,7 @@ const Header = () => {
         }
       </div>
 
-      <nav className='flex gap-3 text-gray-900 dark:text-white'>
+      <nav className='hidden lg:flex gap-3 text-gray-900 dark:text-white'>
         <button className='p-[6px] rounded-[8px] flex items-center gap-1.5 border border-solid border-[#D1D5DB]'>
           <img src={grid} className='block dark:hidden w-4 h-4' />
           <span>
@@ -62,9 +63,14 @@ const Header = () => {
             AI
           </span>
         </button>
-
       </nav>
+
       <div className='flex gap-2'>
+        <button onClick={() => {
+          setShowLeftPane(!showLeftPane)
+        }} className='lg:hidden text-gray-900 dark:text-white'>
+          <GiHamburgerMenu />
+        </button>
         <DarkThemeToggle />
         <Dropdown
           inline

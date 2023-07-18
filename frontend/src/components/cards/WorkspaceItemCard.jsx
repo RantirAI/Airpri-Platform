@@ -10,7 +10,7 @@ import { getDateAndTime } from '../../utils/formatDate'
 
 const WorkspaceItemCard = ({ type, url, time }) => {
     return (
-        <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[370px]'>
+        <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[350px]'>
             <div>
                 <img src={type == 'spreadsheets' ? spreadsheetImg : type == 'gallery' ? galleryImg : type == 'forms' ? formImg : ''} />
             </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ArchiveWorkspaceModal from '../../modals/ArchiveWorkspaceModal'
 import DeleteWorkspaceModal from '../../modals/DeleteWorkspaceModal'
 import DuplicateWorkspaceModal from '../../modals/DuplicateWorkspaceModal'
@@ -9,11 +9,12 @@ import Header from './Header'
 import LeftPane from './LeftPane'
 
 const MainContainer = ({ children }) => {
+    const [showLeftPane, setShowLeftPane] = useState(false)
     return (
         <div className=' flex flex-col bg-gray-300 dark:bg-[#101016] '>
-            <Header />
-            <LeftPane />
-            <div style={{ left: 'calc(100% / 6)' }} className='min-h-screen w-5/6 relative pt-16 flex flex-col px-[20px] py-[10px]'>
+            <Header showLeftPane={showLeftPane} setShowLeftPane={setShowLeftPane} />
+            <LeftPane showLeftPane={showLeftPane} setShowLeftPane={setShowLeftPane} />
+            <div className='min-h-screen w-full lg:w-4/5 left-0 lg:left-[20%] relative pt-16 flex flex-col px-[10px] lg:px-[20px] py-[10px]'>
                 <div >
                     {children}
                 </div>

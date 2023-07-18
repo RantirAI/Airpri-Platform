@@ -31,9 +31,9 @@ const Dashboard = () => {
   return (
     <MainContainer>
 
-      <div className='px-[50px]'>
+      <div className='px-[20px] lg:px-[50px]'>
 
-        <div className='flex gap-[40px] p-[40px] bg-white dark:bg-gray-800 rounded-xl'>
+        <div className='flex gap-[20px] lg:gap-[40px] p-[20px] lg:p-[40px] bg-white dark:bg-gray-800 rounded-xl'>
 
           <div className='w-1/2'>
             <h3 className='text-3xl font-bold text-gray-900 dark:text-white mb-[10px]'>
@@ -43,7 +43,7 @@ const Dashboard = () => {
               Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
             </p>
             <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] block' type='button' onClick={() => {
-              dispatch(toggleNewWorkspaceModal(true))
+            dispatch(toggleNewWorkspaceModal(true))
             }}>
               <HiOutlinePlusCircle className='mr-2 text-xl ' />
               <span>

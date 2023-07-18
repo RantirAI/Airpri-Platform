@@ -30,7 +30,7 @@ const DuplicateWorkspaceModal = () => {
         e.preventDefault()
         try {
             setSubmitting(true)
-            const workspace = await createWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members })
+            const workspace = await createWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members: members.map(({ _id }) => (_id))  })
             toast.success('Workspace successfully created!')
             nameRef.current.value = ''
             descriptionRef.current.value = ''

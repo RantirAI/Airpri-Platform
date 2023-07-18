@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     showNewWorkspaceModal: false,
     showDeleteWorkspaceModal: false,
-    showArchiveWorkspaceModal: false
+    showArchiveWorkspaceModal: false,
+    showDuplicateWorkspaceModal: false
 }
 
 const modalsSlice = createSlice({
@@ -19,7 +20,10 @@ const modalsSlice = createSlice({
         toggleArchiveWorkspaceModal: (state, action) => {
             state.showArchiveWorkspaceModal = action.payload
         },
+        toggleDuplicateWorkspaceModal: (state, action) => {
+            state.showDuplicateWorkspaceModal = action.payload
+        },
     }
 })
-export const { toggleNewWorkspaceModal, toggleDeleteWorkspaceModal, toggleArchiveWorkspaceModal } = modalsSlice.actions
+export const { toggleNewWorkspaceModal, toggleDeleteWorkspaceModal, toggleArchiveWorkspaceModal, toggleDuplicateWorkspaceModal } = modalsSlice.actions
 export default modalsSlice.reducer

@@ -11,7 +11,7 @@ import workspaceImage from '../../assets/image-workspace.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
-import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal, toggleDuplicateWorkspaceModal } from '../../redux/features/modalsSlice'
+import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal, toggleDuplicateWorkspaceModal, toggleWorkspaceSettingsModal } from '../../redux/features/modalsSlice'
 
 const Workspace = () => {
 
@@ -39,7 +39,11 @@ const Workspace = () => {
                         type='search'
                         className='min-w-[500px]'
                     />
-                    <FiSettings />
+                    <button className='border-none outline-none' onClick={() => {
+                        dispatch(toggleWorkspaceSettingsModal(true))
+                    }}>
+                        <FiSettings />
+                    </button>
                     <div className='relative min-w-max'>
                         <button className='w-full min-w-[222px] ' onClick={() => {
                             setShowOptions(!showOptions)

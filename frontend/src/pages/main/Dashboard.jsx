@@ -33,9 +33,9 @@ const Dashboard = () => {
 
       <div className='px-[20px] lg:px-[50px]'>
 
-        <div className='flex gap-[20px] lg:gap-[40px] p-[20px] lg:p-[40px] bg-white dark:bg-gray-800 rounded-xl'>
+        <div className='flex flex-col lg:flex-row gap-[20px] lg:gap-[40px] p-[20px] lg:p-[40px] bg-white dark:bg-gray-800 rounded-xl'>
 
-          <div className='w-1/2'>
+          <div className='w-full w-/12'>
             <h3 className='text-3xl font-bold text-gray-900 dark:text-white mb-[10px]'>
               Welcome Back
             </h3>
@@ -52,7 +52,7 @@ const Dashboard = () => {
             </Button>
 
           </div>
-          <div className='w-1/2 mt-[-40px]'>
+          <div className='w-full lg:mt-[-40px]'>
             <img src={welcomeIllustration} className='h-full w-full object-cover' />
           </div>
 
@@ -83,7 +83,7 @@ const Dashboard = () => {
           workspaces.data?.workspaces?.length > 0 ?
             <div>
               <div className='flex justify-between my-[12px]'>
-                <p className='text-3xl font-bold text-gray-900'>
+                <p className='text-3xl font-bold text-gray-900 dark:text-white'>
                   Workspaces
                 </p>
               </div>
@@ -95,7 +95,7 @@ const Dashboard = () => {
                       <div className='flex justify-between my-[12px]'>
                         <div className='flex items-center gap-[16px]'>
                           <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                          <p className='text-xl text-gray-900 font-medium '>
+                          <p className='text-xl text-gray-900 dark:text-gray-50 font-medium '>
                             {workspace.name}
                           </p>
                         </div>
@@ -110,7 +110,7 @@ const Dashboard = () => {
                         </button>
                       </div>
 
-                      <p className='text-base text-gray-500 font-normal'>
+                      <p className='text-base text-gray-500 dark:text-gray-300 font-normal'>
                         Everything about {workspace.name} here
                       </p>
 

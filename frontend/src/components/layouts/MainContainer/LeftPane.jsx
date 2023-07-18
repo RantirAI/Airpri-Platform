@@ -30,7 +30,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
   const navigate = useNavigate()
 
   return (
-    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-1/5 z-10 ${!showLeftPane && 'hidden'} !lg:flex`}>
+    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-1/5 z-10 ${!showLeftPane && 'hidden'} lg:!block`}>
       <Button color='failure' size='xs' onClick={() => {
         setShowLeftPane(false)
       }} className='absolute top-2 right-2 px-0 lg:hidden' >
@@ -39,45 +39,46 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
       <Sidebar.Items className='pt-4 lg:pt-unset'>
 
+        <div className='lg:!hidden'>
+          <Sidebar.ItemGroup >
 
-        <Sidebar.ItemGroup>
-
-          <Sidebar.Item
-            href=''
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            icon={BsFileSpreadsheet}
-          >
-            <p>
-              Data
-            </p>
-          </Sidebar.Item>
-          <Sidebar.Item
-            href=''
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            icon={HiSquare2Stack}
-          >
-            <p>
-              Apps
-            </p>
-          </Sidebar.Item>
-          <Sidebar.Item
-            href=''
-            onClick={(e) => {
-              e.preventDefault()
-            }}
-            icon={HiLightningBolt}
-          >
-            <p>
-              AI
-            </p>
-          </Sidebar.Item>
+            <Sidebar.Item
+              href=''
+              onClick={(e) => {
+                e.preventDefault()
+              }}
+              icon={BsFileSpreadsheet}
+            >
+              <p>
+                Data
+              </p>
+            </Sidebar.Item>
+            <Sidebar.Item
+              href=''
+              onClick={(e) => {
+                e.preventDefault()
+              }}
+              icon={HiSquare2Stack}
+            >
+              <p>
+                Apps
+              </p>
+            </Sidebar.Item>
+            <Sidebar.Item
+              href=''
+              onClick={(e) => {
+                e.preventDefault()
+              }}
+              icon={HiLightningBolt}
+            >
+              <p>
+                AI
+              </p>
+            </Sidebar.Item>
 
 
-        </Sidebar.ItemGroup>
+          </Sidebar.ItemGroup>
+        </div>
 
         <Sidebar.ItemGroup>
 

@@ -31,7 +31,7 @@ const Dashboard = () => {
   return (
     <MainContainer>
 
-      <div className='px-[20px] lg:px-[50px]'>
+      <div className='px-[20px] lg:px-[50px] mt-[20px]'>
 
         <div className='flex flex-col lg:flex-row gap-[20px] lg:gap-[40px] p-[20px] lg:p-[40px] bg-white dark:bg-gray-800 rounded-xl'>
 

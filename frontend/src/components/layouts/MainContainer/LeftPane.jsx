@@ -21,9 +21,9 @@ import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 const LeftPane = () => {
 
   const currentWorkspace = useSelector(state => state.workspace)
-  const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal } = useSelector(state => state.modals)
+  const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal } = useSelector(state => state.modals)
 
-  const workspaces = useFetch('workspace', [showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal])
+  const workspaces = useFetch('workspace', [showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal])
 
   const dispatch = useDispatch()
   const navigate = useNavigate()

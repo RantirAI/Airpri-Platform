@@ -10,19 +10,19 @@ import { getDateAndTime } from '../../utils/formatDate'
 
 const WorkspaceItemCard = ({ type, url, time }) => {
     return (
-        <div className='rounded-[8px] p-[24px] bg-white shadow-md max-w-[370px]'>
+        <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[370px]'>
             <div>
                 <img src={type == 'spreadsheets' ? spreadsheetImg : type == 'gallery' ? galleryImg : type == 'forms' ? formImg : ''} />
             </div>
-            <div className='my-[9px] text-gray-500'>
+            <div className='my-[9px] text-gray-500 dark:text-gray-200'>
                 {
                     type == 'spreadsheets' ? <LuSheet /> : type == 'gallery' ? <TfiGallery /> : type == 'forms' ? <FaWpforms /> : ''
                 }
             </div>
-            <p className='leading-tight text-2xl font-bold capitalize mb-[9px]'>
+            <p className='leading-tight text-2xl font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
                 {type}
             </p>
-            <p className='text-base text-gray-500 font-normal mb-[12px]'>
+            <p className='text-base text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
                 {getDateAndTime(time)}
             </p>
 

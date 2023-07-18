@@ -83,7 +83,7 @@ const NewWorkspaceModal = () => {
                         />
                     </div>
 
-                    <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 text-gray-500 leading-tight text-sm font-normal'>
+                    <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 dark:bg-gray-700 text-gray-500 leading-tight text-sm font-normal'>
                         <Dropdown
                             inline
                             label={members.length > 0 ? members.map((member) => member.email).join(' , ') : 'Choose from your Organization'}

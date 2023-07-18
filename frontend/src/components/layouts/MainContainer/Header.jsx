@@ -27,7 +27,7 @@ const Header = () => {
         </Link>
         {
           workspace &&
-          <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] bg-gray-50 text-gray-500 leading-tight text-sm font-normal flex items-center gap-2' >
+          <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-50 leading-tight text-sm font-normal flex items-center gap-2' >
             <p>
               {
                 workspace.name

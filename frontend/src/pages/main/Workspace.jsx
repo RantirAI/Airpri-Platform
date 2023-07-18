@@ -39,12 +39,12 @@ const Workspace = () => {
                         type='search'
                         className='min-w-[500px]'
                     />
-                    <button className='border-none outline-none' onClick={() => {
+                    <button className='border-none outline-none text-gray-900 dark:text-white' onClick={() => {
                         dispatch(toggleWorkspaceSettingsModal(true))
                     }}>
                         <FiSettings />
                     </button>
-                    <div className='relative min-w-max'>
+                    <div className='relative min-w-max text-gray-900 dark:text-white'>
                         <button className='w-full min-w-[222px] ' onClick={() => {
                             setShowOptions(!showOptions)
                         }}>
@@ -52,15 +52,15 @@ const Workspace = () => {
                         </button>
                         {
                             showOptions &&
-                            <div className='absolute w-full bg-white shadow-sm rounded-[6px]' onClick={() => {
+                            <div className='absolute w-full bg-white dark:bg-gray-700 shadow-sm rounded-[6px]' onClick={() => {
                                 setShowOptions(false)
                             }}>
-                                <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
+                                <button className=' text-gray-700 dark:text-white w-full text-sm font-normal py-[8px] px-[16px] text-left ' onClick={() => {
                                     dispatch(toggleDuplicateWorkspaceModal(true))
                                 }}>
                                     Duplicate Workspace
                                 </button>
-                                <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
+                                <button className=' text-gray-700 dark:text-white w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
                                     dispatch(toggleArchiveWorkspaceModal(true))
                                 }}>
                                     Archive Workspace
@@ -101,14 +101,14 @@ const Workspace = () => {
                 <div>
                     <div className='mb-[12px] flex items-center gap-[16px]'>
                         <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                        <p className='text-2xl font-semibold text-gray-900'>
+                        <p className='text-2xl font-semibold text-gray-900 dark:text-white'>
                             {workspace?.name}
                         </p>
                     </div>
-                    <p className='text-gray-500 text-sm my-[16px] font-bold'>
+                    <p className='text-gray-500 dark:text-gray-100 text-sm my-[16px] font-bold'>
                         {getDateAndTime(workspace?.updatedAt)}
                     </p>
-                    <p className='text-base font-normal leading-[150%] text-gray-500'>
+                    <p className='text-base font-normal leading-[150%] text-gray-500 dark:text-gray-50'>
                         {workspace?.description}
                     </p>
                 </div>

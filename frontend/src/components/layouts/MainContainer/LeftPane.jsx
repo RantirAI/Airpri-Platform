@@ -71,7 +71,7 @@ const LeftPane = () => {
                     <Sidebar.Collapse
                       icon={MdWorkspaces}
                       label={workspace.name}
-                      className={currentWorkspace.workspace?.name == workspace.name ? 'bg-gray-200' : ''}
+                      className={currentWorkspace.workspace?.name == workspace.name ? 'bg-gray-200 dark:bg-gray-700' : ''}
                     >
                       <div onClick={() => {
                         dispatch(selectWorkspace(workspace))

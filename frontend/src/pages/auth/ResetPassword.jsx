@@ -19,7 +19,6 @@ const ResetPassword = () => {
     try {
       setSubmitting(true)
       if (password != confirmPassword) {
-        console.log(password, confirmPassword)
         throw new Error('Passwords do not match!')
       }
       await resetPassword({ email, password, token })

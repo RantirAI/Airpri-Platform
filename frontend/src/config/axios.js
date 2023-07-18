@@ -21,7 +21,7 @@ export const setAxiosToken = (token) => {
 
 Axios.interceptors.response.use(
   async (response) => response,
-  (error) => Promise.reject(error?.response?.data?.message || error?.response?.data || error?.response || error?.data)
+  (error) => Promise.reject(error?.response?.data?.message || error?.response?.data?.error || error?.response?.data || error?.response || error?.message || error)
 );
 
 export default Axios

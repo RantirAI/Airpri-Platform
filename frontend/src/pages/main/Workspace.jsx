@@ -30,7 +30,7 @@ const Workspace = () => {
     return (
         <MainContainer>
 
-            <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center'>
+            <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center mt-[15px] rounded-[8px]'>
                 <div className='flex gap-[15px] items-center min-w-max'>
                     <TextInput
                         id='workspace-search'

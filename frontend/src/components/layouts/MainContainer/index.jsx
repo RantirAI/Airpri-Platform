@@ -3,6 +3,7 @@ import ArchiveWorkspaceModal from '../../modals/ArchiveWorkspaceModal'
 import DeleteWorkspaceModal from '../../modals/DeleteWorkspaceModal'
 import DuplicateWorkspaceModal from '../../modals/DuplicateWorkspaceModal'
 import NewWorkspaceModal from '../../modals/NewWorkspaceModal'
+import WorkspaceSettingsModal from '../../modals/WorkspaceSettingsModal'
 import Footer from './Footer'
 import Header from './Header'
 import LeftPane from './LeftPane'
@@ -22,6 +23,7 @@ const MainContainer = ({ children }) => {
                 <DeleteWorkspaceModal />
                 <ArchiveWorkspaceModal />
                 <DuplicateWorkspaceModal />
+                <WorkspaceSettingsModal />
             </div>
         </div>
     )

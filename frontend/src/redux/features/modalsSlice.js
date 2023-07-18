@@ -4,7 +4,8 @@ const initialState = {
     showNewWorkspaceModal: false,
     showDeleteWorkspaceModal: false,
     showArchiveWorkspaceModal: false,
-    showDuplicateWorkspaceModal: false
+    showDuplicateWorkspaceModal: false,
+    showWorkspaceSettingsModal: false
 }
 
 const modalsSlice = createSlice({
@@ -23,7 +24,10 @@ const modalsSlice = createSlice({
         toggleDuplicateWorkspaceModal: (state, action) => {
             state.showDuplicateWorkspaceModal = action.payload
         },
+        toggleWorkspaceSettingsModal: (state, action) => {
+            state.showWorkspaceSettingsModal = action.payload
+        },
     }
 })
-export const { toggleNewWorkspaceModal, toggleDeleteWorkspaceModal, toggleArchiveWorkspaceModal, toggleDuplicateWorkspaceModal } = modalsSlice.actions
+export const { toggleNewWorkspaceModal, toggleDeleteWorkspaceModal, toggleArchiveWorkspaceModal, toggleDuplicateWorkspaceModal, toggleWorkspaceSettingsModal } = modalsSlice.actions
 export default modalsSlice.reducer

@@ -18,8 +18,11 @@ import { useNavigate } from 'react-router-dom';
 import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 import { BsFileSpreadsheet } from 'react-icons/bs';
 import { HiSquare2Stack } from 'react-icons/hi2'
+import {GoOrganization} from 'react-icons/go'
 
 const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
+
+  const {user} = useSelector(state => state.auth)
 
   const currentWorkspace = useSelector(state => state.workspace)
   const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal } = useSelector(state => state.modals)
@@ -37,11 +40,25 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
         <IoMdClose />
       </Button>
 
-      <Sidebar.Items className='pt-4 lg:pt-unset'>
+      <Sidebar.Items className='pt-4 lg:pt-0'>
 
-        <div className='lg:!hidden'>
-          <Sidebar.ItemGroup >
 
+        <Sidebar.ItemGroup >
+
+          <Sidebar.Item
+            href=''
+            onClick={(e) => {
+              e.preventDefault()
+              navigate('/dashboard')
+            }}
+            icon={GoOrganization}
+          >
+            <p>
+              {user.orgName}
+            </p>
+          </Sidebar.Item>
+
+          <div className='lg:!hidden'>
             <Sidebar.Item
               href=''
               onClick={(e) => {
@@ -75,10 +92,11 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                 AI
               </p>
             </Sidebar.Item>
+          </div>
 
 
-          </Sidebar.ItemGroup>
-        </div>
+
+        </Sidebar.ItemGroup>
 
         <Sidebar.ItemGroup>
 

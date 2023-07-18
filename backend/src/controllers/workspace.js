@@ -57,7 +57,7 @@ const archiveWorkspace = async (req, res) => {
 const getWorkspaces = async (req, res) => {
     try{
         const {archived} = req.query
-        const workspaces = await Workspace.find({orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: archived ? true: false})
+        const workspaces = await Workspace.find({orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: archived ? true: false}).populate('members')
         
         res.status(200).json({workspaces})
 

@@ -11,7 +11,7 @@ import workspaceImage from '../../assets/image-workspace.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
-import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal } from '../../redux/features/modalsSlice'
+import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal, toggleDuplicateWorkspaceModal } from '../../redux/features/modalsSlice'
 
 const Workspace = () => {
 
@@ -51,7 +51,9 @@ const Workspace = () => {
                             <div className='absolute w-full bg-white shadow-sm rounded-[6px]' onClick={() => {
                                 setShowOptions(false)
                             }}>
-                                <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left'>
+                                <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
+                                    dispatch(toggleDuplicateWorkspaceModal(true))
+                                }}>
                                     Duplicate Workspace
                                 </button>
                                 <button className=' text-gray-700 w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {

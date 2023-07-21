@@ -52,16 +52,6 @@ const getSpreadsheet = async (req, res) => {
             return res.status(404).json({ message: 'Spreadsheet not found' })
         }
 
-        const workspace = await Workspace.findById(spreadsheet.workspace)
-
-        const userInWorkspace = workspace.members.find((member) => (
-            String(member) == String(req.user._id)
-        ))
-
-        if (!userInWorkspace) {
-            return res.status(404).json({ message: 'Spreadsheet not found' })
-        }
-
         return res.status(200).json({ spreadsheet })
     } catch (error) {
         console.log(error.message)

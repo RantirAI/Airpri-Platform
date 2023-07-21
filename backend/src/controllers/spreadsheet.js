@@ -59,8 +59,42 @@ const getSpreadsheet = async (req, res) => {
     }
 }
 
+const updateSpreadsheet = async (req, res) => {
+    try {
+        const id = req.params.id
+        const { name, description, columns, rows } = req.body
+
+        const spreadsheet = await Spreadsheet.findById(id)
+
+        if (!spreadsheet) {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
+        }
+
+        if (name) {
+            spreadsheet.name = name
+        } 
+        if(description){
+            spreadsheet.description = description
+        }
+        if(columns){
+            spreadsheet.columns = columns
+        }
+        if(rows){
+            spreadsheet.rows = rows
+        }
+
+        await spreadsheet.save()
+
+        res.status(200).json({spreadsheet, message: 'Spreadsheet updated'})
+
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ message: 'Something went wrong' })
+    }
+}
 
 module.exports = {
     createSpreadsheet,
-    getSpreadsheet
+    getSpreadsheet,
+    updateSpreadsheet
 }

@@ -72,20 +72,20 @@ const updateSpreadsheet = async (req, res) => {
 
         if (name) {
             spreadsheet.name = name
-        } 
-        if(description){
+        }
+        if (description) {
             spreadsheet.description = description
         }
-        if(columns){
+        if (columns) {
             spreadsheet.columns = columns
         }
-        if(rows){
+        if (rows) {
             spreadsheet.rows = rows
         }
 
         await spreadsheet.save()
 
-        res.status(200).json({spreadsheet, message: 'Spreadsheet updated'})
+        res.status(200).json({ spreadsheet, message: 'Spreadsheet updated' })
 
     } catch (error) {
         console.log(error.message)
@@ -93,8 +93,28 @@ const updateSpreadsheet = async (req, res) => {
     }
 }
 
+const deleteSpreadsheet = async (req, res) => {
+    try {
+        const id = req.params.id
+        const spreadsheet = await Spreadsheet.findById(id)
+
+        if (!spreadsheet) {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
+        }
+
+        await spreadsheet.deleteOne()
+
+        return res.status(200).json({ message: 'Spreadsheet deleted' })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ message: 'Something went wrong' })
+    }
+}
+
+
 module.exports = {
     createSpreadsheet,
     getSpreadsheet,
-    updateSpreadsheet
+    updateSpreadsheet,
+    deleteSpreadsheet
 }

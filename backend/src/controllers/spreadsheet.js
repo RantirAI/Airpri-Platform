@@ -24,8 +24,7 @@ const createSpreadsheet = async (req, res) => {
             return res.status(400).json({ message: 'Title exists' })
         }
 
-
-        const workspace = await Workspace.findOne({ orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: false })
+        const workspace = await Workspace.findOne({id: workspaceId, orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: false })
 
         if(!workspace){
             return res.status(404).json({message: 'Workspace not found'})

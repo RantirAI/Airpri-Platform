@@ -52,6 +52,10 @@ const SpreadsheetSchema = new Schema({
         default: [{
             'name': ""
         }]
+    },
+    archived: {
+        type: Boolean,
+        default: false
     }
 })
 

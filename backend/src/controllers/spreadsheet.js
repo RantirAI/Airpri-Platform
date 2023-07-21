@@ -5,10 +5,10 @@ const Workspace = require('../models/Workspace')
 
 const createSpreadsheet = async (req, res) => {
     try {
-        const { title, workspaceId } = req.body
+        const { name, description, workspaceId } = req.body
 
-        if (!title?.trim()) {
-            return res.status(400).json({ message: 'Title is required' })
+        if (!name?.trim()) {
+            return res.status(400).json({ message: 'Name is required' })
         }
         if (!workspaceId) {
             return res.status(400).json({ message: 'Workspace id is required' })
@@ -17,11 +17,10 @@ const createSpreadsheet = async (req, res) => {
             return res.status(400).json({ message: 'Invalid workspace id' })
         }
 
+        const nameExists = await Spreadsheet.findOne({ name })
 
-        const titleExists = await Spreadsheet.findOne({ title })
-
-        if (titleExists) {
-            return res.status(400).json({ message: 'Title exists' })
+        if (nameExists) {
+            return res.status(400).json({ message: 'Name exists' })
         }
 
         const workspace = await Workspace.findOne({ _id: workspaceId, orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: false })
@@ -31,7 +30,8 @@ const createSpreadsheet = async (req, res) => {
         }
 
         const spreadsheet = await Spreadsheet.create({
-            title,
+            name,
+            description,
             workspace: workspaceId,
         })
 

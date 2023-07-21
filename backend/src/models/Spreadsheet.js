@@ -24,11 +24,15 @@ const ColumnSchema = new Schema({
 })
 
 const SpreadsheetSchema = new Schema({
-    title: {
+    name: {
         type: String,
         required: true,
         trim: true,
         unique: true
+    },
+    description: {
+        type: String, 
+        default: ''
     },
     workspace: {
         ref: 'Workspace',

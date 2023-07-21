@@ -111,10 +111,31 @@ const deleteSpreadsheet = async (req, res) => {
     }
 }
 
+const archiveSpreadsheet = async (req, res) => {
+    try {
+        const id = req.params.id
+        const spreadsheet = await Spreadsheet.findById(id)
+
+        if (!spreadsheet) {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
+        }
+
+        spreadsheet.archived = true
+
+        await spreadsheet.save()
+
+        return res.status(200).json({ message: 'Spreadsheet archived' })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ message: 'Something went wrong' })
+    }
+}
+
 
 module.exports = {
     createSpreadsheet,
     getSpreadsheet,
     updateSpreadsheet,
-    deleteSpreadsheet
+    deleteSpreadsheet,
+    archiveSpreadsheet
 }

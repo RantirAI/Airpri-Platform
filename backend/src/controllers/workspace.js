@@ -9,7 +9,7 @@ const createWorkspace = async (req, res) => {
             return res.status(400).json({ message: 'Name is required' })
         }
 
-        const nameExists = await Workspace.findOne({ name })
+        const nameExists = await Workspace.findOne({ name, orgName: req.user.orgName })
         if (nameExists) {
             return res.status(400).json({ message: "Name is taken" })
         }

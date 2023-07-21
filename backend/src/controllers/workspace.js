@@ -125,6 +125,26 @@ const deleteWorkspace = async (req, res) => {
     }
 }
 
+const getWorkspaceSpreadsheets = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { archived } = req.query
+
+        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: archived != undefined ? true : false })
+
+        if (!workspace) {
+            return res.status(404).json({ message: 'Workspace not found' })
+        }
+
+        const spreadsheets = await Spreadsheet.find({ workspace: id, archived: archived != undefined ? true : false })
+
+        return res.status(200).json({ spreadsheets })
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ message: 'Something went wrong' })
+    }
+}
+
 
 module.exports = {
     createWorkspace,
@@ -132,4 +152,5 @@ module.exports = {
     archiveWorkspace,
     getWorkspaces,
     deleteWorkspace,
+    getWorkspaceSpreadsheets
 }

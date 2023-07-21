@@ -4,11 +4,10 @@ const WorkspaceSchema = new Schema({
     name: {
         type: String,
         required: true,
-        unique: true
     },
     description: {
         type: String,
-        required: true
+        default: ''
     },
     members: {
         type: [Schema.Types.ObjectId],

@@ -12,10 +12,13 @@ import jwtDecode from 'jwt-decode';
 import { authenticate } from './redux/features/authSlice';
 import { setAxiosToken } from './config/axios'
 import Workspace from './pages/main/Workspace'
+import Spreadsheets from './pages/main/Spreadsheets'
 
 const index = () => {
 
     const { user, loading } = useSelector((state) => state.auth)
+    const { workspace } = useSelector(state => state.workspace)
+
 
     const dispatch = useDispatch()
 
@@ -49,7 +52,20 @@ const index = () => {
                             <Route path='/create-account' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/dashboard' element={<Dashboard />} />
-                            <Route path='/workspace' element={<Workspace />} />
+                            <>
+                                {
+                                    workspace ?
+                                        <>
+                                            <Route path='/workspace' element={<Workspace />} />
+                                            <Route path='/spreadsheet' element={<Spreadsheets />} />
+                                        </>
+                                        :
+                                        <>
+                                            <Route path='*' element={<Navigate replace to={'/dashboard'} />} />
+                                        </>
+
+                                }
+                            </>
                         </>
                         :
                         <>

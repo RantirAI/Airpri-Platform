@@ -18,14 +18,7 @@ const Workspace = () => {
     const [showOptions, setShowOptions] = useState(false)
     const { workspace } = useSelector(state => state.workspace)
 
-    const navigate = useNavigate()
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        if (!workspace) {
-            navigate('/dashboard')
-        }
-    }, [])
 
     return (
         <MainContainer>

@@ -18,11 +18,11 @@ import { useNavigate } from 'react-router-dom';
 import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 import { BsFileSpreadsheet } from 'react-icons/bs';
 import { HiSquare2Stack } from 'react-icons/hi2'
-import {GoOrganization} from 'react-icons/go'
+import { GoOrganization } from 'react-icons/go'
 
 const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
-  const {user} = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.auth)
 
   const currentWorkspace = useSelector(state => state.workspace)
   const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal } = useSelector(state => state.modals)
@@ -154,7 +154,11 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                             Overview
                           </p>
                         </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={LuSheet}>
+                        <Sidebar.Item href=''
+                          onClick={(e) => {
+                            e.preventDefault()
+                            navigate('/spreadsheet')
+                          }} icon={LuSheet}>
                           Spreadsheets
                         </Sidebar.Item>
                         <Sidebar.Item href="#" icon={FaWpforms}>

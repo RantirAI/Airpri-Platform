@@ -7,10 +7,11 @@ import { TfiGallery } from 'react-icons/tfi'
 import { FaWpforms } from 'react-icons/fa'
 import { MdOpenInNew } from 'react-icons/md'
 import { getDateAndTime } from '../../utils/formatDate'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { selectWorkspace } from '../../redux/features/workspaceSlice'
 
-const WorkspaceItemCard = ({ type, time }) => {
+const WorkspaceItemCard = ({ type, time, workspace }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     return (
@@ -32,6 +33,7 @@ const WorkspaceItemCard = ({ type, time }) => {
 
             <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={(e) => {
                 e.preventDefault()
+                dispatch(selectWorkspace(workspace))
                 navigate(`/${type}`)
             }}>
                 <span>

@@ -115,9 +115,9 @@ const Dashboard = () => {
                       </p>
 
                       <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
-                        <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} />
-                        <WorkspaceItemCard type={'form'} time={workspace.updatedAt} />
-                        <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} />
+                        <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} />
+                        <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
+                        <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
 
                       </div>
 

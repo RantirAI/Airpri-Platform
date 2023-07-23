@@ -1,10 +1,10 @@
 export const workspaces = [
     {
         name: 'Drivers',
-        spreadsheets: {
+        spreadsheet: {
             time: 'July 2, 2023 6:41 PM'
         },
-        forms: {
+        form: {
             time: 'July 2, 2023 6:41 PM'
         },
         gallery: {

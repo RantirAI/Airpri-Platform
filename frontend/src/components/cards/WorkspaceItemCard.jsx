@@ -7,8 +7,12 @@ import { TfiGallery } from 'react-icons/tfi'
 import { FaWpforms } from 'react-icons/fa'
 import { MdOpenInNew } from 'react-icons/md'
 import { getDateAndTime } from '../../utils/formatDate'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-const WorkspaceItemCard = ({ type, url, time }) => {
+const WorkspaceItemCard = ({ type, time }) => {
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
     return (
         <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[350px]'>
             <div>
@@ -26,7 +30,10 @@ const WorkspaceItemCard = ({ type, url, time }) => {
                 {getDateAndTime(time)}
             </p>
 
-            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]'>
+            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={(e) => {
+                e.preventDefault()
+                navigate(`/${type}`)
+            }}>
                 <span>
                     Open and Edit
                 </span>

@@ -17,7 +17,7 @@ const createSpreadsheet = async (req, res) => {
             return res.status(400).json({ message: 'Invalid workspace id' })
         }
 
-        const nameExists = await Spreadsheet.findOne({ name })
+        const nameExists = await Spreadsheet.findOne({ name, workspaceId })
 
         if (nameExists) {
             return res.status(400).json({ message: 'Name exists' })

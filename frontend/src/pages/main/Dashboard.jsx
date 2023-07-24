@@ -43,7 +43,7 @@ const Dashboard = () => {
               Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
             </p>
             <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] block' type='button' onClick={() => {
-            dispatch(toggleNewWorkspaceModal(true))
+              dispatch(toggleNewWorkspaceModal(true))
             }}>
               <HiOutlinePlusCircle className='mr-2 text-xl ' />
               <span>
@@ -135,7 +135,9 @@ const Dashboard = () => {
               <div className='w-[250px] h-[155px] my-[20px]'>
                 <img src={emptyDashboardIllustration} className='h-full w-full object-cover' />
               </div>
-              <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button'>
+              <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
+                dispatch(toggleNewWorkspaceModal(true))
+              }}>
                 <HiOutlinePlusCircle className='mr-2 text-xl ' />
                 <span>
                   Start a New Workspace

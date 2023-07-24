@@ -5,7 +5,7 @@ const Workspace = require('../models/Workspace')
 
 const createSpreadsheet = async (req, res) => {
     try {
-        const { name, description, workspaceId } = req.body
+        const { name, description, workspaceId, columns, rows } = req.body
 
         if (!name?.trim()) {
             return res.status(400).json({ message: 'Name is required' })
@@ -33,6 +33,8 @@ const createSpreadsheet = async (req, res) => {
             name,
             description,
             workspace: workspaceId,
+            rows,
+            columns
         })
 
         res.status(201).json({ message: 'Spreadsheet created', spreadsheet })

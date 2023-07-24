@@ -16,12 +16,14 @@ import NewSpreadsheetModal from '../../components/modals/NewSpreadsheetModal'
 import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsheetModal'
 import SpreadsheetSettingsModal from '../../components/modals/SpreadsheetSettingsModal'
 import DeleteSpreadsheetModal from '../../components/modals/DeleteSpreadsheetModal'
+import ArchiveSpreadsheetModal from '../../components/modals/ArchiveSpreadsheetModal'
 
 const Spreadsheet = () => {
 
   const [showDuplicateSpreadsheetModal, setShowDuplicateSpreadsheetModal] = useState(false)
   const [showSpreadsheetSettingsModal, setShowSpreadsheetSettingsModal] = useState(false)
   const [showDeleteSpreadsheetModal, setShowDeleteSpreadsheetModal] = useState(false)
+  const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
 
   const { id } = useParams()
 
@@ -65,7 +67,7 @@ const Spreadsheet = () => {
                   Duplicate Spreadsheet
                 </button>
                 <button className=' text-gray-700 dark:text-white w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
-
+                  setShowArchiveSpreadsheetModal(true)
                 }}>
                   Archive Spreadsheet
                 </button>
@@ -136,6 +138,7 @@ const Spreadsheet = () => {
       <DuplicateSpreadsheetModal showModal={showDuplicateSpreadsheetModal} setShowModal={setShowDuplicateSpreadsheetModal} spreadsheet={data?.spreadsheet} />
       <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={data?.spreadsheet} />
       <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={data?.spreadsheet._id} />
+      <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={data?.spreadsheet._id} />
 
     </MainContainer>
   )

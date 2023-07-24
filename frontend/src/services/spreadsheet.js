@@ -25,3 +25,11 @@ export const deleteSpreadsheet = async (id) => {
         throw new Error(error)
     }
 }
+
+export const archiveSpreadsheet = async (id) => {
+    try{
+        await Axios.patch(`spreadsheet/${id}`)
+    } catch(error) {
+        throw new Error(error)
+    }
+}

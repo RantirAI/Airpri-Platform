@@ -7,8 +7,10 @@ import { TfiGallery } from 'react-icons/tfi'
 import { FaWpforms } from 'react-icons/fa'
 import { MdOpenInNew } from 'react-icons/md'
 import { getDateAndTime } from '../../utils/formatDate'
+import { useNavigate } from 'react-router-dom'
 
-const SpreadsheetCard = ({ type, url, time }) => {
+const SpreadsheetCard = ({ id, time, name }) => {
+    const navigate = useNavigate()
     return (
         <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[350px]'>
             <div>
@@ -18,13 +20,15 @@ const SpreadsheetCard = ({ type, url, time }) => {
                 <LuSheet />
             </div>
             <p className='leading-tight text-2xl font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
-                {type}
+                {name}
             </p>
             <p className='text-base text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
                 {getDateAndTime(time)}
             </p>
 
-            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]'>
+            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={() => {
+                navigate(`/spreadsheet/${id}`)
+            }}>
                 <span>
                     Open and Edit
                 </span>

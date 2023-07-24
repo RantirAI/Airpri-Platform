@@ -3,19 +3,17 @@ import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, Spinner, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
 import { HiDownload, HiOutlinePlusCircle } from 'react-icons/hi'
-import WorkspaceItemCard from '../../components/cards/WorkspaceItemCard'
 import { FiSettings } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
-import workspaceImage from '../../assets/image-workspace.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
-import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal, toggleDuplicateWorkspaceModal, toggleWorkspaceSettingsModal } from '../../redux/features/modalsSlice'
 import SpreadsheetCard from '../../components/cards/SpreadsheetCard'
 import useFetch from '../../hooks/useFetch'
 import emptyDashboardIllustration from '../../assets/empty-dashboard-illustration.svg'
 import NewSpreadsheetModal from '../../components/modals/NewSpreadsheetModal'
+import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsheetModal'
 
 const Spreadsheets = () => {
     const [showNewSpreadsheetModal, setShowNewSpreadsheetModal] = useState(false)
@@ -34,14 +32,14 @@ const Spreadsheets = () => {
             <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center mt-[15px] rounded-[8px]'>
                 <div className='flex gap-[15px] items-center min-w-max'>
                     <TextInput
-                        id='workspace-search'
-                        placeholder='Search inside the entire Workspace'
+                        id='spreadsheet-search'
+                        placeholder='Search inside the entire Spreadsheet'
                         required
                         type='search'
                         className='min-w-[250px] lg:min-w-[500px] flex-1'
                     />
                     <button className='border-none outline-none text-gray-900 dark:text-white' onClick={() => {
-                        dispatch(toggleWorkspaceSettingsModal(true))
+                        
                     }}>
                         <FiSettings />
                     </button>
@@ -51,28 +49,28 @@ const Spreadsheets = () => {
                         }}>
                             <SlOptionsVertical />
                         </button>
-                        {
+                        {/* {
                             showOptions &&
                             <div className='absolute w-full bg-white dark:bg-gray-700 shadow-sm rounded-[6px]' onClick={() => {
                                 setShowOptions(false)
                             }}>
                                 <button className=' text-gray-700 dark:text-white w-full text-sm font-normal py-[8px] px-[16px] text-left ' onClick={() => {
-                                    dispatch(toggleDuplicateWorkspaceModal(true))
+                                    setShowDuplicateSpreadsheetModal(true)
                                 }}>
-                                    Duplicate Workspace
+                                    Duplicate Spreadsheet
                                 </button>
                                 <button className=' text-gray-700 dark:text-white w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
-                                    dispatch(toggleArchiveWorkspaceModal(true))
+                                    
                                 }}>
-                                    Archive Workspace
+                                    Archive Spreadsheet
                                 </button>
                                 <button className='border-gray-200 border-0 border-solid border-t-[1px] text-red-500 w-full text-sm font-normal py-[8px] px-[16px] text-left' onClick={() => {
-                                    dispatch(toggleDeleteWorkspaceModal(true))
+                                    
                                 }}>
-                                    Delete Workspace (Forever)
+                                    Delete Spreadsheet (Forever)
                                 </button>
                             </div>
-                        }
+                        } */}
 
                     </div>
                 </div>
@@ -110,8 +108,8 @@ const Spreadsheets = () => {
                     data?.spreadsheets.length > 0 ?
                         <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
                             {
-                                data?.spreadsheets?.map((_id, updatedAt,) => (
-                                    <SpreadsheetCard id={_id} time={updatedAt} />
+                                data?.spreadsheets?.map(({_id, updatedAt, name}) => (
+                                    <SpreadsheetCard id={_id} time={updatedAt} name={name} />
                                 ))
                             }
                         </div>

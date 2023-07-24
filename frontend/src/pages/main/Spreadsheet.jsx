@@ -14,16 +14,18 @@ import useFetch from '../../hooks/useFetch'
 import emptyDashboardIllustration from '../../assets/empty-dashboard-illustration.svg'
 import NewSpreadsheetModal from '../../components/modals/NewSpreadsheetModal'
 import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsheetModal'
+import SpreadsheetSettingsModal from '../../components/modals/SpreadsheetSettingsModal'
 
 const Spreadsheet = () => {
 
   const [showDuplicateSpreadsheetModal, setShowDuplicateSpreadsheetModal] = useState(false)
+  const [showSpreadsheetSettingsModal, setShowSpreadsheetSettingsModal] = useState(false)
 
   const { id } = useParams()
 
   const [showOptions, setShowOptions] = useState(false)
 
-  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id])
+  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal])
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -40,7 +42,7 @@ const Spreadsheet = () => {
             className='min-w-[250px] lg:min-w-[500px] flex-1'
           />
           <button className='border-none outline-none text-gray-900 dark:text-white' onClick={() => {
-
+            setShowSpreadsheetSettingsModal(true)
           }}>
             <FiSettings />
           </button>
@@ -130,6 +132,7 @@ const Spreadsheet = () => {
       }
 
       <DuplicateSpreadsheetModal showModal={showDuplicateSpreadsheetModal} setShowModal={setShowDuplicateSpreadsheetModal} spreadsheet={data?.spreadsheet} />
+      <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={data?.spreadsheet} />
 
     </MainContainer>
   )

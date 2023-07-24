@@ -17,3 +17,11 @@ export const editSpreadsheet = async (data, id) => {
         throw new Error(error)
     }
 }
+
+export const deleteSpreadsheet = async (id) => {
+    try {
+        await Axios.delete(`spreadsheet/${id}`)
+    } catch (error) {
+        throw new Error(error)
+    }
+}

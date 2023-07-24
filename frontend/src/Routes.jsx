@@ -13,6 +13,7 @@ import { authenticate } from './redux/features/authSlice';
 import { setAxiosToken } from './config/axios'
 import Workspace from './pages/main/Workspace'
 import Spreadsheets from './pages/main/Spreadsheets'
+import Spreadsheet from './pages/main/Spreadsheet'
 
 const index = () => {
 
@@ -58,6 +59,7 @@ const index = () => {
                                         <>
                                             <Route path='/workspace' element={<Workspace />} />
                                             <Route path='/spreadsheet' element={<Spreadsheets />} />
+                                            <Route path='/spreadsheet/:id' element={<Spreadsheet />} />
                                         </>
                                         :
                                         <>

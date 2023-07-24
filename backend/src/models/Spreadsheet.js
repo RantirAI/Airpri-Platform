@@ -61,7 +61,7 @@ const SpreadsheetSchema = new Schema({
         type: Boolean,
         default: false
     }
-})
+}, {timestamps: true})
 
 const Spreadsheet = model('Spreadsheet', SpreadsheetSchema)
 

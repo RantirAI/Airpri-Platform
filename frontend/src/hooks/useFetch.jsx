@@ -14,7 +14,7 @@ const useFetch = (url, dependencies) => {
                     const response = await Axios.get(url)
                     setData(response.data)
                 } catch (error) {
-                    setError(error.message)
+                    setError(error)
                 } finally {
                     setLoading(false)
                 }

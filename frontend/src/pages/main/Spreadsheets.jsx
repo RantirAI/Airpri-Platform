@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import MainContainer from '../../components/layouts/MainContainer'
-import { Alert, Button, TextInput } from 'flowbite-react'
+import { Alert, Button, Spinner, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
 import { HiDownload, HiOutlinePlusCircle } from 'react-icons/hi'
 import WorkspaceItemCard from '../../components/cards/WorkspaceItemCard'
@@ -13,11 +13,17 @@ import { useNavigate } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
 import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal, toggleDuplicateWorkspaceModal, toggleWorkspaceSettingsModal } from '../../redux/features/modalsSlice'
 import SpreadsheetCard from '../../components/cards/SpreadsheetCard'
+import useFetch from '../../hooks/useFetch'
+import emptyDashboardIllustration from '../../assets/empty-dashboard-illustration.svg'
+import NewSpreadsheetModal from '../../components/modals/NewSpreadsheetModal'
 
 const Spreadsheets = () => {
+    const [showNewSpreadsheetModal, setShowNewSpreadsheetModal] = useState(false)
 
     const [showOptions, setShowOptions] = useState(false)
     const { workspace } = useSelector(state => state.workspace)
+
+    const { data, loading, error } = useFetch(`/workspace/${workspace._id}`, [showNewSpreadsheetModal, workspace])
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -79,6 +85,7 @@ const Spreadsheets = () => {
                         </span>
                     </Button>
                     <button className=' text-gray-900 dark:text-white flex items-center' type='button' onClick={() => {
+                        setShowNewSpreadsheetModal(true)
                     }}>
                         <HiOutlinePlusCircle className='mr-2 text-xl ' />
                         <span>
@@ -96,10 +103,38 @@ const Spreadsheets = () => {
                 </p>
             </div>
 
-            <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
-                <SpreadsheetCard time={workspace?.updatedAt} />
-            </div>
+            {
+                loading ?
+                    <Spinner aria-label="Fetching spreadsheets..." />
+                    :
+                    data?.spreadsheets.length > 0 ?
+                        <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
+                            {
+                                data?.spreadsheets?.map((_id, updatedAt,) => (
+                                    <SpreadsheetCard id={_id} time={updatedAt} />
+                                ))
+                            }
+                        </div>
+                        :
+                        <div className='flex flex-col items-center py-[40px]'>
+                            <h3 className='text-xl font-medium text-gray-900 dark:text-white'>
+                                Get started by adding a new spreadsheet here
+                            </h3>
+                            <div className='w-[250px] h-[155px] my-[20px]'>
+                                <img src={emptyDashboardIllustration} className='h-full w-full object-cover' />
+                            </div>
+                            <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
+                                setShowNewSpreadsheetModal(true)
+                            }}>
+                                <HiOutlinePlusCircle className='mr-2 text-xl ' />
+                                <span>
+                                    Start a New Spreadsheet
+                                </span>
+                            </Button>
+                        </div>
+            }
 
+            <NewSpreadsheetModal showModal={showNewSpreadsheetModal} setShowModal={setShowNewSpreadsheetModal} />
 
         </MainContainer>
     )

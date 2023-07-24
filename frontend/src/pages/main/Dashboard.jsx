@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import MainContainer from '../../components/layouts/MainContainer'
-import { Alert, Button } from 'flowbite-react'
+import { Alert, Button, Spinner } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
 import { HiOutlinePlusCircle } from 'react-icons/hi'
 import { AiFillEye } from 'react-icons/ai'
@@ -80,70 +80,76 @@ const Dashboard = () => {
 
 
         {
-          workspaces.data?.workspaces?.length > 0 ?
-            <div>
-              <div className='flex justify-between my-[12px]'>
-                <p className='text-3xl font-bold text-gray-900 dark:text-white'>
-                  Workspaces
-                </p>
-              </div>
-
-              <div>
-                {
-                  workspaces?.data?.workspaces?.map((workspace) => (
-                    <div>
-                      <div className='flex justify-between my-[12px]'>
-                        <div className='flex items-center gap-[16px]'>
-                          <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                          <p className='text-xl text-gray-900 dark:text-gray-50 font-medium '>
-                            {workspace.name}
-                          </p>
-                        </div>
-                        <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
-                          dispatch(selectWorkspace(workspace))
-                          navigate('/workspace')
-                        }}>
-                          <span>
-                            Open and Edit
-                          </span>
-                          <MdOpenInNew className='ml-2 text-base ' />
-                        </button>
-                      </div>
-
-                      <p className='text-base text-gray-500 dark:text-gray-300 font-normal'>
-                        Everything about {workspace.name} here
-                      </p>
-
-                      <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
-                        <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} />
-                        <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
-                        <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
-
-                      </div>
-
-                    </div>
-                  ))
-                }
-              </div>
-
-            </div>
+          workspaces.loading ?
+            <Spinner aria-label="Fetching spreadsheets..." />
             :
-            <div className='flex flex-col items-center py-[40px]'>
-              <h3 className='text-xl font-medium text-gray-900 dark:text-white'>
-                Get started by adding a new workspace here
-              </h3>
-              <div className='w-[250px] h-[155px] my-[20px]'>
-                <img src={emptyDashboardIllustration} className='h-full w-full object-cover' />
-              </div>
-              <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
-                dispatch(toggleNewWorkspaceModal(true))
-              }}>
-                <HiOutlinePlusCircle className='mr-2 text-xl ' />
-                <span>
-                  Start a New Workspace
-                </span>
-              </Button>
-            </div>
+            <>
+              {workspaces.data?.workspaces?.length > 0 ?
+                <div>
+                  <div className='flex justify-between my-[12px]'>
+                    <p className='text-3xl font-bold text-gray-900 dark:text-white'>
+                      Workspaces
+                    </p>
+                  </div>
+
+                  <div>
+                    {
+                      workspaces?.data?.workspaces?.map((workspace) => (
+                        <div>
+                          <div className='flex justify-between my-[12px]'>
+                            <div className='flex items-center gap-[16px]'>
+                              <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
+                              <p className='text-xl text-gray-900 dark:text-gray-50 font-medium '>
+                                {workspace.name}
+                              </p>
+                            </div>
+                            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
+                              dispatch(selectWorkspace(workspace))
+                              navigate('/workspace')
+                            }}>
+                              <span>
+                                Open and Edit
+                              </span>
+                              <MdOpenInNew className='ml-2 text-base ' />
+                            </button>
+                          </div>
+
+                          <p className='text-base text-gray-500 dark:text-gray-300 font-normal'>
+                            Everything about {workspace.name} here
+                          </p>
+
+                          <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
+                            <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} />
+                            <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
+                            <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
+
+                          </div>
+
+                        </div>
+                      ))
+                    }
+                  </div>
+
+                </div>
+                :
+                <div className='flex flex-col items-center py-[40px]'>
+                  <h3 className='text-xl font-medium text-gray-900 dark:text-white'>
+                    Get started by adding a new workspace here
+                  </h3>
+                  <div className='w-[250px] h-[155px] my-[20px]'>
+                    <img src={emptyDashboardIllustration} className='h-full w-full object-cover' />
+                  </div>
+                  <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
+                    dispatch(toggleNewWorkspaceModal(true))
+                  }}>
+                    <HiOutlinePlusCircle className='mr-2 text-xl ' />
+                    <span>
+                      Start a New Workspace
+                    </span>
+                  </Button>
+                </div>
+              }
+            </>
         }
       </div>
 

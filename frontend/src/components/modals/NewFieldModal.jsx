@@ -1,11 +1,16 @@
-import { Button, Modal, Spinner } from 'flowbite-react'
-import React, { useState } from 'react'
+import { GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid'
+import { Button, Dropdown, Label, Modal, Spinner, TextInput } from 'flowbite-react'
+import React, { useRef, useState } from 'react'
+import { BsCheckLg } from 'react-icons/bs'
 import { TbClipboardList } from 'react-icons/tb'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { editSpreadsheet } from '../../services/spreadsheet'
 
-const NewFieldModal = ({showModal, setShowModal, id}) => {
+const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
+    const fieldNameRef = useRef(null)
+    const [fieldType, setFieldType] = useState(null)
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -16,6 +21,20 @@ const NewFieldModal = ({showModal, setShowModal, id}) => {
         e.preventDefault()
         try {
             setSubmitting(true)
+            const newRows = rows
+            newRows.forEach((row) => {
+                row[fieldNameRef.current.value.split(' ').join('-')] = ''
+            })
+            await editSpreadsheet({
+                columns: [...columns, {
+                    title: fieldNameRef.current.value,
+                    id: fieldNameRef.current.value.split(' ').join('-'),
+                    editable: true,
+                    icon: fieldType.icon,
+                    type: fieldType.value
+                }],
+                rows: newRows
+            }, id)
             setShowModal(false)
             toast.success('Field added')
         } catch (error) {
@@ -26,17 +45,112 @@ const NewFieldModal = ({showModal, setShowModal, id}) => {
     }
 
     return (
-        <Modal dismissible show={showModal} onClose={() => setShowModal(false)} size='3xl'>
-            <Modal.Header>Add new Fields to the Spreadsheet </Modal.Header>
+        <Modal dismissible show={showModal} onClose={() => setShowModal(false)} size='md'>
+            <Modal.Header>Add new Field to the Spreadsheet </Modal.Header>
             <Modal.Body>
-                <p className='text-sm font-normal flex justify-between'>
-                    <span className='text-gray-600'>
-                        Drag or check the fields you want to add.
-                    </span>
-                    <span className='text-gray-900 font-semibold'>
-                        Then, edit the Name to change the top spreadsheet attribute
-                    </span>
-                </p>
+                <TextInput
+                    id='field-name'
+                    placeholder='Set Field Name'
+                    required
+                    type='text'
+                    ref={fieldNameRef}
+                />
+
+                <div className="mb-2 block">
+                    <Label
+                        htmlFor="field-type"
+                        value="Field Type"
+                        className='text-lg font-semibold text-gray-900 my-[20px] block'
+                    />
+                </div>
+
+                <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 dark:bg-gray-700 text-gray-500 leading-tight text-sm font-normal'>
+                    <Dropdown
+                        inline
+                        label={fieldType?.label || 'Select field type'}
+                        className='bg-transparent z-20 bg-white'
+                        placement='bottom'
+                    >
+                        {
+                            [
+                                {
+                                    icon: GridColumnIcon.HeaderString,
+                                    value: GridCellKind.Text,
+                                    label: 'Text'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderTextTemplate,
+                                    value: GridCellKind.Text,
+                                    label: 'Long Text'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderTextTemplate,
+                                    value: GridCellKind.Text,
+                                    label: 'Rich Text'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderUri,
+                                    value: GridCellKind.Uri,
+                                    label: 'Link/Slug'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderEmail,
+                                    value: GridCellKind.Text,
+                                    label: 'Email'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderCode,
+                                    value: GridCellKind.Protected,
+                                    label: 'Password'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderNumber,
+                                    value: GridCellKind.Number,
+                                    label: 'Number'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderJoinStrings,
+                                    value: GridCellKind.Bubble,
+                                    label: 'Enumeration'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderBoolean,
+                                    value: GridCellKind.Boolean,
+                                    label: 'Boolean'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderImage,
+                                    value: GridCellKind.Custom,
+                                    label: 'Color'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderDate,
+                                    value: GridCellKind.Custom,
+                                    label: 'Date'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderTime,
+                                    value: GridCellKind.Custom,
+                                    label: 'Time'
+                                },
+                                {
+                                    icon: GridColumnIcon.HeaderCode,
+                                    value: GridCellKind.Custom,
+                                    label: 'JSON'
+                                },
+                            ].map((ft) => (
+                                <Dropdown.Item onClick={() => {
+                                    setFieldType(ft)
+                                }} >
+                                    {ft.label}
+                                    {
+                                        ft.label == fieldType?.label ?  <BsCheckLg /> : ''
+                                    }
+                                </Dropdown.Item>
+                            ))
+                        }
+                    </Dropdown>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] flex justify-center w-full' type='submit' onClick={handleSubmit}>
                         {

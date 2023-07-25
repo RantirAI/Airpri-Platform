@@ -49,7 +49,7 @@ const Spreadsheet = () => {
   const [saving, setSaving] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
-  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal, refresh])
+  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal, refresh, showNewFieldModal])
 
   const [spreadsheetData, setSpreadsheetData] = useState(null)
 
@@ -358,7 +358,7 @@ const Spreadsheet = () => {
       <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={spreadsheetData} />
       <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetData?._id} />
       <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
-      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} />
+      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} />
 
     </MainContainer >
   )

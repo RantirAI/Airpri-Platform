@@ -21,7 +21,7 @@ import { editSpreadsheet } from '../../services/spreadsheet'
 import "@glideapps/glide-data-grid/dist/index.css";
 import { DataEditor, GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid';
 import { toast } from 'react-toastify';
-import { LuNetwork, LuSheet } from 'react-icons/lu'
+import { LuNetwork, LuSheet, LuTextCursorInput } from 'react-icons/lu'
 import { FaWpforms } from 'react-icons/fa'
 import { TfiGallery } from 'react-icons/tfi'
 import { TbMessageChatbot } from 'react-icons/tb'
@@ -29,7 +29,8 @@ import { AiOutlineEye, AiOutlineSave } from 'react-icons/ai'
 import { MdOutlineDownloadForOffline } from 'react-icons/md'
 import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from 'react-icons/io5'
 import { CiExport } from 'react-icons/ci'
-import {GrAddCircle} from 'react-icons/gr'
+import { GrAddCircle } from 'react-icons/gr'
+import NewFieldModal from '../../components/modals/NewFieldModal'
 
 
 const Spreadsheet = () => {
@@ -38,6 +39,7 @@ const Spreadsheet = () => {
   const [showSpreadsheetSettingsModal, setShowSpreadsheetSettingsModal] = useState(false)
   const [showDeleteSpreadsheetModal, setShowDeleteSpreadsheetModal] = useState(false)
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
+  const [showNewFieldModal, setShowNewFieldModal] = useState(false)
 
   const { id } = useParams()
   const location = useLocation()
@@ -115,7 +117,7 @@ const Spreadsheet = () => {
       rows: spreadsheetData.rows
     }
     spreadsheetData.columns.forEach((col) => {
-      newData.rows.push({[col['id']] : ''})
+      newData.rows.push({ [col['id']]: '' })
     })
     setSpreadsheetData(newData)
   }
@@ -225,7 +227,7 @@ const Spreadsheet = () => {
             </span>
           </Button>
           <button className=' text-gray-900 dark:text-white flex items-center' type='button' onClick={() => {
-            // setShowNewSpreadsheetModal(true)
+            setShowNewFieldModal(true)
           }}>
             <HiOutlinePlusCircle className='mr-2 text-xl ' />
             <span>
@@ -278,7 +280,7 @@ const Spreadsheet = () => {
               </div>
               <div className='flex flex-row gap-2 flex-wrap border-solid border-0 border-t-2 border-gray-200 border-b-2'>
                 {
-                  [`save`, 'undo', 'redo', 'insert row', 'hide fields', 'import data', 'export'].map((btn) => (
+                  [`save`, 'undo', 'redo', 'insert row', 'hide fields', 'import data', 'export', 'edit fields'].map((btn) => (
                     <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200`} onClick={
                       (e) => {
                         e.preventDefault()
@@ -295,7 +297,7 @@ const Spreadsheet = () => {
                     }>
                       {
                         btn == 'save' ?
-                        <>{saving ? <Spinner /> : <AiOutlineSave />}</>
+                          <>{saving ? <Spinner /> : <AiOutlineSave />}</>
                           :
                           btn == 'undo' ?
                             <IoArrowUndoCircleOutline />
@@ -315,7 +317,10 @@ const Spreadsheet = () => {
                                     btn == 'export' ?
                                       <CiExport />
                                       :
-                                      ''
+                                      btn == 'edit fields' ?
+                                        <LuTextCursorInput />
+                                        :
+                                        ''
                       }
                       {btn}
                     </button>
@@ -353,6 +358,7 @@ const Spreadsheet = () => {
       <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={spreadsheetData} />
       <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetData?._id} />
       <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
+      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} />
 
     </MainContainer >
   )

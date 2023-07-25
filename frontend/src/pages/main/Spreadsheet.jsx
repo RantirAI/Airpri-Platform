@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, Spinner, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
@@ -7,7 +7,7 @@ import { FiSettings } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
 import SpreadsheetCard from '../../components/cards/SpreadsheetCard'
 import useFetch from '../../hooks/useFetch'
@@ -17,6 +17,20 @@ import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsh
 import SpreadsheetSettingsModal from '../../components/modals/SpreadsheetSettingsModal'
 import DeleteSpreadsheetModal from '../../components/modals/DeleteSpreadsheetModal'
 import ArchiveSpreadsheetModal from '../../components/modals/ArchiveSpreadsheetModal'
+import { editSpreadsheet } from '../../services/spreadsheet'
+import "@glideapps/glide-data-grid/dist/index.css";
+import { DataEditor, GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid';
+import { toast } from 'react-toastify';
+import { LuNetwork, LuSheet } from 'react-icons/lu'
+import { FaWpforms } from 'react-icons/fa'
+import { TfiGallery } from 'react-icons/tfi'
+import { TbMessageChatbot } from 'react-icons/tb'
+import { AiOutlineEye, AiOutlineSave } from 'react-icons/ai'
+import { MdOutlineDownloadForOffline } from 'react-icons/md'
+import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from 'react-icons/io5'
+import { CiExport } from 'react-icons/ci'
+import {GrAddCircle} from 'react-icons/gr'
+
 
 const Spreadsheet = () => {
 
@@ -26,13 +40,131 @@ const Spreadsheet = () => {
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
 
   const { id } = useParams()
+  const location = useLocation()
 
   const [showOptions, setShowOptions] = useState(false)
 
   const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal])
 
+  const [spreadsheetData, setSpreadsheetData] = useState(null)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+
+
+  const getContent = useCallback((cell) => {
+    if (spreadsheetData && !loading) {
+      const [col, row] = cell;
+      const dataRow = spreadsheetData['rows'][row];
+      // dumb but simple way to do this
+      // const indexes = ["email", "first-name", "last-name", "photo", "opt-in", "title", "more-info", "manager", "hired", "level"];
+      // console.log(dataRow)
+      const indexes = spreadsheetData['columns'].map(_ => _.id)
+      const d = dataRow[indexes[col]]
+      // console.log(d, indexes[col])
+      // if (indexes[col] == 'photo') {
+      //   return {
+      //     kind: GridCellKind.Image,
+      //     allowOverlay: true,
+      //     displayData: [d],
+      //     data: [d],
+      //   };
+      // }
+      // if (indexes[col] == 'opt-in') {
+      //   return {
+      //     kind: GridCellKind.Boolean,
+      //     allowOverlay: true,
+      //     displayData: d,
+      //     data: d,
+      //   };
+      // }
+      // if (indexes[col] == 'more-info') {
+      //   return {
+      //     kind: GridCellKind.Uri,
+      //     allowOverlay: true,
+      //     displayData: d,
+      //     data: d,
+      //   };
+      // }
+      // if (indexes[col] == 'manager') {
+      //   return {
+      //     kind: GridCellKind.Drilldown,
+      //     allowOverlay: true,
+      //     displayData: [{ img: '"https://images.unsplash.com/photo-1687084626949-93a5e1555fcf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80', text: d }],
+      //     data: [{ img: "https://images.unsplash.com/photo-1687084626949-93a5e1555fcf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80", text: d }],
+      //   };
+      // }
+      // if (indexes)
+      return {
+        kind: GridCellKind.Text,
+        allowOverlay: true,
+        displayData: d,
+        data: d,
+      };
+    }
+
+  }, [spreadsheetData]);
+
+  const handleInsertRow = () => {
+    const newData = {
+      ...spreadsheetData,
+      rows: spreadsheetData.rows
+    }
+    spreadsheetData.columns.forEach((col) => {
+      newData.rows.push({[col['id']] : ''})
+    })
+    setSpreadsheetData(newData)
+  }
+
+  // const data = [
+  //   {
+  //     "email": "lorem@mail.com",
+  //     "first-name": "lorem",
+  //     "last-name": "dolor",
+  //     "photo": "https://images.unsplash.com/photo-1687084626949-93a5e1555fcf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
+  //     "opt-in": false,
+  //     "title": 'Chief lorem dolor',
+  //     "more-info": "https://www.sit-amet.com.ng",
+  //     "manager": "lorem amet",
+  //     "hired": "today",
+  //     "level": "level 2"
+  //   },
+  // ];
+
+  // const columns = [
+  //   { title: "Email", id: 'email', editable: true, icon: GridColumnIcon.HeaderString },
+  //   { title: "First Name", id: 'first-name', icon: GridColumnIcon.HeaderString },
+  //   { title: "Last Name", id: 'last-name', icon: GridColumnIcon.HeaderString },
+  //   { title: "Photo", id: 'photo', icon: GridColumnIcon.HeaderImage },
+  //   { title: "Opt-In", id: 'opt-in', icon: GridColumnIcon.HeaderBoolean },
+  //   { title: "Title", id: 'title', icon: GridColumnIcon.HeaderString },
+  //   { title: "More Info", id: 'more-info', icon: GridColumnIcon.HeaderUri },
+  //   { title: "Manager", id: 'manager', icon: GridColumnIcon.HeaderReference },
+  //   { title: "Hired", id: 'hired', icon: GridColumnIcon.HeaderDate },
+  //   { title: "Level", id: 'level' },
+  // ];
+
+  useEffect(() => {
+    if (data) {
+      setSpreadsheetData(data.spreadsheet)
+    }
+  }, [data])
+
+  const handleSave = async () => {
+    try {
+      setSaving(true)
+      const response = await editSpreadsheet(spreadsheetData, spreadsheetData._id)
+      toast.success('Spreadsheet saved successfully!')
+      setRefresh(refresh)
+    } catch (error) {
+      toast.error(error.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+
 
   return (
     <MainContainer>
@@ -94,7 +226,7 @@ const Spreadsheet = () => {
           }}>
             <HiOutlinePlusCircle className='mr-2 text-xl ' />
             <span>
-              Add a New Spreadsheet
+              Add a New Field
             </span>
           </button>
         </div>
@@ -104,7 +236,7 @@ const Spreadsheet = () => {
       <div className='my-[12px] flex items-center gap-[16px]'>
         <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
         <p className='text-2xl font-semibold text-gray-900 dark:text-white'>
-          {data?.spreadsheet?.name}
+          {spreadsheetData?.name}
         </p>
       </div>
 
@@ -112,9 +244,88 @@ const Spreadsheet = () => {
         loading ?
           <Spinner aria-label="Fetching spreadsheets..." />
           :
-          data?.spreadsheet ?
-            <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
-              {JSON.stringify(data?.spreadsheet)}
+          spreadsheetData ?
+            <div className='p-2 gap-[24px] rounded-md' style={{ boxShadow: '0 0 4px rgba(0,0,0,0.3)', }}>
+              <div className='flex flex-row gap-2 flex-wrap'>
+                {
+                  ['spreadsheet', 'form', 'gallery', 'automation', 'ai-chat'].map((link) => (
+                    <Link to={`/${link}`} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} `}>
+                      {
+                        link == 'spreadsheet' ?
+                          <LuSheet />
+                          :
+                          link == 'form' ?
+                            <FaWpforms />
+                            :
+                            link == 'gallery' ?
+                              <TfiGallery />
+                              :
+                              link == 'automation' ?
+                                <LuNetwork />
+                                :
+                                <TbMessageChatbot />
+                      }
+                      {link.split('-').join(' ')}
+                      {
+                        link != 'spreadsheet' && <span className=' bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs p-0.5 rounded-md'>Soon</span>
+                      }
+                    </Link>
+                  ))
+                }
+              </div>
+              <div className='flex flex-row gap-2 flex-wrap border-solid border-0 border-t-2 border-gray-200 border-b-2'>
+                {
+                  ['save', 'undo', 'redo', 'insert row', 'hide fields', 'import data', 'export'].map((btn) => (
+                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200`} onClick={
+                      (e) => {
+                        e.preventDefault()
+                        switch (btn) {
+                          case 'save':
+                            
+                            break;
+                          case 'insert row':
+                            handleInsertRow()
+                          default:
+                            break;
+                        }
+                      }
+                    }>
+                      {
+                        btn == 'save' ?
+                          <AiOutlineSave />
+                          :
+                          btn == 'undo' ?
+                            <IoArrowUndoCircleOutline />
+                            :
+                            btn == 'redo' ?
+                              <IoArrowRedoCircleOutline />
+                              :
+                              btn == 'insert row' ?
+                                <GrAddCircle />
+                                :
+                                btn == 'hide fields' ?
+                                  <AiOutlineEye />
+                                  :
+                                  btn == 'import data' ?
+                                    <MdOutlineDownloadForOffline />
+                                    :
+                                    btn == 'export' ?
+                                      <CiExport />
+                                      :
+                                      ''
+                      }
+                      {btn}
+                    </button>
+                  ))
+                }
+              </div>
+              <DataEditor className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} getCellsForSelection={true}
+                keybindings={{ search: true }} onCellEdited={(i, j) => {
+                  const dataa = spreadsheetData
+                  dataa.rows[i[1]]['name'] = j.data
+                  setSpreadsheetData(dataa)
+                  // return j.data
+                }} />
             </div>
             :
             <div className='flex flex-col items-center py-[40px]'>
@@ -125,7 +336,7 @@ const Spreadsheet = () => {
                 <img src={emptyDashboardIllustration} className='h-full w-full object-cover' />
               </div>
               <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
-                navigate('/spreadsheets')
+                navigate('/spreadsheet')
               }}>
                 <HiOutlinePlusCircle className='mr-2 text-xl ' />
                 <span>
@@ -135,12 +346,12 @@ const Spreadsheet = () => {
             </div>
       }
 
-      <DuplicateSpreadsheetModal showModal={showDuplicateSpreadsheetModal} setShowModal={setShowDuplicateSpreadsheetModal} spreadsheet={data?.spreadsheet} />
-      <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={data?.spreadsheet} />
-      <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={data?.spreadsheet._id} />
-      <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={data?.spreadsheet._id} />
+      <DuplicateSpreadsheetModal showModal={showDuplicateSpreadsheetModal} setShowModal={setShowDuplicateSpreadsheetModal} spreadsheet={spreadsheetData} />
+      <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={spreadsheetData} />
+      <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetData?._id} />
+      <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
 
-    </MainContainer>
+    </MainContainer >
   )
 }
 

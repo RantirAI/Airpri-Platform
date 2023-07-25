@@ -21,17 +21,25 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
         e.preventDefault()
         try {
             setSubmitting(true)
+            if (columns.find((col) => (
+                col.title.toLowerCase() == fieldNameRef.current.value.toLowerCase()
+            ))) {
+                throw new Error('Field name exists!')
+            }
+            if(!fieldType){
+                throw new Error('Select field type!')
+            }
             const newRows = rows
             newRows.forEach((row) => {
-                row[fieldNameRef.current.value.split(' ').join('-')] = ''
+                row[fieldNameRef.current.value.toLowerCase().split(' ').join('-')] = ''
             })
             await editSpreadsheet({
                 columns: [...columns, {
                     title: fieldNameRef.current.value,
-                    id: fieldNameRef.current.value.split(' ').join('-'),
+                    id: fieldNameRef.current.value.toLowerCase().split(' ').join('-'),
                     editable: true,
-                    icon: fieldType.icon,
-                    type: fieldType.value
+                    icon: fieldType?.icon,
+                    type: fieldType?.value
                 }],
                 rows: newRows
             }, id)
@@ -69,7 +77,7 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
                         inline
                         label={fieldType?.label || 'Select field type'}
                         className='bg-transparent z-20 bg-white'
-                        placement='bottom'
+                        placement='right'
                     >
                         {
                             [
@@ -144,7 +152,7 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
                                 }} >
                                     {ft.label}
                                     {
-                                        ft.label == fieldType?.label ?  <BsCheckLg /> : ''
+                                        ft.label == fieldType?.label ? <BsCheckLg /> : ''
                                     }
                                 </Dropdown.Item>
                             ))

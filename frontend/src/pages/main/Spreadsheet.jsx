@@ -112,14 +112,14 @@ const Spreadsheet = () => {
   }, [spreadsheetData]);
 
   const handleInsertRow = () => {
-    const newData = {
-      ...spreadsheetData,
-      rows: spreadsheetData.rows
-    }
+    const newRow = {}
     spreadsheetData.columns.forEach((col) => {
-      newData.rows.push({ [col['id']]: '' })
+      newRow[col['id']] = ''
     })
-    setSpreadsheetData(newData)
+    setSpreadsheetData({
+      ...spreadsheetData,
+      rows: [...spreadsheetData.rows, newRow]
+    })
   }
 
   // const data = [
@@ -330,9 +330,8 @@ const Spreadsheet = () => {
               <DataEditor className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} getCellsForSelection={true}
                 keybindings={{ search: true }} onCellEdited={(i, j) => {
                   const dataa = spreadsheetData
-                  dataa.rows[i[1]]['name'] = j.data
+                  dataa.rows[i[1]][dataa.columns[i[0]]['id']] = j.data
                   setSpreadsheetData(dataa)
-                  // return j.data
                 }} />
             </div>
             :

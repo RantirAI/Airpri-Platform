@@ -44,7 +44,10 @@ const Spreadsheet = () => {
 
   const [showOptions, setShowOptions] = useState(false)
 
-  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal])
+  const [saving, setSaving] = useState(false)
+  const [refresh, setRefresh] = useState(false)
+
+  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal, refresh])
 
   const [spreadsheetData, setSpreadsheetData] = useState(null)
 
@@ -156,7 +159,7 @@ const Spreadsheet = () => {
       setSaving(true)
       const response = await editSpreadsheet(spreadsheetData, spreadsheetData._id)
       toast.success('Spreadsheet saved successfully!')
-      setRefresh(refresh)
+      setRefresh(!refresh)
     } catch (error) {
       toast.error(error.message)
     } finally {
@@ -275,13 +278,13 @@ const Spreadsheet = () => {
               </div>
               <div className='flex flex-row gap-2 flex-wrap border-solid border-0 border-t-2 border-gray-200 border-b-2'>
                 {
-                  ['save', 'undo', 'redo', 'insert row', 'hide fields', 'import data', 'export'].map((btn) => (
+                  [`save`, 'undo', 'redo', 'insert row', 'hide fields', 'import data', 'export'].map((btn) => (
                     <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200`} onClick={
                       (e) => {
                         e.preventDefault()
                         switch (btn) {
                           case 'save':
-                            
+                            handleSave()
                             break;
                           case 'insert row':
                             handleInsertRow()
@@ -292,7 +295,7 @@ const Spreadsheet = () => {
                     }>
                       {
                         btn == 'save' ?
-                          <AiOutlineSave />
+                        <>{saving ? <Spinner /> : <AiOutlineSave />}</>
                           :
                           btn == 'undo' ?
                             <IoArrowUndoCircleOutline />

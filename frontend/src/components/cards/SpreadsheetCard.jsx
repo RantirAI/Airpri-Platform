@@ -19,20 +19,20 @@ const SpreadsheetCard = ({ id, time, name }) => {
             <div className='my-[9px] text-gray-500 dark:text-gray-200'>
                 <LuSheet />
             </div>
-            <p className='leading-tight text-2xl font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
+            <p className='leading-tight text-base lg:text-lg font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
                 {name}
             </p>
-            <p className='text-base text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
+            <p className='text-[10px] text-[xs] text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
                 {getDateAndTime(time)}
             </p>
 
-            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={() => {
+            <button className='leading-tight text-xs lg:text-[14px] font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={() => {
                 navigate(`/spreadsheet/${id}`)
             }}>
                 <span>
                     Open and Edit
                 </span>
-                <MdOpenInNew className='ml-2 text-base ' />
+                <MdOpenInNew className='ml-2 ' />
             </button>
 
         </div>

@@ -71,7 +71,7 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
                     <Label
                         htmlFor="field-type"
                         value="Field Type"
-                        className='text-lg font-semibold text-gray-900 my-[20px] block'
+                        className='text-[14px] lg:text-base font-semibold text-gray-900 my-[20px] block'
                     />
                 </div>
 
@@ -180,7 +180,7 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
                                 </>
                                 :
                                 <>
-                                    <TbClipboardList className='mr-2 text-xl ' />
+                                    <TbClipboardList className='mr-2 text-lg ' />
                                     <span>
                                         Save & Add Content
                                     </span>

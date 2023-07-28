@@ -36,16 +36,16 @@ const Dashboard = () => {
         <div className='flex flex-col lg:flex-row gap-[20px] lg:gap-[40px] p-[20px] lg:p-[40px] bg-white dark:bg-gray-800 rounded-xl'>
 
           <div className='w-full w-/12'>
-            <h3 className='text-3xl font-bold text-gray-900 dark:text-white mb-[10px]'>
+            <h3 className='text-lg lg:text-2xl font-bold text-gray-900 dark:text-white mb-[10px]'>
               Welcome Back
             </h3>
-            <p className='text-base font-normal text-gray-500 dark:text-gray-100 leading-[150%]'>
+            <p className='text-xs lg:text-[14px] font-normal text-gray-500 dark:text-gray-100 '>
               Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
             </p>
             <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] block' type='button' onClick={() => {
               dispatch(toggleNewWorkspaceModal(true))
             }}>
-              <HiOutlinePlusCircle className='mr-2 text-xl ' />
+              <HiOutlinePlusCircle className='mr-2 text-lg ' />
               <span>
                 Start a New Workspace
               </span>
@@ -63,14 +63,14 @@ const Dashboard = () => {
           color='gray'
           className='my-5 bg-gray-100'
         >
-          <p className='text-base font-semibold'>
+          <p className='text-xs lg:text-[14px] font-semibold'>
             Oh snap, your on the basic plan !
           </p>
-          <p className='text-sm font-normal my-2'>
+          <p className='text-[10px] lg:text-xs font-normal my-2'>
             To view more plans to create a more robust data expereience you need to upgrade. We have generally very flexible and easy to scale AI-data plans for your team.
           </p>
           <Button className='bg-gray-700 text-white dark:text-gray-900 mt-[20px] block' type='button'>
-            <AiFillEye className='mr-2 text-xl ' />
+            <AiFillEye className='mr-2 text-lg ' />
             <span>
               View plans
             </span>
@@ -87,7 +87,7 @@ const Dashboard = () => {
               {workspaces.data?.workspaces?.length > 0 ?
                 <div>
                   <div className='flex justify-between my-[12px]'>
-                    <p className='text-3xl font-bold text-gray-900 dark:text-white'>
+                    <p className='text-lg lg:text-xl font-bold text-gray-900 dark:text-white'>
                       Workspaces
                     </p>
                   </div>
@@ -98,8 +98,8 @@ const Dashboard = () => {
                         <div>
                           <div className='flex justify-between my-[12px]'>
                             <div className='flex items-center gap-[16px]'>
-                              <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                              <p className='text-xl text-gray-900 dark:text-gray-50 font-medium '>
+                              <img src={rectangleStackImg} className='w-[24px] h-[24px] ' />
+                              <p className='text-base lg:text-lg text-gray-900 dark:text-gray-50 font-medium '>
                                 {workspace.name}
                               </p>
                             </div>
@@ -114,14 +114,15 @@ const Dashboard = () => {
                             </button>
                           </div>
 
-                          <p className='text-base text-gray-500 dark:text-gray-300 font-normal'>
+                          <p className='text-[10px] lg:text-xs text-gray-500 dark:text-gray-300 font-normal'>
                             Everything about {workspace.name} here
                           </p>
 
                           <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
                             <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} />
-                            {/* <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} /> */}
-                            {/* <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} /> */}
+                            {/* <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
+                            <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
+                            <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} /> */}
 
                           </div>
 

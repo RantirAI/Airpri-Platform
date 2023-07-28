@@ -20,7 +20,7 @@ const Header = ({ showLeftPane, setShowLeftPane }) => {
   const { workspace } = useSelector(state => state.workspace)
 
   return (
-    <header className='flex justify-between items-center py-[10px] px-[20px] bg-white dark:bg-[#111928] border-solid border-gray-200 dark:border-gray-700 border-0 border-b-2 fixed top-0 right-0 left-0 w-full z-10'>
+    <header className='flex justify-between items-center py-[10px] px-[20px] bg-white dark:bg-[#111928] border-solid border-gray-200 dark:border-gray-700 border-0 border-b-2 fixed top-0 right-0 left-0 w-full z-10 text-[10px] lg:text-xs'>
       <div className='flex gap-[15px]'>
         <Link to='/' className='block w-[40px] h-[40px] '>
           <img src={darkModeLogo} className='hidden dark:block object-cover w-full h-full' />
@@ -28,7 +28,7 @@ const Header = ({ showLeftPane, setShowLeftPane }) => {
         </Link>
         {
           workspace &&
-          <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-50 leading-tight text-sm font-normal flex items-center gap-2' >
+          <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-50 leading-tight text-[10px] lg:text-xs font-normal flex items-center gap-2' >
             <p>
               {
                 workspace.name

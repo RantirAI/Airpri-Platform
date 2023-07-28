@@ -77,7 +77,7 @@ const Spreadsheets = () => {
                 <div className='gap-[10px] flex flex-row flex-wrap items-center '>
                     <Button className='bg-[#1ABFAB] text-white dark:text-gray-900   block' type='button' onClick={() => {
                     }}>
-                        <HiDownload className='mr-2 text-xl ' />
+                        <HiDownload className='mr-2 text-lg ' />
                         <span>
                             Share & Embed
                         </span>
@@ -85,7 +85,7 @@ const Spreadsheets = () => {
                     <button className=' text-gray-900 dark:text-white flex items-center' type='button' onClick={() => {
                         setShowNewSpreadsheetModal(true)
                     }}>
-                        <HiOutlinePlusCircle className='mr-2 text-xl ' />
+                        <HiOutlinePlusCircle className='mr-2 text-lg ' />
                         <span>
                             Add a New Spreadsheet
                         </span>
@@ -96,7 +96,7 @@ const Spreadsheets = () => {
 
             <div className='my-[12px] flex items-center gap-[16px]'>
                 <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                <p className='text-2xl font-semibold text-gray-900 dark:text-white'>
+                <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
                     {workspace?.name}
                 </p>
             </div>
@@ -115,7 +115,7 @@ const Spreadsheets = () => {
                         </div>
                         :
                         <div className='flex flex-col items-center py-[40px]'>
-                            <h3 className='text-xl font-medium text-gray-900 dark:text-white'>
+                            <h3 className='text-base lg:text-lg font-medium text-gray-900 dark:text-white'>
                                 Get started by adding a new spreadsheet here
                             </h3>
                             <div className='w-[250px] h-[155px] my-[20px]'>
@@ -124,7 +124,7 @@ const Spreadsheets = () => {
                             <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
                                 setShowNewSpreadsheetModal(true)
                             }}>
-                                <HiOutlinePlusCircle className='mr-2 text-xl ' />
+                                <HiOutlinePlusCircle className='mr-2 text-lg ' />
                                 <span>
                                     Start a New Spreadsheet
                                 </span>

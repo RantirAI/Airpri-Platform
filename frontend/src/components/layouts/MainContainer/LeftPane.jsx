@@ -34,7 +34,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
   const navigate = useNavigate()
 
   return (
-    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px]`}>
+    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px] left-pane`}>
       <Button color='failure' size='xs' onClick={() => {
         setShowLeftPane(false)
       }} className='absolute top-2 right-2 px-0 lg:hidden' >
@@ -49,7 +49,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
         </button>
       }
 
-      <Sidebar.Items className='pt-4 lg:pt-0'>
+      <Sidebar.Items className='pt-4 lg:pt-0 '>
 
 
         <Sidebar.ItemGroup >
@@ -63,7 +63,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
               }}
               icon={GoOrganization}
             >
-              <p>
+              <p className='text-xs lg:text-[14px]'>
                 {user.orgName}
               </p>
             </Sidebar.Item>
@@ -83,7 +83,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
               }}
               icon={BsFileSpreadsheet}
             >
-              <p>
+              <p >
                 Data
               </p>
             </Sidebar.Item>
@@ -115,7 +115,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
         </Sidebar.ItemGroup>
 
-        <Sidebar.ItemGroup>
+        <Sidebar.ItemGroup >
 
           <Sidebar.Item
             href=''
@@ -124,6 +124,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
               navigate('/dashboard')
             }}
             icon={HiChartPie}
+            className='!text-xs'
           >
             <p>
               Overview

@@ -71,14 +71,14 @@ const Workspace = () => {
                 <div className='gap-[10px] flex flex-row flex-wrap items-center '>
                     <Button className='bg-[#1ABFAB] text-white dark:text-gray-900   block' type='button' onClick={() => {
                     }}>
-                        <HiDownload className='mr-2 text-xl ' />
+                        <HiDownload className='mr-2 text-lg ' />
                         <span>
                             Share & Embed
                         </span>
                     </Button>
                     <button className=' text-gray-900 dark:text-white flex items-center' type='button' onClick={() => {
                     }}>
-                        <HiOutlinePlusCircle className='mr-2 text-xl ' />
+                        <HiOutlinePlusCircle className='mr-2 text-lg ' />
                         <span>
                             Add a New Spreadsheet
                         </span>
@@ -94,14 +94,14 @@ const Workspace = () => {
                 <div>
                     <div className='mb-[12px] flex items-center gap-[16px]'>
                         <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                        <p className='text-2xl font-semibold text-gray-900 dark:text-white'>
+                        <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
                             {workspace?.name}
                         </p>
                     </div>
                     <p className='text-gray-500 dark:text-gray-100 text-sm my-[16px] font-bold'>
                         {getDateAndTime(workspace?.updatedAt)}
                     </p>
-                    <p className='text-base font-normal leading-[150%] text-gray-500 dark:text-gray-50'>
+                    <p className='text-[14px] lg:text-base font-normal leading-[150%] text-gray-500 dark:text-gray-50'>
                         {workspace?.description}
                     </p>
                 </div>

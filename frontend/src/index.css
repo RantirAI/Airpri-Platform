@@ -6,3 +6,10 @@
 body{
     font-family: 'Inter', 'Sans-serif';
 }
+
+.left-pane * {
+    @apply text-[10px] lg:text-xs
+}
+.left-pane svg{
+    @apply w-4 h-4
+}

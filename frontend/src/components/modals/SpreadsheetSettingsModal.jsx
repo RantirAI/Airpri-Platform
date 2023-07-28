@@ -61,7 +61,7 @@ const SpreadsheetSettingsModal = ({ showModal, setShowModal, spreadsheet }) => {
                         <Label
                             htmlFor="spreadsheet-description"
                             value="Give a Spreadsheet Description"
-                            className='text-lg font-semibold text-gray-900 my-[20px] block'
+                            className='text-[14px] lg:text-base font-semibold text-gray-900 my-[20px] block'
                         />
                     </div>
                     <Textarea
@@ -82,7 +82,7 @@ const SpreadsheetSettingsModal = ({ showModal, setShowModal, spreadsheet }) => {
                                 </>
                                 :
                                 <>
-                                    <TbClipboardList className='mr-2 text-xl ' />
+                                    <TbClipboardList className='mr-2 text-lg ' />
                                     <span>
                                         Update Spreadsheet
                                     </span>

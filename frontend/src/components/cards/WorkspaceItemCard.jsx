@@ -15,7 +15,7 @@ const WorkspaceItemCard = ({ type, time, workspace }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     return (
-        <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[350px]'>
+        <div className='rounded-[8px] p-[24px] bg-white dark:bg-gray-800 shadow-md max-w-[300px]'>
             <div>
                 <img src={type == 'spreadsheet' ? spreadsheetImg : type == 'gallery' ? galleryImg : type == 'form' ? formImg : ''} />
             </div>
@@ -24,14 +24,14 @@ const WorkspaceItemCard = ({ type, time, workspace }) => {
                     type == 'spreadsheet' ? <LuSheet /> : type == 'gallery' ? <TfiGallery /> : type == 'form' ? <FaWpforms /> : ''
                 }
             </div>
-            <p className='leading-tight text-2xl font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
+            <p className='leading-tight text-base lg:text-lg font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
                 {type}{type == 'spreadsheet' || type == 'form' ? 's' : ''}
             </p>
-            <p className='text-base text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
+            <p className='text-[10px] lg:text-xs text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
                 {getDateAndTime(time)}
             </p>
 
-            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={(e) => {
+            <button className='leading-tight text-xs lg:text-[14px] font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={(e) => {
                 e.preventDefault()
                 dispatch(selectWorkspace(workspace))
                 navigate(`/${type}`)
@@ -39,7 +39,7 @@ const WorkspaceItemCard = ({ type, time, workspace }) => {
                 <span>
                     Open and Edit
                 </span>
-                <MdOpenInNew className='ml-2 text-base ' />
+                <MdOpenInNew className='ml-2 ' />
             </button>
 
         </div>

@@ -79,7 +79,7 @@ const NewWorkspaceModal = () => {
                         <Label
                             htmlFor="workspace-members"
                             value="Invite Members"
-                            className='text-lg font-semibold text-gray-900 my-[20px] block'
+                            className='text-[14px] lg:text-base font-semibold text-gray-900 my-[20px] block'
                         />
                     </div>
 
@@ -116,7 +116,7 @@ const NewWorkspaceModal = () => {
                         <Label
                             htmlFor="workspace-description"
                             value="Give a Workspace Description"
-                            className='text-lg font-semibold text-gray-900 my-[20px] block'
+                            className='text-[14px] lg:text-base font-semibold text-gray-900 my-[20px] block'
                         />
                     </div>
                     <Textarea
@@ -137,7 +137,7 @@ const NewWorkspaceModal = () => {
                                 </>
                                 :
                                 <>
-                                    <TbClipboardList className='mr-2 text-xl ' />
+                                    <TbClipboardList className='mr-2 text-lg ' />
                                     <span>
                                         Start a New Workspace
                                     </span>

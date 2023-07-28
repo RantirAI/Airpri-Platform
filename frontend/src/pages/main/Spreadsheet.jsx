@@ -221,7 +221,7 @@ const Spreadsheet = () => {
         <div className='gap-[10px] flex flex-row flex-wrap items-center '>
           <Button className='bg-[#1ABFAB] text-white dark:text-gray-900   block' type='button' onClick={() => {
           }}>
-            <HiDownload className='mr-2 text-xl ' />
+            <HiDownload className='mr-2 text-lg ' />
             <span>
               Share & Embed
             </span>
@@ -229,7 +229,7 @@ const Spreadsheet = () => {
           <button className=' text-gray-900 dark:text-white flex items-center' type='button' onClick={() => {
             setShowNewFieldModal(true)
           }}>
-            <HiOutlinePlusCircle className='mr-2 text-xl ' />
+            <HiOutlinePlusCircle className='mr-2 text-lg ' />
             <span>
               Add a New Field
             </span>
@@ -240,7 +240,7 @@ const Spreadsheet = () => {
 
       <div className='my-[12px] flex items-center gap-[16px]'>
         <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-        <p className='text-2xl font-semibold text-gray-900 dark:text-white'>
+        <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
           {spreadsheetData?.name}
         </p>
       </div>
@@ -254,7 +254,7 @@ const Spreadsheet = () => {
               <div className='flex flex-row gap-2 flex-wrap'>
                 {
                   ['spreadsheet', 'form', 'gallery', 'automation', 'ai-chat'].map((link) => (
-                    <Link to={`/${link}`} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} `}>
+                    <Link to={`/${link}`} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} text-[10px] lg:text-xs`}>
                       {
                         link == 'spreadsheet' ?
                           <LuSheet />
@@ -272,7 +272,7 @@ const Spreadsheet = () => {
                       }
                       {link.split('-').join(' ')}
                       {
-                        link != 'spreadsheet' && <span className=' bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs p-0.5 rounded-md'>Soon</span>
+                        link != 'spreadsheet' && <span className=' bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-[8px] lg:text-[10px] p-0.5 rounded-md'>Soon</span>
                       }
                     </Link>
                   ))
@@ -281,7 +281,7 @@ const Spreadsheet = () => {
               <div className='flex flex-row gap-2 flex-wrap border-solid border-0 border-t-2 border-gray-200 border-b-2'>
                 {
                   [`save`, 'undo', 'redo', 'insert row', 'hide fields', 'import data', 'export', 'edit fields'].map((btn) => (
-                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200`} onClick={
+                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200 text-[10px] lg:text-xs`} onClick={
                       (e) => {
                         e.preventDefault()
                         switch (btn) {
@@ -336,7 +336,7 @@ const Spreadsheet = () => {
             </div>
             :
             <div className='flex flex-col items-center py-[40px]'>
-              <h3 className='text-xl font-medium text-gray-900 dark:text-white'>
+              <h3 className='text-lg font-medium text-gray-900 dark:text-white'>
                 Spreadsheet not found
               </h3>
               <div className='w-[250px] h-[155px] my-[20px]'>
@@ -345,7 +345,7 @@ const Spreadsheet = () => {
               <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
                 navigate('/spreadsheet')
               }}>
-                <HiOutlinePlusCircle className='mr-2 text-xl ' />
+                <HiOutlinePlusCircle className='mr-2 text-lg ' />
                 <span>
                   All spreadsheets
                 </span>

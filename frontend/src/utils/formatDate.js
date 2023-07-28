@@ -26,7 +26,7 @@ export const getDateAndTime = (timestamp) => {
 
 
     if (month && day && year && time) {
-        return `${month} ${day}, ${year}. ${time.substring(-2, time.length - 3)}`;
+        return `${month} ${day}, ${year}. ${time}`;
     }
 
     return 'N/A'

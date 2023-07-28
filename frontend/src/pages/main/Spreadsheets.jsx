@@ -106,7 +106,7 @@ const Spreadsheets = () => {
                     <Spinner aria-label="Fetching spreadsheets..." />
                     :
                     data?.spreadsheets.length > 0 ?
-                        <div className='py-[24px] gap-[24px] flex flex-row flex-wrap'>
+                        <div className='py-[24px] gap-[24px] flex flex-col'>
                             {
                                 data?.spreadsheets?.map(({_id, updatedAt, name}) => (
                                     <SpreadsheetCard id={_id} time={updatedAt} name={name} />

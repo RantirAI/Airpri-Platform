@@ -21,12 +21,12 @@ const DuplicateSpreadsheetModal = ({ showModal, setShowModal, spreadsheet }) => 
         e.preventDefault()
         try {
             setSubmitting(true)
-            const spreadsheet = await createSpreadsheet({ name: nameRef.current.value, description: descriptionRef.current.value, workspaceId: workspace._id, rows: spreadsheet.rows, columns: spreadsheet.columns })
+            const newSpreadsheet = await createSpreadsheet({ name: nameRef.current.value, description: descriptionRef.current.value, workspaceId: workspace._id, rows: spreadsheet.rows, columns: spreadsheet.columns })
             toast.success('Spreadsheet successfully duplicated!')
             nameRef.current.value = ''
             descriptionRef.current.value = ''
             setShowModal(false)
-            navigate(`/spreadsheet/${spreadsheet._id}`)
+            navigate(`/spreadsheet/${newSpreadsheet._id}`)
         } catch (error) {
             toast.error(error.message)
         } finally {

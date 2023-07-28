@@ -14,11 +14,12 @@ import { BiSolidHelpCircle } from 'react-icons/bi'
 import useFetch from '../../../hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectWorkspace } from '../../../redux/features/workspaceSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 import { BsFileSpreadsheet } from 'react-icons/bs';
 import { HiSquare2Stack } from 'react-icons/hi2'
 import { GoOrganization } from 'react-icons/go'
+import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
 
 const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
@@ -33,30 +34,46 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
   const navigate = useNavigate()
 
   return (
-    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-1/5 z-10 ${!showLeftPane && 'hidden'} lg:!block border-solid border-[#e6e7eb] border-0 border-r-[1px]`}>
+    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px]`}>
       <Button color='failure' size='xs' onClick={() => {
         setShowLeftPane(false)
       }} className='absolute top-2 right-2 px-0 lg:hidden' >
         <IoMdClose />
       </Button>
+      {
+        !showLeftPane &&
+        <button onClick={() => {
+          setShowLeftPane(true)
+        }} className='hidden lg:block absolute -right-7 top-4 p-1.5 rounded-md hover:bg-gray-200 dark:bg-gray-700'>
+          <FiChevronsRight />
+        </button>
+      }
 
       <Sidebar.Items className='pt-4 lg:pt-0'>
 
 
         <Sidebar.ItemGroup >
 
-          <Sidebar.Item
-            href=''
-            onClick={(e) => {
-              e.preventDefault()
-              navigate('/dashboard')
-            }}
-            icon={GoOrganization}
-          >
-            <p>
-              {user.orgName}
-            </p>
-          </Sidebar.Item>
+          <div className='flex flex-row items-center justify-between gap-2'>
+            <Sidebar.Item
+              href=''
+              onClick={(e) => {
+                e.preventDefault()
+                navigate('/dashboard')
+              }}
+              icon={GoOrganization}
+            >
+              <p>
+                {user.orgName}
+              </p>
+            </Sidebar.Item>
+            <button onClick={() => {
+              setShowLeftPane(false)
+            }} className='hidden lg:block'>
+              <FiChevronsLeft />
+            </button>
+          </div>
+
 
           <div className='lg:!hidden'>
             <Sidebar.Item

@@ -14,7 +14,7 @@ const MainContainer = ({ children }) => {
         <div className=' flex flex-col bg-[rgb(249,250,251)] dark:bg-[#101016] '>
             <Header showLeftPane={showLeftPane} setShowLeftPane={setShowLeftPane} />
             <LeftPane showLeftPane={showLeftPane} setShowLeftPane={setShowLeftPane} />
-            <div className='min-h-screen w-full lg:w-4/5 left-0 lg:left-[20%] relative pt-16 flex flex-col px-[10px] lg:px-[20px] py-[10px]'>
+            <div className={`min-h-screen w-full ${showLeftPane ? 'lg:w-[85%] lg:left-[15%]' : 'lg:w-full'} left-0  relative pt-16 flex flex-col px-[10px] lg:px-[20px] py-[10px]`}>
                 <div >
                     {children}
                 </div>

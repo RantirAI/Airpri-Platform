@@ -25,7 +25,7 @@ const WorkspaceItemCard = ({ type, time, workspace }) => {
                 }
             </div>
             <p className='leading-tight text-2xl font-bold capitalize mb-[9px] text-gray-900 dark:text-white'>
-                {type}
+                {type}{type == 'spreadsheet' || type == 'form' ? 's' : ''}
             </p>
             <p className='text-base text-gray-500 dark:text-gray-200 font-normal mb-[12px]'>
                 {getDateAndTime(time)}

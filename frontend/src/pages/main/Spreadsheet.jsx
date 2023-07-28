@@ -239,7 +239,7 @@ const Spreadsheet = () => {
       </div>
 
       <div className='my-[12px] flex items-center gap-[16px]'>
-        <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
+        <LuSheet /> 
         <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
           {spreadsheetData?.name}
         </p>

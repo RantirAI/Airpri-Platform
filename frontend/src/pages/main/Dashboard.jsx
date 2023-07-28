@@ -3,7 +3,7 @@ import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, Spinner } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
 import { HiOutlinePlusCircle } from 'react-icons/hi'
-import { AiFillEye } from 'react-icons/ai'
+import { AiFillEye, AiOutlineUnorderedList } from 'react-icons/ai'
 import emptyDashboardIllustration from '../../assets/empty-dashboard-illustration.svg'
 import NewWorkspaceModal from '../../components/modals/NewWorkspaceModal'
 import { workspaces } from '../../../data'
@@ -15,6 +15,7 @@ import useFetch from '../../hooks/useFetch'
 import { toggleNewWorkspaceModal } from '../../redux/features/modalsSlice'
 import { selectWorkspace } from '../../redux/features/workspaceSlice'
 import { useNavigate } from 'react-router-dom'
+import { BsGrid } from 'react-icons/bs'
 
 const Dashboard = () => {
 
@@ -26,6 +27,8 @@ const Dashboard = () => {
   const { showNewWorkspaceModal } = useSelector(state => state.modals)
 
   const workspaces = useFetch('workspace', [showNewWorkspaceModal])
+
+  const [gridView, setGridView] = useState(true)
 
 
   return (
@@ -86,10 +89,28 @@ const Dashboard = () => {
             <>
               {workspaces.data?.workspaces?.length > 0 ?
                 <div>
-                  <div className='flex justify-between my-[12px]'>
+                  <div className='flex justify-between mt-[12px] mb-5'>
                     <p className='text-lg lg:text-xl font-bold text-gray-900 dark:text-white'>
                       Workspaces
                     </p>
+                    <div className='flex flex-row gap-1'>
+                      <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? 'bg-gray-200 dark:bg-gray-700 ' : ''} text-[10px] lg:text-xs`} onClick={() => {
+                        setGridView(true)
+                      }}>
+                        <span>
+                          Grid view
+                        </span>
+                        <BsGrid className='ml-2 text-base ' />
+                      </button>
+                      <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? '' : 'bg-gray-200 dark:bg-gray-700 '} text-[10px] lg:text-xs`} onClick={() => {
+                        setGridView(false)
+                      }}>
+                        <span>
+                          List view
+                        </span>
+                        <AiOutlineUnorderedList className='ml-2 text-base ' />
+                      </button>
+                    </div>
                   </div>
 
                   <div>
@@ -103,7 +124,7 @@ const Dashboard = () => {
                                 {workspace.name}
                               </p>
                             </div>
-                            <button className='leading-tight text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
+                            <button className='leading-tight text-[14px] lg:text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
                               dispatch(selectWorkspace(workspace))
                               navigate('/workspace')
                             }}>
@@ -118,8 +139,8 @@ const Dashboard = () => {
                             Everything about {workspace.name} here
                           </p>
 
-                          <div className='py-[24px] gap-[24px] flex flex-col'>
-                            <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} />
+                          <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
+                            <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} gridView={gridView} />
                             {/* <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
                             <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
                             <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} /> */}

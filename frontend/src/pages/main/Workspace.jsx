@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
 import { toggleArchiveWorkspaceModal, toggleDeleteWorkspaceModal, toggleDuplicateWorkspaceModal, toggleWorkspaceSettingsModal } from '../../redux/features/modalsSlice'
+import { BsGrid } from 'react-icons/bs'
+import { AiOutlineUnorderedList } from 'react-icons/ai'
 
 const Workspace = () => {
 
@@ -19,6 +21,8 @@ const Workspace = () => {
     const { workspace } = useSelector(state => state.workspace)
 
     const dispatch = useDispatch()
+    const [gridView, setGridView] = useState(true)
+
 
     return (
         <MainContainer>
@@ -87,30 +91,49 @@ const Workspace = () => {
 
             </div>
 
-            <div className='gap-[16px] flex items-center mt-[24px]'>
-                <div className='max-w-[100px] lg:max-w-[720px] max-h-[150px] lg:max-h-[200px]'>
-                    <img src={workspaceImage} className='h-full w-full object-contain' />
-                </div>
-                <div>
-                    <div className='mb-[12px] flex items-center gap-[16px]'>
-                        <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                        <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
-                            {workspace?.name}
+            <div className='mt-[24px] flex justify-between'>
+                <div className='gap-[16px] flex items-center '>
+                    <div className='max-w-[100px] lg:max-w-[720px] max-h-[150px] lg:max-h-[200px]'>
+                        <img src={workspaceImage} className='h-full w-full object-contain' />
+                    </div>
+                    <div>
+                        <div className='mb-[12px] flex items-center gap-[16px]'>
+                            <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
+                            <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
+                                {workspace?.name}
+                            </p>
+                        </div>
+                        <p className='text-gray-500 dark:text-gray-100 text-sm my-[16px] font-bold'>
+                            {getDateAndTime(workspace?.updatedAt)}
+                        </p>
+                        <p className='text-[14px] lg:text-base font-normal leading-[150%] text-gray-500 dark:text-gray-50'>
+                            {workspace?.description}
                         </p>
                     </div>
-                    <p className='text-gray-500 dark:text-gray-100 text-sm my-[16px] font-bold'>
-                        {getDateAndTime(workspace?.updatedAt)}
-                    </p>
-                    <p className='text-[14px] lg:text-base font-normal leading-[150%] text-gray-500 dark:text-gray-50'>
-                        {workspace?.description}
-                    </p>
                 </div>
 
-
+                <div className='flex flex-row gap-1 self-start'>
+                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? 'bg-gray-200 dark:bg-gray-700 ' : ''} text-[10px] lg:text-xs`} onClick={() => {
+                        setGridView(true)
+                    }}>
+                        <span>
+                            Grid view
+                        </span>
+                        <BsGrid className='ml-2 text-base ' />
+                    </button>
+                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? '' : 'bg-gray-200 dark:bg-gray-700 '} text-[10px] lg:text-xs`} onClick={() => {
+                        setGridView(false)
+                    }}>
+                        <span>
+                            List view
+                        </span>
+                        <AiOutlineUnorderedList className='ml-2 text-base ' />
+                    </button>
+                </div>
             </div>
 
-            <div className='py-[24px] gap-[24px] flex flex-col'>
-                <WorkspaceItemCard type={'spreadsheet'} time={workspace?.updatedAt} workspace={workspace} />
+            <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
+                <WorkspaceItemCard type={'spreadsheet'} time={workspace?.updatedAt} workspace={workspace} gridView={gridView} />
                 {/* <WorkspaceItemCard type={'form'} time={workspace?.updatedAt} workspace={workspace} /> */}
                 {/* <WorkspaceItemCard type={'gallery'} time={workspace?.updatedAt} workspace={workspace} /> */}
             </div>

@@ -14,6 +14,8 @@ import useFetch from '../../hooks/useFetch'
 import emptyDashboardIllustration from '../../assets/empty-dashboard-illustration.svg'
 import NewSpreadsheetModal from '../../components/modals/NewSpreadsheetModal'
 import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsheetModal'
+import { BsGrid } from 'react-icons/bs'
+import { AiOutlineUnorderedList } from 'react-icons/ai'
 
 const Spreadsheets = () => {
     const [showNewSpreadsheetModal, setShowNewSpreadsheetModal] = useState(false)
@@ -25,6 +27,9 @@ const Spreadsheets = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
+    const [gridView, setGridView] = useState(true)
+
 
     return (
         <MainContainer>
@@ -39,7 +44,7 @@ const Spreadsheets = () => {
                         className='min-w-[250px] lg:min-w-[500px] flex-1'
                     />
                     <button className='border-none outline-none text-gray-900 dark:text-white' onClick={() => {
-                        
+
                     }}>
                         <FiSettings />
                     </button>
@@ -94,22 +99,43 @@ const Spreadsheets = () => {
 
             </div>
 
-            <div className='my-[12px] flex items-center gap-[16px]'>
-                <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
-                <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
-                    {workspace?.name}
-                </p>
+            <div className='flex flex-row justify-between mt-2'>
+                <div className='my-[12px] flex items-center gap-[16px]'>
+                    <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
+                    <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
+                        {workspace?.name}
+                    </p>
+                </div>
+                <div className='flex flex-row gap-1 self-start'>
+                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? 'bg-gray-200 dark:bg-gray-700 ' : ''} text-[10px] lg:text-xs`} onClick={() => {
+                        setGridView(true)
+                    }}>
+                        <span>
+                            Grid view
+                        </span>
+                        <BsGrid className='ml-2 text-base ' />
+                    </button>
+                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? '' : 'bg-gray-200 dark:bg-gray-700 '} text-[10px] lg:text-xs`} onClick={() => {
+                        setGridView(false)
+                    }}>
+                        <span>
+                            List view
+                        </span>
+                        <AiOutlineUnorderedList className='ml-2 text-base ' />
+                    </button>
+                </div>
             </div>
+
 
             {
                 loading ?
                     <Spinner aria-label="Fetching spreadsheets..." />
                     :
                     data?.spreadsheets.length > 0 ?
-                        <div className='py-[24px] gap-[24px] flex flex-col'>
+                        <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
                             {
-                                data?.spreadsheets?.map(({_id, updatedAt, name}) => (
-                                    <SpreadsheetCard id={_id} time={updatedAt} name={name} />
+                                data?.spreadsheets?.map(({ _id, updatedAt, name }) => (
+                                    <SpreadsheetCard id={_id} time={updatedAt} name={name} gridView={gridView} />
                                 ))
                             }
                         </div>

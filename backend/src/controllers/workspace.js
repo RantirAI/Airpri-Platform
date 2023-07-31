@@ -138,7 +138,7 @@ const getWorkspaceSpreadsheets = async (req, res) => {
 
         const spreadsheets = await Spreadsheet.find({ workspace: id, archived: archived != undefined ? true : false })
 
-        return res.status(200).json({ spreadsheets })
+        return res.status(200).json({ spreadsheets, workspace })
     } catch (error) {
         console.log(error.message)
         res.status(500).json({ message: 'Something went wrong' })

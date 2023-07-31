@@ -5,11 +5,11 @@ import { toast } from 'react-toastify'
 import { getOrgMembers } from '../../services/user'
 import { createSpreadsheet } from '../../services/spreadsheet'
 import { BsCheckLg } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const NewSpreadsheetModal = ({showModal, setShowModal}) => {
-    const {workspace} = useSelector(state => state.workspace)
+    const {workspaceId} = useParams()
 
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
@@ -21,12 +21,12 @@ const NewSpreadsheetModal = ({showModal, setShowModal}) => {
         e.preventDefault()
         try {
             setSubmitting(true)
-            const spreadsheet = await createSpreadsheet({ name: nameRef.current.value, description: descriptionRef.current.value, workspaceId: workspace._id })
+            const spreadsheet = await createSpreadsheet({ name: nameRef.current.value, description: descriptionRef.current.value, workspaceId: workspaceId })
             toast.success('Spreadsheet successfully created!')
             nameRef.current.value = ''
             descriptionRef.current.value = ''
             setShowModal(false)
-            navigate(`/spreadsheet/${spreadsheet._id}`)
+            navigate(`/workspace/${workspaceId}/spreadsheet/${spreadsheet._id}`)
         } catch (error) {
             toast.error(error.message)
         } finally {

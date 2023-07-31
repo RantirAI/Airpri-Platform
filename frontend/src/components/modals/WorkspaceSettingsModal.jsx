@@ -6,14 +6,13 @@ import { getOrgMembers } from '../../services/user'
 import { createWorkspace, editWorkspace } from '../../services/workspace'
 import { BsCheckLg } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { selectWorkspace } from '../../redux/features/workspaceSlice'
+import { useNavigate, useParams } from 'react-router-dom'
 import { toggleWorkspaceSettingsModal } from '../../redux/features/modalsSlice'
 
 const WorkspaceSettingsModal = () => {
 
     const { showWorkspaceSettingsModal } = useSelector(state => state.modals)
-    const { workspace } = useSelector(state => state.workspace)
+    const {workspaceId} = useParams()
 
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
@@ -30,14 +29,13 @@ const WorkspaceSettingsModal = () => {
         e.preventDefault()
         try {
             setSubmitting(true)
-            const editedWorkspace = await editWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members: members.map(({ _id }) => (_id)) }, workspace._id)
+            const editedWorkspace = await editWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members: members.map(({ _id }) => (_id)) }, workspaceId)
             toast.success('Workspace successfully updated!')
             nameRef.current.value = ''
             descriptionRef.current.value = ''
             setMembers([])
             dispatch(toggleWorkspaceSettingsModal(false))
-            dispatch(selectWorkspace(editedWorkspace))
-            navigate('/workspace')
+            navigate(`/workspace/${editedWorkspace._id}`)
         } catch (error) {
             toast.error(error.message)
         } finally {

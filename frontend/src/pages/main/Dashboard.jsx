@@ -13,14 +13,10 @@ import rectangleStackImg from '../../assets/rectangle-stack.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import useFetch from '../../hooks/useFetch'
 import { toggleNewWorkspaceModal } from '../../redux/features/modalsSlice'
-import { selectWorkspace } from '../../redux/features/workspaceSlice'
 import { useNavigate } from 'react-router-dom'
 import { BsGrid } from 'react-icons/bs'
 
 const Dashboard = () => {
-
-  const { workspace } = useSelector(state => state.workspace)
-
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -125,8 +121,7 @@ const Dashboard = () => {
                               </p>
                             </div>
                             <button className='leading-tight text-[14px] lg:text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
-                              dispatch(selectWorkspace(workspace))
-                              navigate('/workspace')
+                              navigate(`/workspace/${workspace._id}`)
                             }}>
                               <span>
                                 Open and Edit

@@ -18,8 +18,6 @@ import Spreadsheet from './pages/main/Spreadsheet'
 const index = () => {
 
     const { user, loading } = useSelector((state) => state.auth)
-    const { workspace } = useSelector(state => state.workspace)
-
 
     const dispatch = useDispatch()
 
@@ -53,21 +51,12 @@ const index = () => {
                             <Route path='/create-account' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/' element={<Navigate replace to={'/dashboard'} />} />
                             <Route path='/dashboard' element={<Dashboard />} />
-                            <>
-                                {
-                                    workspace ?
-                                        <>
-                                            <Route path='/workspace' element={<Workspace />} />
-                                            <Route path='/spreadsheet' element={<Spreadsheets />} />
-                                            <Route path='/spreadsheet/:id' element={<Spreadsheet />} />
-                                        </>
-                                        :
-                                        <>
-                                            <Route path='*' element={<Navigate replace to={'/dashboard'} />} />
-                                        </>
-
-                                }
-                            </>
+                            <Route path='/workspace/:workspaceId' element={<Workspace />} />
+                            <Route path='/workspace/:workspaceId/spreadsheet' element={<Spreadsheets />} />
+                            <Route path='/workspace/:workspaceId/spreadsheet/:spreadsheetId' element={<Spreadsheet />} />
+                            <Route path='*' element={() => (<div>
+                                page not found
+                            </div>)} />
                         </>
                         :
                         <>
@@ -77,6 +66,9 @@ const index = () => {
                             <Route path='/create-account' element={<CreateAccount />} />
                             <Route path='/forgot-password' element={<ForgotPassword />} />
                             <Route path='/reset-password' element={<ResetPassword />} />
+                            <Route path='*' element={() => (<div>
+                                page not found
+                            </div>)} />
                         </>
                 }
                 <Route path='*' element={<NotFound />} />

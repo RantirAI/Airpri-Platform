@@ -2,16 +2,14 @@ import { Button, Modal, Spinner } from 'flowbite-react';
 import { useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { toggleArchiveWorkspaceModal } from '../../redux/features/modalsSlice';
-import { unselectWorkspace } from '../../redux/features/workspaceSlice';
 import { archiveWorkspace } from '../../services/workspace';
 
 const ArchiveWorkspaceModal = () => {
     const { showArchiveWorkspaceModal } = useSelector(state => state.modals)
-    const { workspace } = useSelector(state => state.workspace)
-
+    const {workspaceId} = useParams()
     const [submitting, setSubmitting] = useState(false)
 
     const dispatch = useDispatch()
@@ -21,10 +19,9 @@ const ArchiveWorkspaceModal = () => {
         try {
             e.preventDefault()
             setSubmitting(true)
-            await archiveWorkspace(workspace._id)
+            await archiveWorkspace(workspaceId)
             toast.info('Workspace archived!')
             dispatch(toggleArchiveWorkspaceModal(false))
-            dispatch(unselectWorkspace())
             navigate('/dashboard')
         } catch (error) {
             toast.error(error.message)

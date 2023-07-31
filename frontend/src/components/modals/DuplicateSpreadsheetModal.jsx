@@ -5,11 +5,11 @@ import { toast } from 'react-toastify'
 import { getOrgMembers } from '../../services/user'
 import { createSpreadsheet } from '../../services/spreadsheet'
 import { BsCheckLg } from 'react-icons/bs'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const DuplicateSpreadsheetModal = ({ showModal, setShowModal, spreadsheet }) => {
-    const { workspace } = useSelector(state => state.workspace)
+    const {workspaceId} = useParams() 
 
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
@@ -21,12 +21,12 @@ const DuplicateSpreadsheetModal = ({ showModal, setShowModal, spreadsheet }) => 
         e.preventDefault()
         try {
             setSubmitting(true)
-            const newSpreadsheet = await createSpreadsheet({ name: nameRef.current.value, description: descriptionRef.current.value, workspaceId: workspace._id, rows: spreadsheet.rows, columns: spreadsheet.columns })
+            const newSpreadsheet = await createSpreadsheet({ name: nameRef.current.value, description: descriptionRef.current.value, workspaceId: workspaceId, rows: spreadsheet.rows, columns: spreadsheet.columns })
             toast.success('Spreadsheet successfully duplicated!')
             nameRef.current.value = ''
             descriptionRef.current.value = ''
             setShowModal(false)
-            navigate(`/spreadsheet/${newSpreadsheet._id}`)
+            navigate(`/workspace/${workspaceId}/spreadsheet/${newSpreadsheet._id}`)
         } catch (error) {
             toast.error(error.message)
         } finally {

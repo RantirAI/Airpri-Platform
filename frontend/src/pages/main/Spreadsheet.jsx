@@ -49,7 +49,7 @@ const Spreadsheet = () => {
   const [saving, setSaving] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
-  const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}`, [spreadsheetId, showSpreadsheetSettingsModal, refresh, showNewFieldModal])
+  const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}`, [spreadsheetId, refresh])
 
 
   const [spreadsheetData, setSpreadsheetData] = useState(null)
@@ -151,12 +151,6 @@ const Spreadsheet = () => {
   //   { title: "Level", id: 'level' },
   // ];
 
-  useEffect(() => {
-    if (data) {
-      setSpreadsheetData(data.spreadsheet)
-    }
-  }, [data])
-
   const handleSave = async () => {
     try {
       setSaving(true)
@@ -170,6 +164,12 @@ const Spreadsheet = () => {
     }
   }
 
+
+  useEffect(() => {
+    if (data) {
+      setSpreadsheetData(data.spreadsheet)
+    }
+  }, [data])
 
 
   return (
@@ -240,7 +240,7 @@ const Spreadsheet = () => {
       </div>
 
       <div className='my-[12px] flex items-center gap-[16px]'>
-        <LuSheet /> 
+        <LuSheet />
         <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
           {spreadsheetData?.name}
         </p>
@@ -352,10 +352,10 @@ const Spreadsheet = () => {
       }
 
       <DuplicateSpreadsheetModal showModal={showDuplicateSpreadsheetModal} setShowModal={setShowDuplicateSpreadsheetModal} spreadsheet={spreadsheetData} />
-      <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={spreadsheetData} />
+      <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={spreadsheetData} refresh={refresh} setRefresh={setRefresh} />
       <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetData?._id} />
       <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
-      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} />
+      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} refresh={refresh} setRefresh={setRefresh} />
 
     </MainContainer >
   )

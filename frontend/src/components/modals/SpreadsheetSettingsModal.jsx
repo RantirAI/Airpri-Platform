@@ -8,7 +8,7 @@ import { BsCheckLg } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-const SpreadsheetSettingsModal = ({ showModal, setShowModal, spreadsheet }) => {
+const SpreadsheetSettingsModal = ({ showModal, setShowModal, spreadsheet, refresh, setRefresh }) => {
 
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
@@ -27,6 +27,7 @@ const SpreadsheetSettingsModal = ({ showModal, setShowModal, spreadsheet }) => {
             nameRef.current.value = ''
             descriptionRef.current.value = ''
             setShowModal(false)
+            setRefresh(!refresh)
         } catch (error) {
             toast.error(error.message)
         } finally {

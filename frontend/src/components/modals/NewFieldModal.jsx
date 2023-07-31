@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { editSpreadsheet } from '../../services/spreadsheet'
 
-const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
+const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, setRefresh }) => {
     const fieldNameRef = useRef(null)
     const [fieldType, setFieldType] = useState(null)
 
@@ -24,6 +24,9 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
         e.preventDefault()
         try {
             setSubmitting(true)
+            if(!fieldNameRef.current.value){
+                throw new Error('Empty field name')
+            }
             if (columns.find((col) => (
                 col.title.toLowerCase() == fieldNameRef.current.value.toLowerCase()
             ))) {
@@ -47,6 +50,7 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows }) => {
                 rows: newRows
             }, id)
             setShowModal(false)
+            setRefresh(!refresh)
             toast.success('Field added')
         } catch (error) {
             toast.error(error.message)

@@ -54,9 +54,9 @@ const index = () => {
                             <Route path='/workspace/:workspaceId' element={<Workspace />} />
                             <Route path='/workspace/:workspaceId/spreadsheet' element={<Spreadsheets />} />
                             <Route path='/workspace/:workspaceId/spreadsheet/:spreadsheetId' element={<Spreadsheet />} />
-                            <Route path='*' element={() => (<div>
+                            <Route path='*' element={<div>
                                 page not found
-                            </div>)} />
+                            </div>} />
                         </>
                         :
                         <>
@@ -66,9 +66,9 @@ const index = () => {
                             <Route path='/create-account' element={<CreateAccount />} />
                             <Route path='/forgot-password' element={<ForgotPassword />} />
                             <Route path='/reset-password' element={<ResetPassword />} />
-                            <Route path='*' element={() => (<div>
+                            <Route path='*' element={<div>
                                 page not found
-                            </div>)} />
+                            </div>} />
                         </>
                 }
                 <Route path='*' element={<NotFound />} />

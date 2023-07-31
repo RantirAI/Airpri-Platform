@@ -7,7 +7,6 @@ import { createWorkspace } from '../../services/workspace'
 import { BsCheckLg } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { selectWorkspace } from '../../redux/features/workspaceSlice'
 import { toggleNewWorkspaceModal } from '../../redux/features/modalsSlice'
 
 const NewWorkspaceModal = () => {
@@ -35,8 +34,7 @@ const NewWorkspaceModal = () => {
             descriptionRef.current.value = ''
             setMembers([])
             dispatch(toggleNewWorkspaceModal(false))
-            dispatch(selectWorkspace(workspace))
-            navigate('/workspace')
+            navigate(`/workspace/${workspace._id}`)
         } catch (error) {
             toast.error(error.message)
         } finally {

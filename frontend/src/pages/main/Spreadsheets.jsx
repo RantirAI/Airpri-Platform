@@ -7,7 +7,7 @@ import { FiSettings } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { getDateAndTime } from '../../utils/formatDate'
 import SpreadsheetCard from '../../components/cards/SpreadsheetCard'
 import useFetch from '../../hooks/useFetch'
@@ -21,9 +21,9 @@ const Spreadsheets = () => {
     const [showNewSpreadsheetModal, setShowNewSpreadsheetModal] = useState(false)
 
     const [showOptions, setShowOptions] = useState(false)
-    const { workspace } = useSelector(state => state.workspace)
+    const {workspaceId} = useParams()
 
-    const { data, loading, error } = useFetch(`/workspace/${workspace._id}`, [showNewSpreadsheetModal, workspace])
+    const { data, loading, error } = useFetch(`/workspace/${workspaceId}`, [showNewSpreadsheetModal, workspaceId])
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
@@ -103,7 +103,7 @@ const Spreadsheets = () => {
                 <div className='my-[12px] flex items-center gap-[16px]'>
                     <img src={rectangleStackImg} className='w-[32px] h-[32px] ' />
                     <p className='text-base lg:text-lg font-semibold text-gray-900 dark:text-white'>
-                        {workspace?.name}
+                        {data?.workspace?.name}
                     </p>
                 </div>
                 <div className='flex flex-row gap-1 self-start'>

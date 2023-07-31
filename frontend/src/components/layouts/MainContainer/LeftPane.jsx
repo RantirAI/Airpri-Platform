@@ -13,8 +13,7 @@ import { CgLoadbarDoc } from 'react-icons/cg'
 import { BiSolidHelpCircle } from 'react-icons/bi'
 import useFetch from '../../../hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectWorkspace } from '../../../redux/features/workspaceSlice';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 import { BsFileSpreadsheet } from 'react-icons/bs';
 import { HiSquare2Stack } from 'react-icons/hi2'
@@ -25,7 +24,8 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
   const { user } = useSelector(state => state.auth)
 
-  const currentWorkspace = useSelector(state => state.workspace)
+  const { workspaceId } = useParams()
+
   const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal } = useSelector(state => state.modals)
 
   const workspaces = useFetch('workspace', [showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal])
@@ -154,17 +154,16 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                     <Sidebar.Collapse
                       icon={MdWorkspaces}
                       label={workspace.name}
-                      className={currentWorkspace.workspace?.name == workspace.name ? 'bg-gray-200 dark:bg-gray-700' : ''}
+                      className={workspaceId == workspace._id ? 'bg-gray-200 dark:bg-gray-700' : ''}
                     >
                       <div onClick={() => {
-                        dispatch(selectWorkspace(workspace))
+                        navigate(`/workspace/${workspace._id}`)
                       }}>
                         <Sidebar.Item
                           href=''
                           onClick={(e) => {
                             e.preventDefault()
-                            navigate('/workspace')
-
+                            navigate(`/workspace/${workspace._id}`)
                           }}
                           icon={HiChartPie}
                         >
@@ -175,7 +174,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                         <Sidebar.Item href=''
                           onClick={(e) => {
                             e.preventDefault()
-                            navigate('/spreadsheet')
+                            navigate(`/workspace/${workspace._id}/spreadsheet`)
                           }} icon={LuSheet}>
                           Spreadsheets
                         </Sidebar.Item>

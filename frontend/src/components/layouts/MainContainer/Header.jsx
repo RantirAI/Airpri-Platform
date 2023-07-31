@@ -1,6 +1,6 @@
 import { Avatar, Button, DarkThemeToggle, Dropdown } from 'flowbite-react'
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import lightModeLogo from '../../../assets/airpri-light-mode-logo.svg'
 import darkModeLogo from '../../../assets/airpri-dark-mode-logo.svg'
 import grid from '../../../assets/grid.svg'
@@ -10,14 +10,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../../../redux/features/authSlice'
 import { toast } from 'react-toastify'
 import { IoMdClose } from 'react-icons/io'
-import { unselectWorkspace } from '../../../redux/features/workspaceSlice'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import useFetch from '../../../hooks/useFetch'
 
 const Header = ({ showLeftPane, setShowLeftPane }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { workspace } = useSelector(state => state.workspace)
+  const { workspaceId } = useParams()
+
+  const currentWorkspace = useFetch(`/workspace/${workspaceId}`, [workspaceId])
 
   return (
     <header className='flex justify-between items-center py-[10px] px-[20px] bg-white dark:bg-[#111928] border-solid border-gray-200 dark:border-gray-700 border-0 border-b-2 fixed top-0 right-0 left-0 w-full z-10 text-[10px] lg:text-xs'>
@@ -27,15 +29,14 @@ const Header = ({ showLeftPane, setShowLeftPane }) => {
           <img src={lightModeLogo} className='block dark:hidden object-cover w-full h-full' />
         </Link>
         {
-          workspace &&
+          currentWorkspace.data?.workspace &&
           <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-50 leading-tight text-[10px] lg:text-xs font-normal flex items-center gap-2' >
             <p>
               {
-                workspace.name
+                currentWorkspace.data?.workspace?.name
               }
             </p>
             <button onClick={() => {
-              dispatch(unselectWorkspace())
               navigate('/dashboard')
             }}>
               <IoMdClose />

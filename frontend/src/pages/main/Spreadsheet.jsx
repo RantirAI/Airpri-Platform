@@ -41,7 +41,7 @@ const Spreadsheet = () => {
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
   const [showNewFieldModal, setShowNewFieldModal] = useState(false)
 
-  const { id } = useParams()
+  const { spreadsheetId } = useParams()
   const location = useLocation()
 
   const [showOptions, setShowOptions] = useState(false)
@@ -49,7 +49,8 @@ const Spreadsheet = () => {
   const [saving, setSaving] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
-  const { data, loading, error } = useFetch(`/spreadsheet/${id}`, [id, showSpreadsheetSettingsModal, refresh, showNewFieldModal])
+  const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}`, [spreadsheetId, showSpreadsheetSettingsModal, refresh, showNewFieldModal])
+
 
   const [spreadsheetData, setSpreadsheetData] = useState(null)
 
@@ -159,7 +160,7 @@ const Spreadsheet = () => {
   const handleSave = async () => {
     try {
       setSaving(true)
-      const response = await editSpreadsheet(spreadsheetData, spreadsheetData._id)
+      const response = await editSpreadsheet(spreadsheetData, spreadsheet)
       toast.success('Spreadsheet saved successfully!')
       setRefresh(!refresh)
     } catch (error) {

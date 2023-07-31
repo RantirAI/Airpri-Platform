@@ -2,15 +2,14 @@ import { Button, Modal, Spinner } from 'flowbite-react';
 import { useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { toggleDeleteWorkspaceModal } from '../../redux/features/modalsSlice';
-import { unselectWorkspace } from '../../redux/features/workspaceSlice';
 import { deleteWorkspace } from '../../services/workspace';
 
 const DeleteWorkspaceModal = () => {
     const { showDeleteWorkspaceModal } = useSelector(state => state.modals)
-    const { workspace } = useSelector(state => state.workspace)
+    const {workspaceId} = useParams()
 
     const [submitting, setSubmitting] = useState(false)
 
@@ -21,10 +20,9 @@ const DeleteWorkspaceModal = () => {
         try {
             e.preventDefault()
             setSubmitting(true)
-            await deleteWorkspace(workspace._id)
+            await deleteWorkspace(workspaceId)
             toast.info('Workspace deleted!')
             dispatch(toggleDeleteWorkspaceModal(false))
-            dispatch(unselectWorkspace())
             navigate('/dashboard')
         } catch (error) {
             toast.error(error.message)

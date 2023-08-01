@@ -27,7 +27,7 @@ import { TfiGallery } from 'react-icons/tfi'
 import { TbMessageChatbot } from 'react-icons/tb'
 import { AiOutlineEye, AiOutlineSave } from 'react-icons/ai'
 import { MdOutlineDownloadForOffline } from 'react-icons/md'
-import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from 'react-icons/io5'
+import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline, IoCheckmarkCircle } from 'react-icons/io5'
 import { CiExport } from 'react-icons/ci'
 import { GrAddCircle } from 'react-icons/gr'
 import NewFieldModal from '../../components/modals/NewFieldModal'
@@ -43,13 +43,14 @@ const Spreadsheet = () => {
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
   const [showNewFieldModal, setShowNewFieldModal] = useState(false)
 
-  const {workspaceId} = useParams()
+  const { workspaceId } = useParams()
   const { spreadsheetId } = useParams()
   const location = useLocation()
 
   const [showOptions, setShowOptions] = useState(false)
 
   const [saving, setSaving] = useState(false)
+  const [cellChanged, setCellChanged] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
   const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}`, [spreadsheetId, refresh])
@@ -114,8 +115,7 @@ const Spreadsheet = () => {
         data: d,
       };
     }
-
-  }, [spreadsheetData]);
+  }, [spreadsheetData])
 
   const handleInsertRow = () => {
     const newRow = {}
@@ -156,18 +156,6 @@ const Spreadsheet = () => {
   //   { title: "Level", id: 'level' },
   // ];
 
-  const handleSave = async () => {
-    try {
-      setSaving(true)
-      const response = await editSpreadsheet(spreadsheetData, spreadsheetId)
-      toast.success('Spreadsheet saved successfully!')
-      setRefresh(!refresh)
-    } catch (error) {
-      toast.error(error.message)
-    } finally {
-      setSaving(false)
-    }
-  }
 
   const handleImportCsv = (e) => {
     Papa.parse(e.target.files[0], {
@@ -233,6 +221,20 @@ const Spreadsheet = () => {
       setSpreadsheetData(data.spreadsheet)
     }
   }, [data])
+
+  useEffect(() => {
+    if (!spreadsheetData) return
+    (async () => {
+      try {
+        setSaving(true)
+        await editSpreadsheet(spreadsheetData, spreadsheetId)
+      } catch (error) {
+        toast.error(error.message)
+      } finally {
+        setSaving(false)
+      }
+    })()
+  }, [spreadsheetData, cellChanged])
 
 
   return (
@@ -344,15 +346,26 @@ const Spreadsheet = () => {
               </div>
               <div className='flex flex-row gap-2 flex-wrap border-solid border-0 border-t-2 border-gray-200 border-b-2'>
                 <input type='file' ref={importRef} accept=".csv" onChange={handleImportCsv} className='hidden' />
+                <div className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200 text-[10px] lg:text-xs`} >
+                  {
+                    saving ?
+                      <>  <span>Autosaving...</span> <Spinner size={'xs'} /> </>
+                      :
+                      <>
+                        <span>
+                          Changes saved
+                        </span>
+                        <IoCheckmarkCircle />
+                      </>
+                  }
+                </div>
                 {
-                  [`save`, 'undo', 'redo', 'insert row', 'import csv', 'export', 'edit fields'].map((btn) => (
+
+                  ['undo', 'redo', 'insert row', 'import csv', 'export', 'edit fields'].map((btn) => (
                     <button key={btn} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200 text-[10px] lg:text-xs`} onClick={
                       (e) => {
                         e.preventDefault()
                         switch (btn) {
-                          case 'save':
-                            handleSave()
-                            break;
                           case 'insert row':
                             handleInsertRow()
                             break;
@@ -365,31 +378,27 @@ const Spreadsheet = () => {
                       }
                     }>
                       {
-                        btn == 'save' ?
-                          <>{saving ? <Spinner /> : <AiOutlineSave />}</>
+                        btn == 'undo' ?
+                          <IoArrowUndoCircleOutline />
                           :
-                          btn == 'undo' ?
-                            <IoArrowUndoCircleOutline />
+                          btn == 'redo' ?
+                            <IoArrowRedoCircleOutline />
                             :
-                            btn == 'redo' ?
-                              <IoArrowRedoCircleOutline />
+                            btn == 'insert row' ?
+                              <GrAddCircle />
                               :
-                              btn == 'insert row' ?
-                                <GrAddCircle />
+                              btn == 'import csv' ?
+                                <MdOutlineDownloadForOffline />
                                 :
-                                btn == 'import csv' ?
-                                  <MdOutlineDownloadForOffline />
+                                btn == 'export' ?
+                                  <CiExport />
                                   :
-                                  btn == 'export' ?
-                                    <CiExport />
+                                  btn == 'edit fields' ?
+                                    <LuTextCursorInput />
                                     :
-                                    btn == 'edit fields' ?
-                                      <LuTextCursorInput />
-                                      :
-                                      ''
+                                    ''
                       }
                       {btn}
-                      {/* {btn == 'import csv' ? <input type='file' ref={importRef} className='hidden' /> : null} */}
                     </button>
                   ))
                 }
@@ -399,6 +408,7 @@ const Spreadsheet = () => {
                   const dataa = spreadsheetData
                   dataa.rows[i[1]][dataa.columns[i[0]]['id']] = j.data
                   setSpreadsheetData(dataa)
+                  setCellChanged(!cellChanged)
                 }} />
             </div>
             :

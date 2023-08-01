@@ -34,7 +34,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
   const navigate = useNavigate()
 
   return (
-    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px] left-pane`}>
+    <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-100%] lg:left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px] left-pane`}>
       <Button color='failure' size='xs' onClick={() => {
         setShowLeftPane(false)
       }} className='absolute top-2 right-2 px-0 lg:hidden' >

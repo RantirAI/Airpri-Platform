@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, Spinner, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
@@ -31,6 +31,8 @@ import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from 'react-icons/
 import { CiExport } from 'react-icons/ci'
 import { GrAddCircle } from 'react-icons/gr'
 import NewFieldModal from '../../components/modals/NewFieldModal'
+import Papa from 'papaparse'
+import getIdFromName from '../../utils/getIdFromName'
 
 
 const Spreadsheet = () => {
@@ -53,6 +55,8 @@ const Spreadsheet = () => {
 
 
   const [spreadsheetData, setSpreadsheetData] = useState(null)
+
+  const importRef = useRef(null)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -154,7 +158,7 @@ const Spreadsheet = () => {
   const handleSave = async () => {
     try {
       setSaving(true)
-      const response = await editSpreadsheet(spreadsheetData, spreadsheet)
+      const response = await editSpreadsheet(spreadsheetData, spreadsheetId)
       toast.success('Spreadsheet saved successfully!')
       setRefresh(!refresh)
     } catch (error) {
@@ -164,6 +168,64 @@ const Spreadsheet = () => {
     }
   }
 
+  const handleImportCsv = (e) => {
+    Papa.parse(e.target.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: function (results) {
+        const columns = []
+        const duplicateColumns = []
+        const rows = []
+        Object.keys(results.data[0]).forEach((key) => {
+          if (spreadsheetData.columns.findIndex(({ id }) => (getIdFromName(key) == id)) != -1) {
+            duplicateColumns.push(getIdFromName(key))
+            return
+          }
+          columns.push({
+            title: key,
+            id: getIdFromName(key),
+            editable: true,
+            icon: GridColumnIcon.HeaderString,
+            type: 'Text',
+          })
+        })
+        results.data.forEach((obj) => {
+          const row = {}
+          Object.entries(obj).forEach(([key, value]) => {
+            row[getIdFromName(key)] = value
+          })
+          rows.push(row)
+        })
+
+        const oldRows = spreadsheetData.rows
+        oldRows.map((row) => {
+          const newRow = row
+          columns.forEach((col) => {
+            newRow[col['id']] = ''
+          })
+          return newRow
+        })
+
+        const newRows = rows
+        newRows.map((row) => {
+          const newRow = row
+          spreadsheetData.columns.forEach((col) => {
+            if (duplicateColumns.findIndex((key) => (key == col['id'])) != -1) {
+              return
+            }
+            newRow[col['id']] = ''
+          })
+          return newRow
+        })
+
+        setSpreadsheetData({
+          ...spreadsheetData,
+          columns: [...spreadsheetData.columns, ...columns],
+          rows: [...oldRows, ...newRows]
+        })
+      },
+    });
+  }
 
   useEffect(() => {
     if (data) {
@@ -280,9 +342,10 @@ const Spreadsheet = () => {
                 }
               </div>
               <div className='flex flex-row gap-2 flex-wrap border-solid border-0 border-t-2 border-gray-200 border-b-2'>
+                <input type='file' ref={importRef} accept=".csv" onChange={handleImportCsv} className='hidden' />
                 {
-                  [`save`, 'undo', 'redo', 'insert row', 'import data', 'export', 'edit fields'].map((btn) => (
-                    <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200 text-[10px] lg:text-xs`} onClick={
+                  [`save`, 'undo', 'redo', 'insert row', 'import csv', 'export', 'edit fields'].map((btn) => (
+                    <button key={btn} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200 text-[10px] lg:text-xs`} onClick={
                       (e) => {
                         e.preventDefault()
                         switch (btn) {
@@ -291,6 +354,10 @@ const Spreadsheet = () => {
                             break;
                           case 'insert row':
                             handleInsertRow()
+                            break;
+                          case 'import csv':
+                            importRef.current.click();
+                            break;
                           default:
                             break;
                         }
@@ -308,19 +375,20 @@ const Spreadsheet = () => {
                               :
                               btn == 'insert row' ?
                                 <GrAddCircle />
+                                :
+                                btn == 'import csv' ?
+                                  <MdOutlineDownloadForOffline />
                                   :
-                                  btn == 'import data' ?
-                                    <MdOutlineDownloadForOffline />
+                                  btn == 'export' ?
+                                    <CiExport />
                                     :
-                                    btn == 'export' ?
-                                      <CiExport />
+                                    btn == 'edit fields' ?
+                                      <LuTextCursorInput />
                                       :
-                                      btn == 'edit fields' ?
-                                        <LuTextCursorInput />
-                                        :
-                                        ''
+                                      ''
                       }
                       {btn}
+                      {/* {btn == 'import csv' ? <input type='file' ref={importRef} className='hidden' /> : null} */}
                     </button>
                   ))
                 }

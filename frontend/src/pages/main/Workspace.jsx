@@ -22,8 +22,6 @@ const Workspace = () => {
 
     const { data, loading } = useFetch(`/workspace/${workspaceId}`, [workspaceId])
 
-    console.log(data)
-
 
     const [showOptions, setShowOptions] = useState(false)
 
@@ -147,7 +145,7 @@ const Workspace = () => {
                             </div>
 
                             <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
-                                <WorkspaceItemCard type={'spreadsheet'} time={data?.workspace?.updatedAt} workspace={data?.workspace} gridView={gridView} />
+                                <WorkspaceItemCard type={'spreadsheet'} time={data?.workspace?.updatedAt} workspace={data?.workspace} gridView={gridView} workspaceId={workspaceId} />
                                 {/* <WorkspaceItemCard type={'form'} time={data?.updatedAt} workspace={data} /> */}
                                 {/* <WorkspaceItemCard type={'gallery'} time={data?.updatedAt} workspace={data} /> */}
                             </div>

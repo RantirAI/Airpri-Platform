@@ -135,7 +135,7 @@ const Dashboard = () => {
                           </p>
 
                           <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
-                            <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} gridView={gridView} />
+                            <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} gridView={gridView} workspaceId={workspace._id} />
                             {/* <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
                             <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
                             <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} /> */}

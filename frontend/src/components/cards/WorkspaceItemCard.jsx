@@ -10,10 +10,9 @@ import { getDateAndTime } from '../../utils/formatDate'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const WorkspaceItemCard = ({ type, time, workspace, gridView }) => {
+const WorkspaceItemCard = ({ type, time, workspaceId, gridView }) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const { workspaceId } = useParams()
     return (
         <>
             {

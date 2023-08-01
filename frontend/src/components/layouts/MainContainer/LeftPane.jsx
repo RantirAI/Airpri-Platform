@@ -156,9 +156,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                       label={workspace.name}
                       className={workspaceId == workspace._id ? 'bg-gray-200 dark:bg-gray-700' : ''}
                     >
-                      <div onClick={() => {
-                        navigate(`/workspace/${workspace._id}`)
-                      }}>
+
                         <Sidebar.Item
                           href=''
                           onClick={(e) => {
@@ -193,7 +191,6 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                         <Sidebar.Item href="#" icon={IoIosPeople}>
                           Members
                         </Sidebar.Item>
-                      </div>
                     </Sidebar.Collapse>
                   ))
                 }

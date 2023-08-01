@@ -43,6 +43,7 @@ const Spreadsheet = () => {
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
   const [showNewFieldModal, setShowNewFieldModal] = useState(false)
 
+  const {workspaceId} = useParams()
   const { spreadsheetId } = useParams()
   const location = useLocation()
 
@@ -317,7 +318,7 @@ const Spreadsheet = () => {
               <div className='flex flex-row gap-2 flex-wrap'>
                 {
                   ['spreadsheet', 'form', 'gallery', 'automation', 'ai-chat'].map((link) => (
-                    <Link to={`/${link}`} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} text-[10px] lg:text-xs`}>
+                    <Link to={`/workspace/${workspaceId}/${link}`} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} text-[10px] lg:text-xs`}>
                       {
                         link == 'spreadsheet' ?
                           <LuSheet />
@@ -408,14 +409,12 @@ const Spreadsheet = () => {
               <div className='w-[250px] h-[155px] my-[20px]'>
                 <img src={emptyDashboardIllustration} className='h-full w-full object-cover' />
               </div>
-              <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 block' type='button' onClick={() => {
-                navigate('/spreadsheet')
-              }}>
-                <HiOutlinePlusCircle className='mr-2 text-lg ' />
+              <Link to={`/workspace/${workspaceId}/spreadsheet`} className='bg-[#1ABFAB] text-white dark:text-gray-900 flex items-center p-2 rounded-md' >
+                <LuSheet className='mr-2 text-lg ' />
                 <span>
                   All spreadsheets
                 </span>
-              </Button>
+              </Link>
             </div>
       }
 

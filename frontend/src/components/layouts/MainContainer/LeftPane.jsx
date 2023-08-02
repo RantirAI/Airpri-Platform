@@ -1,5 +1,5 @@
 import { Button, Sidebar, Spinner } from 'flowbite-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaWpforms } from 'react-icons/fa';
 import { HiChartPie, HiLightningBolt, HiOutlinePlusCircle, HiViewBoards } from 'react-icons/hi';
 import { IoIosPeople, IoMdClose } from 'react-icons/io';
@@ -13,7 +13,7 @@ import { CgLoadbarDoc } from 'react-icons/cg'
 import { BiSolidHelpCircle } from 'react-icons/bi'
 import useFetch from '../../../hooks/useFetch';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toggleNewWorkspaceModal } from '../../../redux/features/modalsSlice';
 import { BsFileSpreadsheet } from 'react-icons/bs';
 import { HiSquare2Stack } from 'react-icons/hi2'
@@ -21,6 +21,7 @@ import { GoOrganization } from 'react-icons/go'
 import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
 
 const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
+  const {pathname} = useLocation()
 
   const { user } = useSelector(state => state.auth)
 
@@ -32,6 +33,12 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if(!pathname.includes('/spreadsheet/') && !pathname.includes('/form/') && window.innerWidth >= 1024){
+      setShowLeftPane(true)
+    }
+  }, [pathname])
 
   return (
     <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-100%] lg:left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px] left-pane`}>

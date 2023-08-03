@@ -33,6 +33,7 @@ import { GrAddCircle } from 'react-icons/gr'
 import NewFieldModal from '../../components/modals/NewFieldModal'
 import Papa from 'papaparse'
 import getIdFromName from '../../utils/getIdFromName'
+import exportFromJSON from 'export-from-json'
 
 
 const Spreadsheet = () => {
@@ -216,6 +217,25 @@ const Spreadsheet = () => {
     });
   }
 
+  const handleExportCsv = () => {
+    const data = []
+
+    spreadsheetData?.rows.forEach((row) => {
+      const newRow = {}
+
+      spreadsheetData?.columns.forEach(({ title, id }) => {
+        newRow[title] = row[id]
+      })
+
+      data.push(newRow)
+    })
+
+    const fileName = spreadsheetData?.name
+    const exportType = exportFromJSON.types.csv
+
+    exportFromJSON({ data, fileName, exportType })
+  }
+
   useEffect(() => {
     if (data) {
       setSpreadsheetData(data.spreadsheet)
@@ -361,7 +381,7 @@ const Spreadsheet = () => {
                 </div>
                 {
 
-                  ['undo', 'redo', 'insert row', 'import csv', 'export', 'edit fields'].map((btn) => (
+                  ['undo', 'redo', 'insert row', 'import csv', 'export csv', 'edit fields'].map((btn) => (
                     <button key={btn} className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2  border-solid border-0 border-r-[1px] border-gray-200 text-[10px] lg:text-xs`} onClick={
                       (e) => {
                         e.preventDefault()
@@ -371,6 +391,9 @@ const Spreadsheet = () => {
                             break;
                           case 'import csv':
                             importRef.current.click();
+                            break;
+                          case 'export csv':
+                            handleExportCsv()
                             break;
                           default:
                             break;

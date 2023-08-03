@@ -2,12 +2,13 @@ import { Button, Modal, Spinner } from 'flowbite-react';
 import { useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { deleteSpreadsheet } from '../../services/spreadsheet';
 
 const DeleteSpreadsheetModal = ({showModal, setShowModal, id}) => {
     const [submitting, setSubmitting] = useState(false)
+    const {workspaceId} = useParams()
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -19,7 +20,7 @@ const DeleteSpreadsheetModal = ({showModal, setShowModal, id}) => {
             await deleteSpreadsheet(id)
             toast.info('Spreadsheet deleted!')
             setShowModal(false)
-            navigate('/spreadsheet')
+            navigate(`/workspace/${workspaceId}/spreadsheet`)
         } catch (error) {
             toast.error(error.message)
         } finally {

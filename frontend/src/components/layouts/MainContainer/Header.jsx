@@ -12,6 +12,7 @@ import { toast } from 'react-toastify'
 import { IoMdClose } from 'react-icons/io'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import useFetch from '../../../hooks/useFetch'
+import { setAxiosToken } from '../../../config/axios'
 
 const Header = ({ showLeftPane, setShowLeftPane }) => {
   const dispatch = useDispatch()
@@ -85,6 +86,7 @@ const Header = ({ showLeftPane, setShowLeftPane }) => {
             <Button type='button' className='bg-red-600 dark:bg-red-400 hover:!bg-red-700 hover:dark:!bg-red-500' onClick={(e) => {
               e.preventDefault()
               dispatch(signOut())
+              setAxiosToken(null)
               localStorage.removeItem('token')
               toast.info('Signed Out!')
               navigate('/')

@@ -8,6 +8,8 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { editSpreadsheet } from '../../services/spreadsheet'
+import FieldTypeIcon from '../FieldTypeIcon'
+import renderFieldTypeIcon from '../FieldTypeIcon'
 
 const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, setRefresh }) => {
     const fieldNameRef = useRef(null)
@@ -83,11 +85,15 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, se
                     setShowDropdown(!showDropdown)
                 }}>
 
-                    <p
-                        className='z-20 flex flex-row items-center justify-between'
-                    >
-                        <span> {fieldType?.label || 'Select field type'} </span>{showDropdown ? <FiChevronUp /> : <FiChevronDown />}
+                <p
+                    className=' flex flex-row items-center justify-between'
+                >
+                    <p className='flex flex-row items-center gap-1'>
+                        <FieldTypeIcon type={fieldType?.label} />
+                        <span> {fieldType?.label || 'Select field type'} </span>
                     </p>
+                    {showDropdown ? <FiChevronUp /> : <FiChevronDown />}
+                </p>
                     {
                         showDropdown &&
                         <div className='w-full max-h-[130px] shadow-md rounded-md right-0 left-0 top-[42px] overflow-y-scroll flex flex-col absolute z-30 bg-white'>
@@ -162,10 +168,15 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, se
                                     <button className='p-2 flex flex-row justify-between' onClick={() => {
                                         setFieldType(ft)
                                     }} >
-                                        {ft.label}
-                                        {
-                                            ft.label == fieldType?.label ? <BsCheckLg /> : ''
-                                        }
+                                    <p className='flex flex-row gap-1 items-center'>
+                                        <FieldTypeIcon type={ft.label} />
+                                        <span>
+                                            {ft.label}
+                                        </span>
+                                    </p>
+                                    {
+                                        ft.label == fieldType?.label ? <BsCheckLg /> : ''
+                                    }
                                     </button>
                                 ))
                             }

@@ -17,121 +17,9 @@ import { BiSolidLockAlt } from 'react-icons/bi'
 import { GoNumber } from 'react-icons/go'
 import { LuCheckSquare, LuFileJson } from 'react-icons/lu'
 import { MdDateRange, MdFormatColorFill } from 'react-icons/md'
+import FieldTypeIcon from '../FieldTypeIcon'
+import fieldTypes from '../../utils/fieldTypes'
 
-const types = [
-    {
-        icon: GridColumnIcon.HeaderString,
-        value: GridCellKind.Text,
-        label: 'Text'
-    },
-    {
-        icon: GridColumnIcon.HeaderTextTemplate,
-        value: GridCellKind.Text,
-        label: 'Long Text'
-    },
-    {
-        icon: GridColumnIcon.HeaderTextTemplate,
-        value: GridCellKind.Text,
-        label: 'Rich Text'
-    },
-    {
-        icon: GridColumnIcon.HeaderUri,
-        value: GridCellKind.Uri,
-        label: 'Link/Slug'
-    },
-    {
-        icon: GridColumnIcon.HeaderEmail,
-        value: GridCellKind.Text,
-        label: 'Email'
-    },
-    {
-        icon: GridColumnIcon.HeaderCode,
-        value: GridCellKind.Protected,
-        label: 'Password'
-    },
-    {
-        icon: GridColumnIcon.HeaderNumber,
-        value: GridCellKind.Number,
-        label: 'Number'
-    },
-    {
-        icon: GridColumnIcon.HeaderJoinStrings,
-        value: GridCellKind.Bubble,
-        label: 'Enumeration'
-    },
-    {
-        icon: GridColumnIcon.HeaderBoolean,
-        value: GridCellKind.Boolean,
-        label: 'Boolean'
-    },
-    {
-        icon: GridColumnIcon.HeaderImage,
-        value: GridCellKind.Custom,
-        label: 'Color'
-    },
-    {
-        icon: GridColumnIcon.HeaderDate,
-        value: GridCellKind.Custom,
-        label: 'Date'
-    },
-    {
-        icon: GridColumnIcon.HeaderTime,
-        value: GridCellKind.Custom,
-        label: 'Time'
-    },
-    {
-        icon: GridColumnIcon.HeaderCode,
-        value: GridCellKind.Custom,
-        label: 'JSON'
-    },
-]
-
-const renderIcon = (type) => (
-    <>
-        {
-            type == 'Text' ?
-                <ImTextColor />
-                :
-                type == 'Long Text' ?
-                    <CiTextAlignLeft />
-                    :
-                    type == 'Rich Text' ?
-                        <BsTextIndentLeft />
-                        :
-                        type == 'Link/Slug' ?
-                            <AiOutlineLink />
-                            :
-                            type == 'Email' ?
-                                <HiOutlineMailOpen />
-                                :
-                                type == 'Password' ?
-                                    <BiSolidLockAlt />
-                                    :
-                                    type == 'Number' ?
-                                        <GoNumber />
-                                        :
-                                        type == 'Enumeration' ?
-                                            <ImListNumbered />
-                                            :
-                                            type == 'Boolean' ?
-                                                <LuCheckSquare />
-                                                :
-                                                type == 'Color' ?
-                                                    <MdFormatColorFill />
-                                                    :
-                                                    type == 'Date' ?
-                                                        <MdDateRange />
-                                                        :
-                                                        type == 'Time' ?
-                                                            <TbCalendarTime />
-                                                            :
-                                                            type == 'JSON' ?
-                                                                < LuFileJson />
-                                                                :
-                                                                ''
-        }
-    </>
-)
 
 const Field = ({ col, cols, setCols, rows, setRows }) => {
     const [showDropdown, setShowDropdown] = useState(false)
@@ -139,7 +27,7 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
     const [fieldName, setFieldName] = useState('')
 
     useEffect(() => {
-        setFieldType(types[types.findIndex((_) => (_.value == col.type))])
+        setFieldType(fieldTypes[fieldTypes.findIndex((_) => (_.value == col.type))])
         setFieldName(col.title)
     }, [cols, col])
 
@@ -155,7 +43,7 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
                     className=' flex flex-row items-center justify-between'
                 >
                     <p className='flex flex-row items-center gap-1'>
-                        {renderIcon(fieldType?.label)}
+                        <FieldTypeIcon type={fieldType?.label} />
                         <span> {fieldType?.label || 'Select field type'} </span>
                     </p>
                     {showDropdown ? <FiChevronUp /> : <FiChevronDown />}
@@ -164,7 +52,7 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
                     showDropdown &&
                     <div className='w-full max-h-[90px] shadow-md rounded-md right-0 left-0 top-[42px] overflow-y-scroll flex flex-col absolute  bg-white z-50'>
                         {
-                            types.map((ft) => (
+                            fieldTypes.map((ft) => (
                                 <button className='p-2 flex flex-row justify-between w-full' onClick={() => {
                                     setFieldType(ft)
                                     const all = cols
@@ -174,8 +62,10 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
                                     setCols(all)
                                 }} >
                                     <p className='flex flex-row gap-1 items-center'>
-                                        {renderIcon(ft.label)}
-                                        {ft.label}
+                                        <FieldTypeIcon type={ft.label} />
+                                        <span>
+                                            {ft.label}
+                                        </span>
                                     </p>
                                     {
                                         ft.label == fieldType?.label ? <BsCheckLg /> : ''
@@ -223,8 +113,8 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
 const EditFieldsModal = ({ showModal, setShowModal, spreadsheetData, refresh, setRefresh }) => {
     const [cols, setCols] = useState([])
     const [rows, setRows] = useState([])
-    
-    
+
+
     const [submitting, setSubmitting] = useState(false)
 
     const handleSubmit = async (e) => {

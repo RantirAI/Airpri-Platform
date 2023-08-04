@@ -353,7 +353,7 @@ const Spreadsheet = () => {
                       icon: <TfiGallery />
                     },
                   ].map(({ title, icon }) => (
-                    <div className='flex items-center justify-between w-full mb-4 font-medium'>
+                    <div key={title} className='flex items-center justify-between w-full mb-4 font-medium'>
                       <div className='flex items-center gap-1'>
                         {icon}
                         <span className='text-xs lg:text-[14px]'>
@@ -392,7 +392,7 @@ const Spreadsheet = () => {
                       icon: <TbMessageChatbot />
                     },
                   ].map(({ title, icon }) => (
-                    <div className='flex items-center justify-between w-full mb-4 font-medium'>
+                    <div key={title} className='flex items-center justify-between w-full mb-4 font-medium'>
                       <div className='flex items-center gap-1'>
                         {icon}
                         <span className='text-xs lg:text-[14px]'>
@@ -426,7 +426,7 @@ const Spreadsheet = () => {
               <div className='flex flex-row gap-2 flex-wrap'>
                 {
                   ['spreadsheet', 'form'].map((link) => (
-                    <Link to={`/workspace/${workspaceId}/${link}`} className={` capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} text-[10px] lg:text-xs`}>
+                    <Link key={link} to={`/workspace/${workspaceId}/${link}`} className={` capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} text-[10px] lg:text-xs`}>
                       {
                         link == 'spreadsheet' ?
                           <LuSheet />

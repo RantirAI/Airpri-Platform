@@ -21,7 +21,7 @@ import { GoOrganization } from 'react-icons/go'
 import { FiChevronsLeft, FiChevronsRight } from 'react-icons/fi'
 
 const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
-  const {pathname} = useLocation()
+  const { pathname } = useLocation()
 
   const { user } = useSelector(state => state.auth)
 
@@ -35,7 +35,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if(!pathname.includes('/spreadsheet/') && !pathname.includes('/form/') && window.innerWidth >= 1024){
+    if (!pathname.includes('/spreadsheet/') && !pathname.includes('/form/') && window.innerWidth >= 1024) {
       setShowLeftPane(true)
     }
   }, [pathname])
@@ -162,42 +162,43 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                       icon={MdWorkspaces}
                       label={workspace.name}
                       className={workspaceId == workspace._id ? 'bg-gray-200 dark:bg-gray-700' : ''}
+                      key={workspace?._id}
                     >
 
-                        <Sidebar.Item
-                          href=''
-                          onClick={(e) => {
-                            e.preventDefault()
-                            navigate(`/workspace/${workspace._id}`)
-                          }}
-                          icon={HiChartPie}
-                        >
-                          <p>
-                            Overview
-                          </p>
-                        </Sidebar.Item>
-                        <Sidebar.Item href=''
-                          onClick={(e) => {
-                            e.preventDefault()
-                            navigate(`/workspace/${workspace._id}/spreadsheet`)
-                          }} icon={LuSheet}>
-                          Spreadsheets
-                        </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={FaWpforms}>
-                          Forms
-                        </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={TfiGallery}>
-                          Gallery
-                        </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={LuNetwork}>
-                          Automation
-                        </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={TbMessageChatbot}>
-                          AI Chat
-                        </Sidebar.Item>
-                        <Sidebar.Item href="#" icon={IoIosPeople}>
-                          Members
-                        </Sidebar.Item>
+                      <Sidebar.Item
+                        href=''
+                        onClick={(e) => {
+                          e.preventDefault()
+                          navigate(`/workspace/${workspace._id}`)
+                        }}
+                        icon={HiChartPie}
+                      >
+                        <p>
+                          Overview
+                        </p>
+                      </Sidebar.Item>
+                      <Sidebar.Item href=''
+                        onClick={(e) => {
+                          e.preventDefault()
+                          navigate(`/workspace/${workspace._id}/spreadsheet`)
+                        }} icon={LuSheet}>
+                        Spreadsheets
+                      </Sidebar.Item>
+                      <Sidebar.Item href="#" icon={FaWpforms}>
+                        Forms
+                      </Sidebar.Item>
+                      <Sidebar.Item href="#" icon={TfiGallery}>
+                        Gallery
+                      </Sidebar.Item>
+                      <Sidebar.Item href="#" icon={LuNetwork}>
+                        Automation
+                      </Sidebar.Item>
+                      <Sidebar.Item href="#" icon={TbMessageChatbot}>
+                        AI Chat
+                      </Sidebar.Item>
+                      <Sidebar.Item href="#" icon={IoIosPeople}>
+                        Members
+                      </Sidebar.Item>
                     </Sidebar.Collapse>
                   ))
                 }

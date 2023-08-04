@@ -80,7 +80,7 @@ const Dashboard = () => {
 
         {
           workspaces.loading ?
-            <Spinner aria-label="Fetching spreadsheets..." />
+            <Spinner aria-label="Fetching workspaces..." />
             :
             <>
               {workspaces.data?.workspaces?.length > 0 ?

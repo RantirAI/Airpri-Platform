@@ -34,6 +34,7 @@ import NewFieldModal from '../../components/modals/NewFieldModal'
 import Papa from 'papaparse'
 import getIdFromName from '../../utils/getIdFromName'
 import exportFromJSON from 'export-from-json'
+import EditFieldsModal from '../../components/modals/EditFieldsModal'
 
 
 const Spreadsheet = () => {
@@ -43,6 +44,7 @@ const Spreadsheet = () => {
   const [showDeleteSpreadsheetModal, setShowDeleteSpreadsheetModal] = useState(false)
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
   const [showNewFieldModal, setShowNewFieldModal] = useState(false)
+  const [showEditFieldsModal, setShowEditFieldsModal] = useState(false)
 
   const { workspaceId } = useParams()
   const { spreadsheetId } = useParams()
@@ -176,7 +178,7 @@ const Spreadsheet = () => {
             id: getIdFromName(key),
             editable: true,
             icon: GridColumnIcon.HeaderString,
-            type: 'Text',
+            type: 'text',
           })
         })
         results.data.forEach((obj) => {
@@ -255,8 +257,7 @@ const Spreadsheet = () => {
       }
     })()
   }, [spreadsheetData, cellChanged])
-
-
+  
   return (
     <MainContainer>
       <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center mt-[15px] rounded-[8px]'>
@@ -395,6 +396,9 @@ const Spreadsheet = () => {
                           case 'export csv':
                             handleExportCsv()
                             break;
+                          case 'edit fields':
+                            setShowEditFieldsModal(true)
+                            break;
                           default:
                             break;
                         }
@@ -456,6 +460,7 @@ const Spreadsheet = () => {
       <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetData?._id} />
       <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
       <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} refresh={refresh} setRefresh={setRefresh} />
+      <EditFieldsModal showModal={showEditFieldsModal} setShowModal={setShowEditFieldsModal} spreadsheetData={spreadsheetData} refresh={refresh} setRefresh={setRefresh} setSpreadsheetData={setSpreadsheetData} />
 
     </MainContainer >
   )

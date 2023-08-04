@@ -1,24 +1,14 @@
-import { GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid'
-import { Button, Dropdown, Label, Modal, Spinner, TextInput } from 'flowbite-react'
-import React, { useEffect, useRef, useState } from 'react'
-import { AiOutlineDelete, AiOutlineLink } from 'react-icons/ai'
-import { BsCheckLg, BsTextIndentLeft } from 'react-icons/bs'
+import { Button, Modal, Spinner } from 'flowbite-react'
+import React, { useEffect, useState } from 'react'
+import { AiOutlineDelete } from 'react-icons/ai'
+import { BsCheckLg } from 'react-icons/bs'
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'
-import { TbCalendarTime, TbClipboardList } from 'react-icons/tb'
-import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { TbClipboardList } from 'react-icons/tb'
 import { toast } from 'react-toastify'
 import { editSpreadsheet } from '../../services/spreadsheet'
-import getIdFromName from '../../utils/getIdFromName'
-import { ImListNumbered, ImTextColor } from 'react-icons/im'
-import { CiTextAlignLeft } from 'react-icons/ci'
-import { HiOutlineMailOpen } from 'react-icons/hi'
-import { BiSolidLockAlt } from 'react-icons/bi'
-import { GoNumber } from 'react-icons/go'
-import { LuCheckSquare, LuFileJson } from 'react-icons/lu'
-import { MdDateRange, MdFormatColorFill } from 'react-icons/md'
-import FieldTypeIcon from '../FieldTypeIcon'
 import fieldTypes from '../../utils/fieldTypes'
+import getIdFromName from '../../utils/getIdFromName'
+import FieldTypeIcon from '../FieldTypeIcon'
 
 
 const Field = ({ col, cols, setCols, rows, setRows }) => {
@@ -53,7 +43,7 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
                     <div className='w-full max-h-[90px] shadow-md rounded-md right-0 left-0 top-[42px] overflow-y-scroll flex flex-col absolute  bg-white z-50'>
                         {
                             fieldTypes.map((ft) => (
-                                <button className='p-2 flex flex-row justify-between w-full' onClick={() => {
+                                <button key={ft.label} className='p-2 flex flex-row justify-between w-full' onClick={() => {
                                     setFieldType(ft)
                                     const all = cols
                                     const index = cols.findIndex((_) => _.id == col.id)
@@ -77,12 +67,10 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
                 }
             </div>
             <input type={'text'} className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 dark:bg-gray-700 text-gray-500 leading-tight text-sm font-normal relative cursor-pointer flex ' value={fieldName} onChange={(e) => {
-                const all = cols
-                const index = cols.findIndex((_) => _.id == col.id)
-                all[index]['title'] = e.target.value
                 setFieldName(e.target.value)
-                setCols(all)
-                all[index]['id'] = getIdFromName(e.target.value)
+                const all = [...cols]
+                const index = all.findIndex((_) => _.id == col.id)
+                all[index]['title'] = e.target.value
             }} />
 
             <button onClick={(e) => {
@@ -121,9 +109,27 @@ const EditFieldsModal = ({ showModal, setShowModal, spreadsheetData, refresh, se
         e.preventDefault()
         try {
             setSubmitting(true)
+
+            const finalRows = []
+            rows.forEach((__) => {
+                const newRow = {}
+                Object.entries(__).forEach((item) => {
+                    const colIndex = cols.findIndex((col) => col.id == item[0])
+                    if (getIdFromName(cols[colIndex]['title']) == item[0]) {
+                        newRow[item[0]] = item[1]
+                    } else {
+                        newRow[getIdFromName(cols[colIndex]['title'])] = item[1]
+                    }
+                })
+                finalRows.push(newRow)
+            })
+
+            const finalCols = cols.map((_) => {
+                return ({ ..._, id: getIdFromName(_.title) })
+            })
+
             await editSpreadsheet({
-                columns: cols,
-                rows
+                columns: finalCols, rows: finalRows
             }, spreadsheetData?._id)
             setShowModal(false)
             setRefresh(!refresh)
@@ -147,7 +153,7 @@ const EditFieldsModal = ({ showModal, setShowModal, spreadsheetData, refresh, se
             <Modal.Body>
                 {
                     cols?.map((col, index) => (
-                        <Field col={col} cols={cols} setCols={setCols} rows={rows} setRows={setRows} spreadsheetData={spreadsheetData} />
+                        <Field key={col['id']} col={col} cols={cols} setCols={setCols} rows={rows} setRows={setRows} spreadsheetData={spreadsheetData} />
                     ))
                 }
 

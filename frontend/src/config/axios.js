@@ -6,22 +6,16 @@ const Axios = axios.create({
 })
 
 export const setAxiosToken = (token) => {
-    return (Axios.interceptors.request.use(
-        async (config) => {
-            config.headers = {
-                Authorization: `Bearer ${token}`,
-            };
-            return config;
-        },
-        (error) => {
-            Promise.reject(error);
-        }
-    ))
-}
+    if (token) {
+        Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    } else {
+        delete Axios.defaults.headers.common['Authorization'];
+    }
+};
 
 Axios.interceptors.response.use(
-  async (response) => response,
-  (error) => Promise.reject(error?.response?.data?.message || error?.response?.data?.error || error?.response?.data || error?.response || error?.message || error)
+    async (response) => response,
+    (error) => Promise.reject(error?.response?.data?.message || error?.response?.data?.error || error?.response?.data || error?.response || error?.message || error)
 );
 
 export default Axios

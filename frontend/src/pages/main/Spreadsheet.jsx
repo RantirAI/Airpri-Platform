@@ -3,7 +3,7 @@ import MainContainer from '../../components/layouts/MainContainer'
 import { Alert, Button, Spinner, TextInput } from 'flowbite-react'
 import welcomeIllustration from '../../assets/welcome-illustration.svg'
 import { HiDownload, HiOutlinePlusCircle } from 'react-icons/hi'
-import { FiSettings } from 'react-icons/fi'
+import { FiCheckCircle, FiSettings } from 'react-icons/fi'
 import { SlOptionsVertical } from 'react-icons/sl'
 import rectangleStackImg from '../../assets/rectangle-stack.svg'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,7 +27,7 @@ import { TfiGallery } from 'react-icons/tfi'
 import { TbMessageChatbot } from 'react-icons/tb'
 import { AiOutlineEye, AiOutlineSave } from 'react-icons/ai'
 import { MdOutlineDownloadForOffline } from 'react-icons/md'
-import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline, IoCheckmarkCircle } from 'react-icons/io5'
+import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline, IoCheckmarkCircle, IoAddCircleOutline } from 'react-icons/io5'
 import { CiExport } from 'react-icons/ci'
 import { GrAddCircle } from 'react-icons/gr'
 import NewFieldModal from '../../components/modals/NewFieldModal'
@@ -51,6 +51,7 @@ const Spreadsheet = () => {
   const location = useLocation()
 
   const [showOptions, setShowOptions] = useState(false)
+  const [showViewDropdown, setShowViewDropdown] = useState(false)
 
   const [saving, setSaving] = useState(false)
   const [cellChanged, setCellChanged] = useState(false)
@@ -58,6 +59,7 @@ const Spreadsheet = () => {
 
   const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}`, [spreadsheetId, refresh])
 
+  const currentWorkspace = useFetch(`/workspace/${workspaceId}`, [workspaceId])
 
   const [spreadsheetData, setSpreadsheetData] = useState(null)
 
@@ -257,7 +259,7 @@ const Spreadsheet = () => {
       }
     })()
   }, [spreadsheetData, cellChanged])
-  
+
   return (
     <MainContainer>
       <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center mt-[15px] rounded-[8px]'>
@@ -305,7 +307,12 @@ const Spreadsheet = () => {
 
           </div>
         </div>
-        <div className='gap-[10px] flex flex-row flex-wrap items-center '>
+        <div className='gap-[15px] flex flex-row flex-wrap items-center relative'>
+          <button className={`flex flex-row items-center p-2 border-solid border-gray-200  ${showViewDropdown ? 'border-[1px]' : 'border-0'}  rounded-md gap-2`} onClick={() => {
+            setShowViewDropdown(!showViewDropdown)
+          }}>
+            <IoAddCircleOutline /> <span>Add View</span>
+          </button>
           <Button className='bg-[#1ABFAB] text-white dark:text-gray-900   block' type='button' onClick={() => {
           }}>
             <HiDownload className='mr-2 text-lg ' />
@@ -321,6 +328,84 @@ const Spreadsheet = () => {
               Add a New Field
             </span>
           </button>
+
+          {
+            showViewDropdown &&
+            <div className='absolute w-3/4 bg-white dark:bg-gray-700 rounded-[6px] top-12 shadow-md border-solid border-gray-200 border-[1px] text-gray-700 dark:text-white p-3  z-50' onClick={() => {
+              setShowViewDropdown(false)
+            }}>
+              <p className='text-gray-400 font-medium dark:text-white mb-4 text-xs lg:text-[14px]'>
+                Data Views
+              </p>
+              <div className='w-full'>
+                {
+                  [
+                    {
+                      title: 'Spreadsheet',
+                      icon: <LuSheet />
+                    },
+                    {
+                      title: 'Forms',
+                      icon: <FaWpforms />
+                    },
+                    {
+                      title: 'Gallery',
+                      icon: <TfiGallery />
+                    },
+                  ].map(({ title, icon }) => (
+                    <div className='flex items-center justify-between w-full mb-4 font-medium'>
+                      <div className='flex items-center gap-1'>
+                        {icon}
+                        <span className='text-xs lg:text-[14px]'>
+                          {currentWorkspace.data?.workspace?.name} {title}
+                        </span>
+                        {
+                          title == 'Spreadsheet' &&
+                          <div className='text-[10px] lg:text-xs text-[#1ABFAB] flex flex-row items-center gap-1 ml-2'>
+                            <FiCheckCircle />
+                            <span className=''>
+                              Active
+                            </span>
+                          </div>
+                        }
+                      </div>
+                      <button className='flex flex-row gap-1 text-gray-500 dark:text-white items-center'>
+                        <IoAddCircleOutline /> <span className='text-[10px] lg:text-xs '>Add View</span>
+                      </button>
+                    </div>
+                  ))
+                }
+
+              </div>
+              <p className='text-gray-400 font-medium dark:text-white my-4 text-xs lg:text-[14px]'>
+                Coming Soon
+              </p>
+              <div className='w-full'>
+                {
+                  [
+                    {
+                      title: 'Automation',
+                      icon: <LuNetwork />
+                    },
+                    {
+                      title: 'AI Chat',
+                      icon: <TbMessageChatbot />
+                    },
+                  ].map(({ title, icon }) => (
+                    <div className='flex items-center justify-between w-full mb-4 font-medium'>
+                      <div className='flex items-center gap-1'>
+                        {icon}
+                        <span className='text-xs lg:text-[14px]'>
+                          {currentWorkspace.data?.workspace?.name} {title}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                }
+
+              </div>
+            </div>
+          }
         </div>
 
       </div>
@@ -340,7 +425,7 @@ const Spreadsheet = () => {
             <div className='p-2 gap-[24px] rounded-md' style={{ boxShadow: '0 0 4px rgba(0,0,0,0.3)', }}>
               <div className='flex flex-row gap-2 flex-wrap'>
                 {
-                  ['spreadsheet', 'form', 'gallery', 'automation', 'ai-chat'].map((link) => (
+                  ['spreadsheet', 'form'].map((link) => (
                     <Link to={`/workspace/${workspaceId}/${link}`} className={` capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${location.pathname.includes(link) && 'bg-gray-200 dark:bg-gray-700'} text-[10px] lg:text-xs`}>
                       {
                         link == 'spreadsheet' ?
@@ -349,13 +434,7 @@ const Spreadsheet = () => {
                           link == 'form' ?
                             <FaWpforms />
                             :
-                            link == 'gallery' ?
-                              <TfiGallery />
-                              :
-                              link == 'automation' ?
-                                <LuNetwork />
-                                :
-                                <TbMessageChatbot />
+                            ''
                       }
                       {link.split('-').join(' ')}
                       {

@@ -21,6 +21,11 @@ const WorkspaceSchema = new Schema({
     archived: {
         type: Boolean,
         default: false,
+    },
+    access: {
+        type: String,
+        enum: ['public', 'private'],
+        default: 'private'
     }
 }, { timestamps: true })
 

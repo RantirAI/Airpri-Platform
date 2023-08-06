@@ -30,7 +30,7 @@ const SpreadsheetSchema = new Schema({
         trim: true,
     },
     description: {
-        type: String, 
+        type: String,
         default: ''
     },
     workspace: {
@@ -59,8 +59,13 @@ const SpreadsheetSchema = new Schema({
     archived: {
         type: Boolean,
         default: false
+    },
+    access: {
+        type: String,
+        enum: ['public', 'private'],
+        default: 'private'
     }
-}, {timestamps: true})
+}, { timestamps: true })
 
 const Spreadsheet = model('Spreadsheet', SpreadsheetSchema)
 

@@ -1,7 +1,7 @@
 const Spreadsheet = require("../models/Spreadsheet")
 const Workspace = require("../models/Workspace")
 
-const authorizeSpreadsheetAccess = async (req, res, next) => {
+const authorizeSpreadsheetAccess = async (req, res) => {
     try {
         const id = req.params.id
         const spreadsheet = await Spreadsheet.findById(id).populate('workspace')
@@ -19,8 +19,6 @@ const authorizeSpreadsheetAccess = async (req, res, next) => {
         if (!userInWorkspace) {
             return res.status(404).json({ message: 'Spreadsheet not found' })
         }
-
-        next()
 
     } catch (error) {
         console.log(error.message)

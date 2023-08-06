@@ -34,7 +34,7 @@ const editWorkspace = async (req, res) => {
         const { id } = req.params
         const { name, description, members } = req.body
 
-        const workspace = await Workspace.findById(id)
+        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] } })
 
         if (name) {
             const nameExists = await Workspace.findOne({ name })
@@ -71,7 +71,7 @@ const archiveWorkspace = async (req, res) => {
     try {
         const { id } = req.params
 
-        const workspace = await Workspace.findById(id)
+        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] } })
 
         if (!workspace) {
             return res.status(404).json({ message: 'Workspace not found' })
@@ -110,7 +110,7 @@ const deleteWorkspace = async (req, res) => {
     try {
         const { id } = req.params
 
-        const workspace = await Workspace.findById(id)
+        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] } })
 
         if (!workspace) {
             return res.status(404).json({ message: 'Workspace not found' })

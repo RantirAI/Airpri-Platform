@@ -125,7 +125,7 @@ const deleteWorkspace = async (req, res) => {
     }
 }
 
-const getWorkspaceSpreadsheets = async (req, res) => {
+const getWorkspace = async (req, res) => {
     try {
         const { id } = req.params
         const { archived } = req.query
@@ -152,5 +152,5 @@ module.exports = {
     archiveWorkspace,
     getWorkspaces,
     deleteWorkspace,
-    getWorkspaceSpreadsheets
+    getWorkspace
 }

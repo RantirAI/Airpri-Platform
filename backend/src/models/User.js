@@ -13,10 +13,9 @@ const UserSchema = new Schema({
         trim: true,
         select: false
     },
-    orgName: {
-        type: String,
+    orgs: {
+        type: [String],
         required: true,
-        trim: true,
     },
 })
 

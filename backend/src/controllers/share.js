@@ -785,11 +785,10 @@ const shareWorkspace = async (req, res) => {
 
         await workspace.save()
 
-        res.sendStatus(200)
+        res.status(200).json({workspace: workspace._id})
 
     } catch (error) {
         console.log(error.message)
-        console.log(error)
         res.sendStatus(500)
     }
 }
@@ -826,7 +825,7 @@ const shareSpreadsheet = async (req, res) => {
 
         await spreadsheet.save()
 
-        return res.sendStatus(200)
+        return res.status(200).json({spreadsheetId: spreadsheet._id})
 
     } catch (error) {
         console.log(error.message)

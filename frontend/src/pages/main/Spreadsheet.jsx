@@ -35,6 +35,7 @@ import Papa from 'papaparse'
 import getIdFromName from '../../utils/getIdFromName'
 import exportFromJSON from 'export-from-json'
 import EditFieldsModal from '../../components/modals/EditFieldsModal'
+import ShareSpreadsheetModal from '../../components/modals/ShareSpreadsheetModal'
 
 
 const Spreadsheet = () => {
@@ -45,6 +46,7 @@ const Spreadsheet = () => {
   const [showArchiveSpreadsheetModal, setShowArchiveSpreadsheetModal] = useState(false)
   const [showNewFieldModal, setShowNewFieldModal] = useState(false)
   const [showEditFieldsModal, setShowEditFieldsModal] = useState(false)
+  const [showShareModal, setShowShareModal] = useState(false)
 
   const { workspaceId } = useParams()
   const { spreadsheetId } = useParams()
@@ -260,6 +262,8 @@ const Spreadsheet = () => {
     })()
   }, [spreadsheetData, cellChanged])
 
+  console.log('hello:', spreadsheetData)
+
   return (
     <MainContainer>
       <div className='p-[15px] bg-white dark:bg-[#111928] flex flex-wrap gap-2 justify-between  items-center mt-[15px] rounded-[8px]'>
@@ -314,6 +318,7 @@ const Spreadsheet = () => {
             <IoAddCircleOutline /> <span>Add View</span>
           </button>
           <Button className='bg-[#1ABFAB] text-white dark:text-gray-900   block' type='button' onClick={() => {
+            setShowShareModal(true)
           }}>
             <HiDownload className='mr-2 text-lg ' />
             <span>
@@ -540,6 +545,7 @@ const Spreadsheet = () => {
       <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
       <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} refresh={refresh} setRefresh={setRefresh} />
       <EditFieldsModal showModal={showEditFieldsModal} setShowModal={setShowEditFieldsModal} spreadsheetData={spreadsheetData} refresh={refresh} setRefresh={setRefresh} setSpreadsheetData={setSpreadsheetData} />
+      <ShareSpreadsheetModal showModal={showShareModal} setShowModal={setShowShareModal} id={spreadsheetData?._id} privateAccess={spreadsheetData?.access == "private"} />
 
     </MainContainer >
   )

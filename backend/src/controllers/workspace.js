@@ -4,12 +4,12 @@ const Workspace = require("../models/Workspace")
 
 const createWorkspace = async (req, res) => {
     try {
-        const { name, description, members = [] } = req.body
+        const { name, description, members = [], orgName = req.user?.orgs[0] } = req.body
         if (!name) {
             return res.status(400).json({ message: 'Name is required' })
         }
 
-        const nameExists = await Workspace.findOne({ name, orgName: req.user.orgName })
+        const nameExists = await Workspace.findOne({ name, orgName })
         if (nameExists) {
             return res.status(400).json({ message: "Name is taken" })
         }
@@ -17,7 +17,7 @@ const createWorkspace = async (req, res) => {
         const workspace = await Workspace.create({
             name,
             description,
-            orgName: req.user.orgName,
+            orgName,
             members: !(members.includes(String(req.user._id))) ? [...members, req.user._id] : members
         })
 
@@ -32,9 +32,9 @@ const createWorkspace = async (req, res) => {
 const editWorkspace = async (req, res) => {
     try {
         const { id } = req.params
-        const { name, description, members } = req.body
+        const { name, description, members, orgName = [req.user?.orgs[0]] } = req.body
 
-        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] } })
+        const workspace = await Workspace.findOne({ _id: id, orgName, members: { $in: [req.user._id] } })
 
         if (name) {
             const nameExists = await Workspace.findOne({ name })
@@ -71,7 +71,7 @@ const archiveWorkspace = async (req, res) => {
     try {
         const { id } = req.params
 
-        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] } })
+        const workspace = await Workspace.findOne({ _id: id, orgName: { $in: req.user.orgs }, members: { $in: [req.user._id] } })
 
         if (!workspace) {
             return res.status(404).json({ message: 'Workspace not found' })
@@ -96,9 +96,22 @@ const archiveWorkspace = async (req, res) => {
 const getWorkspaces = async (req, res) => {
     try {
         const { archived } = req.query
-        const workspaces = await Workspace.find({ orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: archived != undefined ? true : false }).populate('members')
+        const workspacePromises = req.user.orgs.map(async (orgName) => {
+            const workspaces = await Workspace.find({
+                orgName,
+                members: { $in: [req.user._id] }, archived: archived != undefined ? true : false
+            }).populate('members');
 
-        res.status(200).json({ workspaces })
+            console.log(workspaces, 'helloooooo')
+
+            if (workspaces.length > 0) {
+                return {workspaces, orgName}
+            }
+        });
+
+        const orgWorkspaces = await Promise.all(workspacePromises);
+
+        res.status(200).json({ allWorkspaces: orgWorkspaces.filter((workspace) => workspace != null ) })
 
     } catch (error) {
         console.log(error.message)
@@ -110,7 +123,7 @@ const deleteWorkspace = async (req, res) => {
     try {
         const { id } = req.params
 
-        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] } })
+        const workspace = await Workspace.findOne({ _id: id, orgName: { $in: req.user.orgs }, members: { $in: [req.user._id] } })
 
         if (!workspace) {
             return res.status(404).json({ message: 'Workspace not found' })
@@ -130,7 +143,7 @@ const getWorkspace = async (req, res) => {
         const { id } = req.params
         const { archived } = req.query
 
-        const workspace = await Workspace.findOne({ _id: id, orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: archived != undefined ? true : false })
+        const workspace = await Workspace.findOne({ _id: id, orgName: { $in: req.user.orgs }, members: { $in: [req.user._id] }, archived: archived != undefined ? true : false })
 
         if (!workspace) {
             return res.status(404).json({ message: 'Workspace not found' })

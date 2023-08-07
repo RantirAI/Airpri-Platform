@@ -2,7 +2,9 @@ const User = require("../models/User")
 
 const getOrgMembers = async (req, res) => {
     try {
-        const members = await User.find({ orgName: req.user.orgName })
+        const { orgName = req.user?.orgs[0] } = req.params
+
+        const members = await User.find({ orgs: { $in: [orgName] } })
 
         if (!members) {
             return res.status(404).json({ message: 'No member found' })

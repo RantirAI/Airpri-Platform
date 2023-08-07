@@ -14,11 +14,11 @@ const shareWorkspace = async (req, res) => {
             return res.status(400).json({ message: 'Invalid workspace id' })
         }
 
-        if(!access && !invitee){
-            return res.status(500).json({message: 'Access or invitee is required'})
+        if (!access && !invitee) {
+            return res.status(500).json({ message: 'Access or invitee is required' })
         }
 
-        if(invitee){
+        if (invitee) {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
             if (!emailRegex.test(invitee)) {
                 return res.status(400).json({ message: 'Invalid invitee email' })
@@ -38,44 +38,47 @@ const shareWorkspace = async (req, res) => {
             }
         }
 
-        if (access == 'public') {
-            workspace.access = 'public'
-        } else {
-            console.log('got here!')
-            const inviteeInWorkspace = workspace?.members.find((member) => (
-                String(member?.email) == String(invitee)
-            ))
-            if (inviteeInWorkspace) {
-                return res.status(400).json({ message: 'User already in workspace' })
-            }
+        if (access) {
+            workspace.access = access
+        }
 
-            const inviteeInOrg = await User.findOne({ email: invitee, orgs: { $in: [workspace.orgName] } })
+        if (invitee) {
+            {
+                console.log('got here!')
+                const inviteeInWorkspace = workspace?.members.find((member) => (
+                    String(member?.email) == String(invitee)
+                ))
+                if (inviteeInWorkspace) {
+                    return res.status(400).json({ message: 'User already in workspace' })
+                }
 
-            if (!inviteeInOrg) {
-                const inviteeAsUser = await User.findOne({ email: invitee })
+                const inviteeInOrg = await User.findOne({ email: invitee, orgs: { $in: [workspace.orgName] } })
 
-                if (inviteeAsUser) {
-                    workspace.members = [...workspace.members.map((member) => member._id), inviteeAsUser._id]
+                if (!inviteeInOrg) {
+                    const inviteeAsUser = await User.findOne({ email: invitee })
 
-                    inviteeAsUser.orgs = [...inviteeAsUser.orgs, workspace.orgName]
+                    if (inviteeAsUser) {
+                        workspace.members = [...workspace.members.map((member) => member._id), inviteeAsUser._id]
 
-                    const transporter = nodemailer.createTransport({
-                        service: 'gmail',
-                        host: 'smtp.gmail.com',
-                        port: 465,
-                        secure: true,
-                        secureConnection: true,
-                        auth: {
-                            user: process.env.NODEMAILER_EMAIL,
-                            pass: process.env.NODEMAILER_PASS
-                        }
-                    });
+                        inviteeAsUser.orgs = [...inviteeAsUser.orgs, workspace.orgName]
 
-                    const mailOptions = {
-                        from: 'sakawahab03@gmail.com',
-                        to: invitee,
-                        subject: `Welcome to ${workspace.name}`,
-                        html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            secureConnection: true,
+                            auth: {
+                                user: process.env.NODEMAILER_EMAIL,
+                                pass: process.env.NODEMAILER_PASS
+                            }
+                        });
+
+                        const mailOptions = {
+                            from: 'sakawahab03@gmail.com',
+                            to: invitee,
+                            subject: `Welcome to ${workspace.name}`,
+                            html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -406,42 +409,42 @@ const shareWorkspace = async (req, res) => {
     </table>
   </body>
 </html>`,
-                    };
+                        };
 
-                    await transporter.sendMail(mailOptions);
+                        await transporter.sendMail(mailOptions);
 
-                } else {
-                    let newAccountPassword = ''
-                    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+                    } else {
+                        let newAccountPassword = ''
+                        const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-                    for (let i = 0; i < 6; i++) {
-                        const randomIndex = Math.floor(Math.random() * charset.length);
-                        newAccountPassword += charset[randomIndex];
-                    }
-
-                    const hashedPassword = await bcrypt.hash(newAccountPassword, 10)
-
-                    const user = await User.create({ email: invitee, password: hashedPassword, orgs: [workspace.orgName] })
-
-                    workspace.members = [...workspace.members.map((member) => member._id), user._id]
-
-                    const transporter = nodemailer.createTransport({
-                        service: 'gmail',
-                        host: 'smtp.gmail.com',
-                        port: 465,
-                        secure: true,
-                        secureConnection: true,
-                        auth: {
-                            user: process.env.NODEMAILER_EMAIL,
-                            pass: process.env.NODEMAILER_PASS
+                        for (let i = 0; i < 6; i++) {
+                            const randomIndex = Math.floor(Math.random() * charset.length);
+                            newAccountPassword += charset[randomIndex];
                         }
-                    });
 
-                    const mailOptions = {
-                        from: 'sakawahab03@gmail.com',
-                        to: invitee,
-                        subject: `Welcome to ${workspace.name}`,
-                        html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                        const hashedPassword = await bcrypt.hash(newAccountPassword, 10)
+
+                        const user = await User.create({ email: invitee, password: hashedPassword, orgs: [workspace.orgName] })
+
+                        workspace.members = [...workspace.members.map((member) => member._id), user._id]
+
+                        const transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            host: 'smtp.gmail.com',
+                            port: 465,
+                            secure: true,
+                            secureConnection: true,
+                            auth: {
+                                user: process.env.NODEMAILER_EMAIL,
+                                pass: process.env.NODEMAILER_PASS
+                            }
+                        });
+
+                        const mailOptions = {
+                            from: 'sakawahab03@gmail.com',
+                            to: invitee,
+                            subject: `Welcome to ${workspace.name}`,
+                            html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -774,18 +777,19 @@ const shareWorkspace = async (req, res) => {
     </table>
   </body>
 </html>`,
-                    };
+                        };
 
-                    await transporter.sendMail(mailOptions);
+                        await transporter.sendMail(mailOptions);
+                    }
+                } else {
+                    workspace.members = [...workspace.members.map((member) => member._id), inviteeInOrg._id]
                 }
-            } else {
-                workspace.members = [...workspace.members.map((member) => member._id), inviteeInOrg._id]
             }
         }
 
         await workspace.save()
 
-        res.status(200).json({workspace: workspace._id})
+        res.status(200).json({ workspace: workspace._id })
 
     } catch (error) {
         console.log(error.message)
@@ -825,7 +829,7 @@ const shareSpreadsheet = async (req, res) => {
 
         await spreadsheet.save()
 
-        return res.status(200).json({spreadsheetId: spreadsheet._id})
+        return res.status(200).json({ spreadsheetId: spreadsheet._id })
 
     } catch (error) {
         console.log(error.message)

@@ -25,6 +25,12 @@ const shareWorkspace = async (req, res) => {
             return res.status(404).json({ message: 'Workspace not found' })
         }
 
+        if(access?.trim()){
+            if(access != 'public' && access != 'private'){
+                return res.status(400).json({message: 'Invalid access. Access should private or public'})
+            }
+        }
+
         if (access == 'public') {
             workspace.access = 'public'
         } else {

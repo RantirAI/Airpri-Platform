@@ -102,8 +102,6 @@ const getWorkspaces = async (req, res) => {
                 members: { $in: [req.user._id] }, archived: archived != undefined ? true : false
             }).populate('members');
 
-            console.log(workspaces, 'helloooooo')
-
             if (workspaces.length > 0) {
                 return {workspaces, orgName}
             }

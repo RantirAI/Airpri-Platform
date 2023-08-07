@@ -262,7 +262,6 @@ const Spreadsheet = () => {
     })()
   }, [spreadsheetData, cellChanged])
 
-  console.log('hello:', spreadsheetData)
 
   return (
     <MainContainer>

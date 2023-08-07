@@ -114,8 +114,6 @@ const Spreadsheet = () => {
         }
     }, [data])
 
-    console.log(spreadsheetData)
-
     return (
         <div className='bg-[#111928] p-2.5 min-h-screen flex flex-col '>
 

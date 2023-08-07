@@ -44,7 +44,6 @@ const shareWorkspace = async (req, res) => {
 
         if (invitee) {
             {
-                console.log('got here!')
                 const inviteeInWorkspace = workspace?.members.find((member) => (
                     String(member?.email) == String(invitee)
                 ))

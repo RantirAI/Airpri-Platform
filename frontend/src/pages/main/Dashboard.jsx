@@ -86,7 +86,7 @@ const Dashboard = () => {
               {workspaces.data?.allWorkspaces?.length > 0 ?
                 <>
                   {
-                    workspaces.data?.allWorkspaces.map(({ orgName, workspaces }) => (
+                    workspaces.data?.allWorkspaces?.map(({ orgName, workspaces }) => (
                       <div>
                         <div className='flex justify-between mt-[12px] mb-5'>
                           <p className='text-lg lg:text-xl font-bold text-gray-900 dark:text-white'>

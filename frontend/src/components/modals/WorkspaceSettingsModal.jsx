@@ -97,7 +97,7 @@ const WorkspaceSettingsModal = () => {
                             className='bg-transparent z-20 bg-white'
                         >
                             {
-                                orgMembers.map(({ email, _id }) => (
+                                orgMembers?.map(({ email, _id }) => (
                                     <Dropdown.Item onClick={() => {
                                         const memberSelected = members.findIndex((member) => member._id == _id)
                                         if (memberSelected == -1) {

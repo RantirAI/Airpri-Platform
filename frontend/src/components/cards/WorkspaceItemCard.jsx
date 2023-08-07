@@ -35,7 +35,9 @@ const WorkspaceItemCard = ({ type, time, workspaceId, gridView }) => {
 
                         <button className='leading-tight text-xs lg:text-[14px] font-normal flex flex-row items-center text-[#1ABFAB] my-[9px]' onClick={(e) => {
                             e.preventDefault()
-                            navigate(`/workspace/${workspaceId}/${type}`)
+                            if (workspaceId) {
+                                navigate(`/workspace/${workspaceId}/${type}`)
+                            }
                         }}>
                             <span>
                                 Open and Edit

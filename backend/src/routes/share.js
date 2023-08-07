@@ -1,9 +1,10 @@
 const { } = require('../controllers/auth')
-const { shareWorkspace, shareSpreadsheet, getSpreadsheet } = require('../controllers/share')
+const { shareWorkspace, shareSpreadsheet, getSpreadsheet, getWorkspace } = require('../controllers/share')
 const authenticate = require('../middlewares/authenticate')
 
 const router = require('express').Router()
 
+router.get('/workspace/:id', getWorkspace)
 router.get('/spreadsheet/:id', getSpreadsheet)
 
 router.use(authenticate)

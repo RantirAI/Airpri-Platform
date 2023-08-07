@@ -14,10 +14,17 @@ const shareWorkspace = async (req, res) => {
             return res.status(400).json({ message: 'Invalid workspace id' })
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        if (!emailRegex.test(invitee)) {
-            return res.status(400).json({ message: 'Invalid invitee email' })
+        if(!access && !invitee){
+            return res.status(500).json({message: 'Access or invitee is required'})
         }
+
+        if(invitee){
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+            if (!emailRegex.test(invitee)) {
+                return res.status(400).json({ message: 'Invalid invitee email' })
+            }
+        }
+
 
         const workspace = await Workspace.findOne({ _id: id, orgName: { $in: req.user.orgs }, members: { $in: [req.user._id] } }).populate('members')
 
@@ -34,6 +41,7 @@ const shareWorkspace = async (req, res) => {
         if (access == 'public') {
             workspace.access = 'public'
         } else {
+            console.log('got here!')
             const inviteeInWorkspace = workspace?.members.find((member) => (
                 String(member?.email) == String(invitee)
             ))
@@ -780,8 +788,9 @@ const shareWorkspace = async (req, res) => {
         res.sendStatus(200)
 
     } catch (error) {
-        res.sendStatus(500)
         console.log(error.message)
+        console.log(error)
+        res.sendStatus(500)
     }
 }
 
@@ -825,10 +834,32 @@ const shareSpreadsheet = async (req, res) => {
     }
 }
 
+const getWorkspace = async (req, res) => {
+    try {
+        const { id } = req.params
+
+        const workspace = await Workspace.findOne({
+            _id: id,
+            archived: false
+        })
+
+        if (!workspace || workspace?.access != 'public') {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
+        }
+
+        const spreadsheets = await Spreadsheet.find({ workspace: id, archived: false })
+
+        return res.status(200).json({ spreadsheets, workspace })
+    } catch (error) {
+        console.log(error.message)
+        res.sendStatus(500)
+    }
+}
+
 const getSpreadsheet = async (req, res) => {
     try {
         const { id } = req.params
-        const spreadsheet = await Spreadsheet.findOne({_id : id, access: 'public'})
+        const spreadsheet = await Spreadsheet.findOne({ _id: id, access: 'public' })
 
         if (!spreadsheet) {
             return res.status(404).json({ message: 'Spreadsheet not found' })
@@ -845,5 +876,6 @@ const getSpreadsheet = async (req, res) => {
 module.exports = {
     shareWorkspace,
     shareSpreadsheet,
+    getWorkspace,
     getSpreadsheet
 }

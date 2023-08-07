@@ -29,7 +29,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
   const { showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal } = useSelector(state => state.modals)
 
-  const workspaces = useFetch('workspace', [showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal])
+  const { data, loading, error } = useFetch('workspace', [showNewWorkspaceModal, showDeleteWorkspaceModal, showArchiveWorkspaceModal, showDuplicateWorkspaceModal, showWorkspaceSettingsModal])
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -39,6 +39,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
       setShowLeftPane(true)
     }
   }, [pathname])
+
 
   return (
     <Sidebar aria-label="Left pane" className={`h-[calc(100%-64px)]  fixed top-16 left-0 w-full lg:w-[15%] z-10 ${!showLeftPane && 'left-[-100%] lg:left-[-15%]'} border-solid border-[#e6e7eb] border-0 border-r-[1px] left-pane`}>
@@ -58,29 +59,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
       <Sidebar.Items className='pt-4 lg:pt-0 '>
 
-
-        <Sidebar.ItemGroup >
-
-          <div className='flex flex-row items-center justify-between gap-2'>
-            <Sidebar.Item
-              href=''
-              onClick={(e) => {
-                e.preventDefault()
-                navigate('/dashboard')
-              }}
-              icon={GoOrganization}
-            >
-              <p className='text-xs lg:text-[14px]'>
-                {user.orgName}
-              </p>
-            </Sidebar.Item>
-            <button onClick={() => {
-              setShowLeftPane(false)
-            }} className='hidden lg:block'>
-              <FiChevronsLeft />
-            </button>
-          </div>
-
+        <Sidebar.ItemGroup className='lg:!hidden'>
 
           <div className='lg:!hidden'>
             <Sidebar.Item
@@ -118,96 +97,160 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
             </Sidebar.Item>
           </div>
 
-
-
         </Sidebar.ItemGroup>
 
-        <Sidebar.ItemGroup >
-
-          <Sidebar.Item
-            href=''
-            onClick={(e) => {
-              e.preventDefault()
-              navigate('/dashboard')
-            }}
-            icon={HiChartPie}
-            className='!text-xs'
-          >
-            <p>
-              Overview
-            </p>
-          </Sidebar.Item>
-
-          <Sidebar.Item
-            href=''
-            onClick={(e) => {
-              e.preventDefault()
-              dispatch(toggleNewWorkspaceModal(true))
-            }}
-            icon={HiOutlinePlusCircle}
-          >
-            <p>
-              Add a New Workspace
-            </p>
-          </Sidebar.Item>
-
-          {
-            workspaces.loading ?
-              <Spinner aria-label="Fetching workspaces" className='mx-auto block' />
-              :
-              <>
-                {
-                  workspaces.data?.workspaces?.map((workspace) => (
-                    <Sidebar.Collapse
-                      icon={MdWorkspaces}
-                      label={workspace.name}
-                      className={workspaceId == workspace._id ? 'bg-gray-200 dark:bg-gray-700' : ''}
-                      key={workspace?._id}
+        {
+          loading ?
+            <Spinner aria-label="Fetching workspaces" className='mx-auto block' />
+            :
+            <>
+              {
+                data?.allWorkspaces < 1 ?
+                  <Sidebar.ItemGroup>
+                    <Sidebar.Item
+                      href=''
+                      onClick={(e) => {
+                        e.preventDefault()
+                        navigate('/dashboard')
+                      }}
+                      icon={HiChartPie}
+                      className='!text-xs'
                     >
+                      <p>
+                        Overview
+                      </p>
+                    </Sidebar.Item>
 
-                      <Sidebar.Item
-                        href=''
-                        onClick={(e) => {
-                          e.preventDefault()
-                          navigate(`/workspace/${workspace._id}`)
-                        }}
-                        icon={HiChartPie}
-                      >
-                        <p>
-                          Overview
-                        </p>
-                      </Sidebar.Item>
-                      <Sidebar.Item href=''
-                        onClick={(e) => {
-                          e.preventDefault()
-                          navigate(`/workspace/${workspace._id}/spreadsheet`)
-                        }} icon={LuSheet}>
-                        Spreadsheets
-                      </Sidebar.Item>
-                      <Sidebar.Item href="#" icon={FaWpforms}>
-                        Forms
-                      </Sidebar.Item>
-                      <Sidebar.Item href="#" icon={TfiGallery}>
-                        Gallery
-                      </Sidebar.Item>
-                      <Sidebar.Item href="#" icon={LuNetwork}>
-                        Automation
-                      </Sidebar.Item>
-                      <Sidebar.Item href="#" icon={TbMessageChatbot}>
-                        AI Chat
-                      </Sidebar.Item>
-                      <Sidebar.Item href="#" icon={IoIosPeople}>
-                        Members
-                      </Sidebar.Item>
-                    </Sidebar.Collapse>
-                  ))
-                }
-              </>
-          }
+                    <Sidebar.Item
+                      href=''
+                      onClick={(e) => {
+                        e.preventDefault()
+                        dispatch(toggleNewWorkspaceModal(true))
+                      }}
+                      icon={HiOutlinePlusCircle}
+                    >
+                      <p>
+                        Add a New Workspace
+                      </p>
+                    </Sidebar.Item>
+                  </Sidebar.ItemGroup>
+                  :
+                  <>
+                    {
+                      data?.allWorkspaces.map(({ orgName, workspaces }) => (
+                        <>
 
+                          <Sidebar.ItemGroup className='mt-0' >
 
+                            <div className='flex flex-row items-center justify-between gap-2'>
+                              <Sidebar.Item
+                                className=''
+                                href=''
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  navigate('/dashboard')
+                                }}
+                                icon={GoOrganization}
+                              >
+                                <p className='text-xs lg:text-[14px]'>
+                                  {orgName}
+                                </p>
+                              </Sidebar.Item>
+                              <button onClick={() => {
+                                setShowLeftPane(false)
+                              }} className='hidden lg:block'>
+                                <FiChevronsLeft />
+                              </button>
+                            </div>
+                          </Sidebar.ItemGroup>
 
-        </Sidebar.ItemGroup>
+                          <Sidebar.ItemGroup className='mb-4 border-0'>
+
+                            <Sidebar.Item
+                              href=''
+                              onClick={(e) => {
+                                e.preventDefault()
+                                navigate('/dashboard')
+                              }}
+                              icon={HiChartPie}
+                              className='!text-xs'
+                            >
+                              <p>
+                                Overview
+                              </p>
+                            </Sidebar.Item>
+
+                            <Sidebar.Item
+                              href=''
+                              onClick={(e) => {
+                                e.preventDefault()
+                                dispatch(toggleNewWorkspaceModal(true))
+                              }}
+                              icon={HiOutlinePlusCircle}
+                            >
+                              <p>
+                                Add a New Workspace
+                              </p>
+                            </Sidebar.Item>
+
+                            <>
+                              {
+                                workspaces?.map((workspace) => (
+                                  <Sidebar.Collapse
+                                    icon={MdWorkspaces}
+                                    label={workspace.name}
+                                    className={workspaceId == workspace._id ? 'bg-gray-200 dark:bg-gray-700' : ''}
+                                    key={workspace?._id}
+                                  >
+
+                                    <Sidebar.Item
+                                      href=''
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        navigate(`/workspace/${workspace._id}`)
+                                      }}
+                                      icon={HiChartPie}
+                                    >
+                                      <p>
+                                        Overview
+                                      </p>
+                                    </Sidebar.Item>
+                                    <Sidebar.Item href=''
+                                      onClick={(e) => {
+                                        e.preventDefault()
+                                        navigate(`/workspace/${workspace._id}/spreadsheet`)
+                                      }} icon={LuSheet}>
+                                      Spreadsheets
+                                    </Sidebar.Item>
+                                    <Sidebar.Item href="#" icon={FaWpforms}>
+                                      Forms
+                                    </Sidebar.Item>
+                                    <Sidebar.Item href="#" icon={TfiGallery}>
+                                      Gallery
+                                    </Sidebar.Item>
+                                    <Sidebar.Item href="#" icon={LuNetwork}>
+                                      Automation
+                                    </Sidebar.Item>
+                                    <Sidebar.Item href="#" icon={TbMessageChatbot}>
+                                      AI Chat
+                                    </Sidebar.Item>
+                                    <Sidebar.Item href="#" icon={IoIosPeople}>
+                                      Members
+                                    </Sidebar.Item>
+                                  </Sidebar.Collapse>
+                                ))
+                              }
+                            </>
+
+                          </Sidebar.ItemGroup>
+
+                        </>
+                      ))
+                    }
+                  </>
+              }
+            </>
+        }
 
 
         <Sidebar.ItemGroup>
@@ -260,7 +303,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
 
 
       </Sidebar.Items>
-    </Sidebar>
+    </Sidebar >
   )
 }
 

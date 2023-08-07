@@ -83,71 +83,78 @@ const Dashboard = () => {
             <Spinner aria-label="Fetching workspaces..." />
             :
             <>
-              {workspaces.data?.workspaces?.length > 0 ?
-                <div>
-                  <div className='flex justify-between mt-[12px] mb-5'>
-                    <p className='text-lg lg:text-xl font-bold text-gray-900 dark:text-white'>
-                      Workspaces
-                    </p>
-                    <div className='flex flex-row gap-1'>
-                      <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? 'bg-gray-200 dark:bg-gray-700 ' : ''} text-[10px] lg:text-xs`} onClick={() => {
-                        setGridView(true)
-                      }}>
-                        <span>
-                          Grid view
-                        </span>
-                        <BsGrid className='ml-2 text-base ' />
-                      </button>
-                      <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? '' : 'bg-gray-200 dark:bg-gray-700 '} text-[10px] lg:text-xs`} onClick={() => {
-                        setGridView(false)
-                      }}>
-                        <span>
-                          List view
-                        </span>
-                        <AiOutlineUnorderedList className='ml-2 text-base ' />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div>
-                    {
-                      workspaces?.data?.workspaces?.map((workspace) => (
-                        <div>
-                          <div className='flex justify-between my-[12px]'>
-                            <div className='flex items-center gap-[16px]'>
-                              <img src={rectangleStackImg} className='w-[24px] h-[24px] ' />
-                              <p className='text-base lg:text-lg text-gray-900 dark:text-gray-50 font-medium '>
-                                {workspace.name}
-                              </p>
-                            </div>
-                            <button className='leading-tight text-[14px] lg:text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
-                              navigate(`/workspace/${workspace._id}`)
+              {workspaces.data?.allWorkspaces?.length > 0 ?
+                <>
+                  {
+                    workspaces.data?.allWorkspaces.map(({ orgName, workspaces }) => (
+                      <div>
+                        <div className='flex justify-between mt-[12px] mb-5'>
+                          <p className='text-lg lg:text-xl font-bold text-gray-900 dark:text-white'>
+                            Workspaces in {orgName}
+                          </p>
+                          <div className='flex flex-row gap-1'>
+                            <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? 'bg-gray-200 dark:bg-gray-700 ' : ''} text-[10px] lg:text-xs`} onClick={() => {
+                              setGridView(true)
                             }}>
                               <span>
-                                Open and Edit
+                                Grid view
                               </span>
-                              <MdOpenInNew className='ml-2 text-base ' />
+                              <BsGrid className='ml-2 text-base ' />
+                            </button>
+                            <button className={`rounded-md capitalize flex items-center text-gray-700 dark:text-gray-200 gap-2 p-2 ${gridView ? '' : 'bg-gray-200 dark:bg-gray-700 '} text-[10px] lg:text-xs`} onClick={() => {
+                              setGridView(false)
+                            }}>
+                              <span>
+                                List view
+                              </span>
+                              <AiOutlineUnorderedList className='ml-2 text-base ' />
                             </button>
                           </div>
+                        </div>
 
-                          <p className='text-[10px] lg:text-xs text-gray-500 dark:text-gray-300 font-normal'>
-                            Everything about {workspace.name} here
-                          </p>
+                        <div>
+                          {
+                            workspaces?.map((workspace) => (
+                              <div>
+                                <div className='flex justify-between my-[12px]'>
+                                  <div className='flex items-center gap-[16px]'>
+                                    <img src={rectangleStackImg} className='w-[24px] h-[24px] ' />
+                                    <p className='text-base lg:text-lg text-gray-900 dark:text-gray-50 font-medium '>
+                                      {workspace.name}
+                                    </p>
+                                  </div>
+                                  <button className='leading-tight text-[14px] lg:text-base font-normal flex flex-row items-center text-[#1ABFAB]' onClick={() => {
+                                    navigate(`/workspace/${workspace._id}`)
+                                  }}>
+                                    <span>
+                                      Open and Edit
+                                    </span>
+                                    <MdOpenInNew className='ml-2 text-base ' />
+                                  </button>
+                                </div>
 
-                          <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
-                            <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} gridView={gridView} workspaceId={workspace._id} />
-                            {/* <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
+                                <p className='text-[10px] lg:text-xs text-gray-500 dark:text-gray-300 font-normal'>
+                                  Everything about {workspace.name} here
+                                </p>
+
+                                <div className={`py-[24px] gap-[24px] flex ${gridView ? 'flex-row flex-wrap' : 'flex-col'}`}>
+                                  <WorkspaceItemCard type={'spreadsheet'} time={workspace.updatedAt} workspace={workspace} gridView={gridView} workspaceId={workspace._id} />
+                                  {/* <WorkspaceItemCard type={'form'} time={workspace.updatedAt} workspace={workspace} />
                             <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} />
                             <WorkspaceItemCard type={'gallery'} time={workspace.updatedAt} workspace={workspace} /> */}
 
-                          </div>
+                                </div>
 
+                              </div>
+                            ))
+                          }
                         </div>
-                      ))
-                    }
-                  </div>
 
-                </div>
+                      </div>
+                    ))
+                  }
+                </>
+
                 :
                 <div className='flex flex-col items-center py-[40px]'>
                   <h3 className='text-xl font-medium text-gray-900 dark:text-white'>

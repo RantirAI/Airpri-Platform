@@ -38,9 +38,9 @@ const createAccount = async (req, res) => {
       return res.status(400).json({ message: 'User exists' })
     }
 
-    const user = await User.create({ email, password: hashedPassword, orgName })
+    const user = await User.create({ email, password: hashedPassword, orgs: [orgName] })
 
-    const token = jwt.sign({_id : user._id, email, orgName }, process.env.JWT_SECRET)
+    const token = jwt.sign({_id : user._id, email, orgs: [orgName] }, process.env.JWT_SECRET)
 
     res.status(201).json({ message: 'Account created successfully', token })
 

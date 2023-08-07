@@ -41,7 +41,7 @@ const createSpreadsheet = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+        res.sendStatus(500)
     }
 }
 
@@ -57,7 +57,7 @@ const getSpreadsheet = async (req, res) => {
         return res.status(200).json({ spreadsheet })
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+        res.sendStatus(500)
     }
 }
 
@@ -91,7 +91,7 @@ const updateSpreadsheet = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+        res.sendStatus(500)
     }
 }
 
@@ -109,7 +109,7 @@ const deleteSpreadsheet = async (req, res) => {
         return res.status(200).json({ message: 'Spreadsheet deleted' })
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+        res.sendStatus(500)
     }
 }
 
@@ -129,7 +129,7 @@ const archiveSpreadsheet = async (req, res) => {
         return res.status(200).json({ message: 'Spreadsheet archived' })
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+        res.sendStatus(500)
     }
 }
 

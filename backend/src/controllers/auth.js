@@ -40,13 +40,13 @@ const createAccount = async (req, res) => {
 
     const user = await User.create({ email, password: hashedPassword, orgs: [orgName] })
 
-    const token = jwt.sign({_id : user._id, email, orgs: [orgName] }, process.env.JWT_SECRET)
+    const token = jwt.sign({ _id: user._id, email, orgs: [orgName] }, process.env.JWT_SECRET)
 
     res.status(201).json({ message: 'Account created successfully', token })
 
   } catch (error) {
     console.log(error.message)
-    res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
   }
 }
 
@@ -70,13 +70,13 @@ const signIn = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' })
     }
 
-    const token = jwt.sign({_id: user._id, user: user.email, orgName: user.orgName }, process.env.JWT_SECRET)
+    const token = jwt.sign({ _id: user._id, user: user.email, orgName: user.orgName }, process.env.JWT_SECRET)
 
     res.status(200).json({ token })
 
   } catch (error) {
     console.log(error.message)
-    res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
   }
 }
 
@@ -466,7 +466,7 @@ const requestPasswordReset = async (req, res) => {
 
   } catch (error) {
     console.log(error.message)
-    res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
   }
 }
 
@@ -497,8 +497,8 @@ const resetPassword = async (req, res) => {
       return res.status(400).json({ message: 'Invalid or expired token' })
     }
 
-    if(tokenObj.purpose != 'password-reset'){
-      return res.status(400).json({message: 'Invalid token'})
+    if (tokenObj.purpose != 'password-reset') {
+      return res.status(400).json({ message: 'Invalid token' })
     }
 
     if (tokenObj.used) {
@@ -512,11 +512,11 @@ const resetPassword = async (req, res) => {
 
     await tokenObj.deleteOne()
 
-    res.status(200).json({message: 'Password reset successful'})
+    res.status(200).json({ message: 'Password reset successful' })
 
   } catch (error) {
     console.log(error.message)
-    res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
   }
 }
 

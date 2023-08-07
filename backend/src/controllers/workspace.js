@@ -25,7 +25,7 @@ const createWorkspace = async (req, res) => {
     }
     catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
     }
 }
 
@@ -63,7 +63,7 @@ const editWorkspace = async (req, res) => {
     }
     catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
     }
 }
 
@@ -89,7 +89,7 @@ const archiveWorkspace = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
     }
 }
 
@@ -115,7 +115,7 @@ const getWorkspaces = async (req, res) => {
 
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
     }
 }
 
@@ -134,7 +134,7 @@ const deleteWorkspace = async (req, res) => {
         res.status(200).json({ message: 'Workspace deleted successfully' })
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
     }
 }
 
@@ -154,7 +154,7 @@ const getWorkspace = async (req, res) => {
         return res.status(200).json({ spreadsheets, workspace })
     } catch (error) {
         console.log(error.message)
-        res.status(500).json({ message: 'Something went wrong' })
+    res.sendStatus(500)
     }
 }
 

@@ -25,9 +25,9 @@ const shareWorkspace = async (req, res) => {
             return res.status(404).json({ message: 'Workspace not found' })
         }
 
-        if(access?.trim()){
-            if(access != 'public' && access != 'private'){
-                return res.status(400).json({message: 'Invalid access. Access should private or public'})
+        if (access?.trim()) {
+            if (access != 'public' && access != 'private') {
+                return res.status(400).json({ message: 'Invalid access. Access should private or public' })
             }
         }
 
@@ -780,13 +780,53 @@ const shareWorkspace = async (req, res) => {
         res.sendStatus(200)
 
     } catch (error) {
-        res.status(500).json({ message: 'Something went wrong' })
+        res.sendStatus(500)
         console.log(error.message)
     }
 }
 
+const shareSpreadsheet = async (req, res) => {
+    try {
+        const { id } = req.params
+        const { access } = req.body
+
+
+        const spreadsheet = await Spreadsheet.findById(id).populate('workspace')
+
+        if (!spreadsheet) {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
+        }
+
+        const workspace = await Workspace.findById(spreadsheet.workspace)
+
+        const userInWorkspace = workspace?.members.find((member) => (
+            String(member) == String(req.user._id)
+        ))
+
+        if (!userInWorkspace) {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
+        }
+
+        if (access?.trim()) {
+            if (access != 'public' && access != 'private') {
+                return res.status(400).json({ message: 'Invalid access. Access should private or public' })
+            }
+        }
+
+        spreadsheet.access = access
+
+        await spreadsheet.save()
+
+        return res.sendStatus(200)
+
+    } catch (error) {
+        console.log(error.message)
+        res.sendStatus(500)
+    }
+}
 
 
 module.exports = {
     shareWorkspace,
+    shareSpreadsheet
 }

@@ -828,14 +828,10 @@ const shareSpreadsheet = async (req, res) => {
 const getSpreadsheet = async (req, res) => {
     try {
         const { id } = req.params
-        const spreadsheet = await Spreadsheet.findById(id)
+        const spreadsheet = await Spreadsheet.findOne({_id : id, access: 'public'})
 
         if (!spreadsheet) {
             return res.status(404).json({ message: 'Spreadsheet not found' })
-        }
-
-        if (spreadsheet.access == 'private') {
-            return res.status(403).json({ message: 'Spreadsheet not public' })
         }
 
         res.status(200).json({ spreadsheet })

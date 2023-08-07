@@ -14,6 +14,8 @@ import { setAxiosToken } from './config/axios'
 import Workspace from './pages/main/Workspace'
 import Spreadsheets from './pages/main/Spreadsheets'
 import Spreadsheet from './pages/main/Spreadsheet'
+import SharedSpreadsheet from './pages/shared/Spreadsheet'
+import SharedWorkspace from './pages/shared/Workspace'
 
 const index = () => {
 
@@ -54,7 +56,7 @@ const index = () => {
                             <Route path='/workspace/:workspaceId' element={<Workspace />} />
                             <Route path='/workspace/:workspaceId/spreadsheet' element={<Spreadsheets />} />
                             <Route path='/workspace/:workspaceId/spreadsheet/:spreadsheetId' element={<Spreadsheet />} />
-                            <Route path='*' element={<NotFound />} />
+
                         </>
                         :
                         <>
@@ -64,9 +66,12 @@ const index = () => {
                             <Route path='/create-account' element={<CreateAccount />} />
                             <Route path='/forgot-password' element={<ForgotPassword />} />
                             <Route path='/reset-password' element={<ResetPassword />} />
-                            <Route path='*' element={<NotFound />} />
                         </>
                 }
+                
+                <Route path='/share/spreadsheet/:spreadsheetId' element={<SharedSpreadsheet />} />
+                <Route path='/share/workspace/:workspaceId' element={<SharedWorkspace />} />
+
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </BrowserRouter>

@@ -137,7 +137,7 @@ const LeftPane = ({ showLeftPane, setShowLeftPane }) => {
                   :
                   <>
                     {
-                      data?.allWorkspaces.map(({ orgName, workspaces }) => (
+                      data?.allWorkspaces?.map(({ orgName, workspaces }) => (
                         <>
 
                           <Sidebar.ItemGroup className='mt-0' >

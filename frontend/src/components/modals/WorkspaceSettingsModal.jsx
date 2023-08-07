@@ -29,7 +29,7 @@ const WorkspaceSettingsModal = () => {
         e.preventDefault()
         try {
             setSubmitting(true)
-            const editedWorkspace = await editWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members: members.map(({ _id }) => (_id)) }, workspaceId)
+            const editedWorkspace = await editWorkspace({ name: nameRef.current.value, description: descriptionRef.current.value, members: members?.map(({ _id }) => (_id)) }, workspaceId)
             toast.success('Workspace successfully updated!')
             nameRef.current.value = ''
             descriptionRef.current.value = ''
@@ -93,7 +93,7 @@ const WorkspaceSettingsModal = () => {
                     <div className='border border-solid border-gray-300 p-[12px] rounded-[8px] focus:border-2 focus:border-[#1ABFAB] bg-gray-50 dark:bg-gray-700 text-gray-500 leading-tight text-sm font-normal'>
                         <Dropdown
                             inline
-                            label={members.length > 0 ? members.map((member) => member.email).join(' , ') : 'Choose from your Organization'}
+                            label={members.length > 0 ? members?.map((member) => member.email).join(' , ') : 'Choose from your Organization'}
                             className='bg-transparent z-20 bg-white'
                         >
                             {

@@ -5,7 +5,7 @@ const Workspace = require('../models/Workspace')
 
 const createSpreadsheet = async (req, res) => {
     try {
-        const { name, description, workspaceId, columns, rows } = req.body
+        const { name, description, workspaceId, columns, rows, orgName = req.user?.orgs[0] } = req.body
 
         if (!name?.trim()) {
             return res.status(400).json({ message: 'Name is required' })
@@ -23,7 +23,7 @@ const createSpreadsheet = async (req, res) => {
             return res.status(400).json({ message: 'Name exists' })
         }
 
-        const workspace = await Workspace.findOne({ _id: workspaceId, orgName: req.user.orgName, members: { $in: [req.user._id] }, archived: false })
+        const workspace = await Workspace.findOne({ _id: workspaceId, orgName, members: { $in: [req.user._id] }, archived: false })
 
         if (!workspace) {
             return res.status(404).json({ message: 'Workspace not found' })

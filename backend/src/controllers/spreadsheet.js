@@ -1,6 +1,8 @@
 const Spreadsheet = require('../models/Spreadsheet')
 const mongoose = require('mongoose')
 const Workspace = require('../models/Workspace')
+const csv=require('csvtojson')
+const fs = require('fs');
 
 
 const createSpreadsheet = async (req, res) => {
@@ -43,6 +45,68 @@ const createSpreadsheet = async (req, res) => {
         console.log(error.message)
         res.sendStatus(500)
     }
+}
+
+const importCsv = async (req, res) => {
+    const results = [];
+    const buffer = req.file.buffer.toString(); // Convert buffer to string
+    fs.writeFile('data.csv', buffer, (err) => {
+        if (err) {
+          return res.status(500).send('Error while saving the CSV file.');
+        }
+    });
+
+    let headersData = [];
+    let rowData = []
+    let jsonData = null;
+    csv()
+    .fromFile("data.csv")
+    .then(async (jsonObj)=>{
+        jsonData = jsonObj;
+        console.log("data csv");
+        let column = Object.keys(jsonData[0]);
+    for(let i = 0;i<column.length;i++) {
+        let columnText = column[i].replace(/\s/g, '-').toLowerCase()
+        headersData.push({ editable: true, icon: "headerString", id: columnText, title: column[i], type:'text'});
+    }
+
+    for(let j = 1;j<jsonData.length;j++) {
+        let objData = {}
+        for(let k = 0;k<column.length;k++) {
+            let columnText = column[k].replace(/\s/g, '-').toLowerCase()
+            objData[columnText] = jsonData[j][column[k]];
+        }
+        rowData.push(objData);
+        objData = {}
+    }
+    
+        try {
+            const id = "64d1d1dbf5586f3cb111b15f"
+
+            const spreadsheet = await Spreadsheet.findById(id)
+
+            if (!spreadsheet) {
+                return res.status(404).json({ message: 'Spreadsheet not found' })
+            }
+
+            spreadsheet.name = "Test";
+
+            spreadsheet.description = "test";
+
+            spreadsheet.columns = headersData;
+
+            spreadsheet.rows = rowData;
+
+            await spreadsheet.save()
+
+        } catch (error) {
+            console.log(error.message)
+            res.sendStatus(500)
+        }
+    })
+
+      res.status(201).json({ message: 'Import CSV Successfully' });
+
 }
 
 const getSpreadsheet = async (req, res) => {
@@ -139,5 +203,6 @@ module.exports = {
     getSpreadsheet,
     updateSpreadsheet,
     deleteSpreadsheet,
-    archiveSpreadsheet
+    archiveSpreadsheet,
+    importCsv
 }

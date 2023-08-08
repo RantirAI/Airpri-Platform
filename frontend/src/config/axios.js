@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const Axios = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
-    timeout: 200000
+    timeout: 1000000
 })
 
 export const setAxiosToken = (token) => {

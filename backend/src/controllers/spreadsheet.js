@@ -48,7 +48,7 @@ const createSpreadsheet = async (req, res) => {
 }
 
 const importCsv = async (req, res) => {
-    const results = [];
+    const { name, description } = req.body
     const buffer = req.file.buffer.toString(); // Convert buffer to string
     fs.writeFile('data.csv', buffer, (err) => {
         if (err) {
@@ -81,7 +81,7 @@ const importCsv = async (req, res) => {
     }
     
         try {
-            const id = "64d1d1dbf5586f3cb111b15f"
+            const id = req.params.id
 
             const spreadsheet = await Spreadsheet.findById(id)
 
@@ -89,9 +89,9 @@ const importCsv = async (req, res) => {
                 return res.status(404).json({ message: 'Spreadsheet not found' })
             }
 
-            spreadsheet.name = "Test";
+            spreadsheet.name = name;
 
-            spreadsheet.description = "test";
+            spreadsheet.description = description;
 
             spreadsheet.columns = headersData;
 

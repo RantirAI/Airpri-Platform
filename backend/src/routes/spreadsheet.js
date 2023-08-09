@@ -10,7 +10,7 @@ const router = Router()
 router.route('/').post(createSpreadsheet)
 router.param("id", validateObjectId)
 router.param("id", authorizeSpreadsheetAccess)
-router.route('/import-csv').post(upload.single('csvFile'),importCsv);
+router.route('/import-csv/:id').post(upload.single('csvFile'),importCsv);
 router.route('/:id').get(getSpreadsheet).put(updateSpreadsheet).delete(deleteSpreadsheet).patch(archiveSpreadsheet)
 
 module.exports = router

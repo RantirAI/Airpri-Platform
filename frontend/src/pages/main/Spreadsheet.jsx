@@ -36,6 +36,8 @@ import getIdFromName from '../../utils/getIdFromName'
 import exportFromJSON from 'export-from-json'
 import EditFieldsModal from '../../components/modals/EditFieldsModal'
 import ShareSpreadsheetModal from '../../components/modals/ShareSpreadsheetModal'
+import Axios, { setAxiosToken } from "../../config/axios"
+import { importCsvSpreadsheet } from '../../services/spreadsheet'
 
 
 const Spreadsheet = () => {
@@ -164,7 +166,7 @@ const Spreadsheet = () => {
   // ];
 
 
-  const handleImportCsv = (e) => {
+  const handleImportCsv = async (e) => {
     Papa.parse(e.target.files[0], {
       header: true,
       skipEmptyLines: true,
@@ -193,34 +195,44 @@ const Spreadsheet = () => {
           rows.push(row)
         })
 
-        const oldRows = spreadsheetData.rows
-        oldRows.map((row) => {
-          const newRow = row
-          columns.forEach((col) => {
-            newRow[col['id']] = ''
-          })
-          return newRow
-        })
+        
 
-        const newRows = rows
-        newRows.map((row) => {
-          const newRow = row
-          spreadsheetData.columns.forEach((col) => {
-            if (duplicateColumns.findIndex((key) => (key == col['id'])) != -1) {
-              return
-            }
-            newRow[col['id']] = ''
-          })
-          return newRow
-        })
+        
+
+        // const oldRows = spreadsheetData.rows
+        // oldRows.map((row) => {
+        //   const newRow = row
+        //   columns.forEach((col) => {
+        //     newRow[col['id']] = ''
+        //   })
+        //   return newRow
+        // })
+
+        // const newRows = rows
+        // newRows.map((row) => {
+        //   const newRow = row
+        //   spreadsheetData.columns.forEach((col) => {
+        //     if (duplicateColumns.findIndex((key) => (key == col['id'])) != -1) {
+        //       return
+        //     }
+        //     newRow[col['id']] = ''
+        //   })
+        //   return newRow
+        // })
 
         setSpreadsheetData({
           ...spreadsheetData,
-          columns: [...spreadsheetData.columns, ...columns],
-          rows: [...oldRows, ...newRows]
+          columns: [...spreadsheetData.columns, ...columns]
         })
+
       },
     });
+    var formData = new FormData();
+    formData.append('csvFile',e.target.files[0]);
+    formData.append('name',spreadsheetData.name);
+    formData.append('description',spreadsheetData.description);
+
+    await importCsvSpreadsheet(formData,spreadsheetData._id);
   }
 
   const handleExportCsv = () => {

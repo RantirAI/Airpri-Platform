@@ -33,3 +33,11 @@ export const archiveSpreadsheet = async (id) => {
         throw new Error(error)
     }
 }
+
+export const importCsvSpreadsheet = async (data, id) => {
+    try {
+        await Axios.post(`spreadsheet/import-csv/${id}`, data);
+    } catch(error) {
+        throw new Error(error)
+    }
+}

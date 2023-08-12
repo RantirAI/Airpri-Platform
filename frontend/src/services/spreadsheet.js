@@ -42,3 +42,12 @@ export const importCsv = async (data, id) => {
         throw new Error(error)
     }
 }
+
+export const autosave = async (data, id) => {
+    try {
+        const response = await Axios.patch(`spreadsheet/autosave/${id}`, data)
+        return response.data.spreadsheet
+    } catch (error) {
+        throw new Error(error)
+    }
+}

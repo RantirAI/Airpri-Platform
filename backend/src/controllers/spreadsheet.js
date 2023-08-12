@@ -215,6 +215,45 @@ const archiveSpreadsheet = async (req, res) => {
     }
 }
 
+const autosave = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { cell, insertNewRow } = req.body;
+        const index = cell?.index;
+        const data = cell?.data;
+
+        const spreadsheet = await Spreadsheet.findById(id);
+
+        if (!spreadsheet) {
+            return res.status(404).json({ message: 'Spreadsheet not found' });
+        }
+
+        let rows = JSON.parse(JSON.stringify(spreadsheet.rows));
+        let columns = [...spreadsheet.columns];
+
+        if (index && data) {
+            rows[index[1]][columns[index[0]]['id']] = data;
+        }
+
+        if (insertNewRow) {
+            const newRow = {};
+            columns.forEach((col) => {
+                newRow[col['id']] = '';
+            });
+            rows.push(newRow);
+        }
+
+        spreadsheet.rows = rows;
+
+        await spreadsheet.save();
+
+        res.status(200).json({ spreadsheet, message: 'Spreadsheet updated' });
+    } catch (error) {
+        console.log(error.message);
+        res.sendStatus(500);
+    }
+};
+
 
 module.exports = {
     createSpreadsheet,
@@ -222,5 +261,6 @@ module.exports = {
     updateSpreadsheet,
     deleteSpreadsheet,
     archiveSpreadsheet,
-    importCsv
+    importCsv,
+    autosave
 }

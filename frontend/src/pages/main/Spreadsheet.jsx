@@ -17,7 +17,7 @@ import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsh
 import SpreadsheetSettingsModal from '../../components/modals/SpreadsheetSettingsModal'
 import DeleteSpreadsheetModal from '../../components/modals/DeleteSpreadsheetModal'
 import ArchiveSpreadsheetModal from '../../components/modals/ArchiveSpreadsheetModal'
-import { editSpreadsheet, importCsv } from '../../services/spreadsheet'
+import { autosave, editSpreadsheet, importCsv } from '../../services/spreadsheet'
 import "@glideapps/glide-data-grid/dist/index.css";
 import { DataEditor, GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid';
 import { toast } from 'react-toastify';
@@ -57,7 +57,6 @@ const Spreadsheet = () => {
   const [showViewDropdown, setShowViewDropdown] = useState(false)
 
   const [saving, setSaving] = useState(false)
-  const [cellChanged, setCellChanged] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
   const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}`, [spreadsheetId, refresh])
@@ -126,16 +125,6 @@ const Spreadsheet = () => {
     }
   }, [spreadsheetData])
 
-  const handleInsertRow = () => {
-    const newRow = {}
-    spreadsheetData.columns.forEach((col) => {
-      newRow[col['id']] = ''
-    })
-    setSpreadsheetData({
-      ...spreadsheetData,
-      rows: [...spreadsheetData.rows, newRow]
-    })
-  }
 
   // const data = [
   //   {
@@ -204,21 +193,6 @@ const Spreadsheet = () => {
       setSpreadsheetData(data.spreadsheet)
     }
   }, [data])
-
-  useEffect(() => {
-    if (!spreadsheetData) return
-    (async () => {
-      try {
-        setSaving(true)
-        await editSpreadsheet(spreadsheetData, spreadsheetId)
-      } catch (error) {
-        toast.error(error.message)
-      } finally {
-        setSaving(false)
-      }
-    })()
-  }, [cellChanged])
-
 
   return (
     <MainContainer>
@@ -428,7 +402,24 @@ const Spreadsheet = () => {
                         e.preventDefault()
                         switch (btn) {
                           case 'insert row':
-                            handleInsertRow()
+                            (async () => {
+                              try {
+                                setSaving(true)
+                                const newRow = {}
+                                spreadsheetData.columns.forEach((col) => {
+                                  newRow[col['id']] = ''
+                                })
+                                setSpreadsheetData({
+                                  ...spreadsheetData,
+                                  rows: [...spreadsheetData.rows, newRow]
+                                })
+                                await autosave({insertNewRow: true}, spreadsheetId)
+                              } catch (error) {
+                                toast.error(error.message)
+                              } finally {
+                                setSaving(false)
+                              }
+                            })()
                             break;
                           case 'import csv':
                             importRef.current.click();
@@ -472,10 +463,19 @@ const Spreadsheet = () => {
               </div>
               <DataEditor className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} getCellsForSelection={true}
                 keybindings={{ search: true }} onCellEdited={(i, j) => {
-                  const dataa = spreadsheetData
-                  dataa.rows[i[1]][dataa.columns[i[0]]['id']] = j.data
-                  setSpreadsheetData(dataa)
-                  setCellChanged(!cellChanged)
+                  (async () => {
+                    try {
+                      const dataa = spreadsheetData
+                      dataa.rows[i[1]][dataa.columns[i[0]]['id']] = j.data
+                      setSpreadsheetData(dataa)
+                      setSaving(true)
+                      await autosave({cell : {index: i, data: j.data}}, spreadsheetId)
+                    } catch (error) {
+                      toast.error(error.message)
+                    } finally {
+                      setSaving(false)
+                    }
+                  })()
                 }} />
             </div>
             :

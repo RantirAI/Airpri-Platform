@@ -17,7 +17,7 @@ import DuplicateSpreadsheetModal from '../../components/modals/DuplicateSpreadsh
 import SpreadsheetSettingsModal from '../../components/modals/SpreadsheetSettingsModal'
 import DeleteSpreadsheetModal from '../../components/modals/DeleteSpreadsheetModal'
 import ArchiveSpreadsheetModal from '../../components/modals/ArchiveSpreadsheetModal'
-import { editSpreadsheet } from '../../services/spreadsheet'
+import { editSpreadsheet, importCsv } from '../../services/spreadsheet'
 import "@glideapps/glide-data-grid/dist/index.css";
 import { DataEditor, GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid';
 import { toast } from 'react-toastify';
@@ -36,6 +36,7 @@ import getIdFromName from '../../utils/getIdFromName'
 import exportFromJSON from 'export-from-json'
 import EditFieldsModal from '../../components/modals/EditFieldsModal'
 import ShareSpreadsheetModal from '../../components/modals/ShareSpreadsheetModal'
+import ImportingCSVModal from '../../components/modals/ImportingCSVModal'
 
 
 const Spreadsheet = () => {
@@ -66,6 +67,7 @@ const Spreadsheet = () => {
   const [spreadsheetData, setSpreadsheetData] = useState(null)
 
   const importRef = useRef(null)
+  const [importingCSV, setImportingCSV] = useState(false)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -164,63 +166,18 @@ const Spreadsheet = () => {
   // ];
 
 
-  const handleImportCsv = (e) => {
-    Papa.parse(e.target.files[0], {
-      header: true,
-      skipEmptyLines: true,
-      complete: function (results) {
-        const columns = []
-        const duplicateColumns = []
-        const rows = []
-        Object.keys(results.data[0]).forEach((key) => {
-          if (spreadsheetData.columns.findIndex(({ id }) => (getIdFromName(key) == id)) != -1) {
-            duplicateColumns.push(getIdFromName(key))
-            return
-          }
-          columns.push({
-            title: key,
-            id: getIdFromName(key),
-            editable: true,
-            icon: GridColumnIcon.HeaderString,
-            type: 'text',
-          })
-        })
-        results.data.forEach((obj) => {
-          const row = {}
-          Object.entries(obj).forEach(([key, value]) => {
-            row[getIdFromName(key)] = value
-          })
-          rows.push(row)
-        })
-
-        const oldRows = spreadsheetData.rows
-        oldRows.map((row) => {
-          const newRow = row
-          columns.forEach((col) => {
-            newRow[col['id']] = ''
-          })
-          return newRow
-        })
-
-        const newRows = rows
-        newRows.map((row) => {
-          const newRow = row
-          spreadsheetData.columns.forEach((col) => {
-            if (duplicateColumns.findIndex((key) => (key == col['id'])) != -1) {
-              return
-            }
-            newRow[col['id']] = ''
-          })
-          return newRow
-        })
-
-        setSpreadsheetData({
-          ...spreadsheetData,
-          columns: [...spreadsheetData.columns, ...columns],
-          rows: [...oldRows, ...newRows]
-        })
-      },
-    });
+  const handleImportCsv = async (e) => {
+    try {
+      setImportingCSV(true)
+      const formData = new FormData()
+      formData.append('csvFile', e.target.files[0])
+      const spreadsheet = await importCsv(formData, spreadsheetId)
+      setSpreadsheetData(spreadsheet)
+    } catch (error) {
+      toast.error(error?.message)
+    } finally {
+      setImportingCSV(false)
+    }
   }
 
   const handleExportCsv = () => {
@@ -260,7 +217,7 @@ const Spreadsheet = () => {
         setSaving(false)
       }
     })()
-  }, [spreadsheetData, cellChanged])
+  }, [cellChanged])
 
 
   return (
@@ -545,6 +502,7 @@ const Spreadsheet = () => {
       <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} refresh={refresh} setRefresh={setRefresh} />
       <EditFieldsModal showModal={showEditFieldsModal} setShowModal={setShowEditFieldsModal} spreadsheetData={spreadsheetData} refresh={refresh} setRefresh={setRefresh} setSpreadsheetData={setSpreadsheetData} />
       <ShareSpreadsheetModal showModal={showShareModal} setShowModal={setShowShareModal} id={spreadsheetData?._id} privateAccess={spreadsheetData?.access == "private"} />
+      <ImportingCSVModal showModal={importingCSV} />
 
     </MainContainer >
   )

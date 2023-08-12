@@ -1,7 +1,7 @@
 const Spreadsheet = require('../models/Spreadsheet')
 const mongoose = require('mongoose')
 const Workspace = require('../models/Workspace')
-const csv=require('csvtojson')
+const csv = require('csvtojson')
 const fs = require('fs');
 
 
@@ -48,65 +48,83 @@ const createSpreadsheet = async (req, res) => {
 }
 
 const importCsv = async (req, res) => {
-    const { name, description } = req.body
-    const buffer = req.file.buffer.toString(); // Convert buffer to string
-    fs.writeFile('data.csv', buffer, (err) => {
-        if (err) {
-          return res.status(500).send('Error while saving the CSV file.');
+    try {
+        const id = req.params.id
+        const spreadsheet = await Spreadsheet.findById(id)
+
+        if (!spreadsheet) {
+            return res.status(404).json({ message: 'Spreadsheet not found' })
         }
-    });
 
-    let headersData = [];
-    let rowData = []
-    let jsonData = null;
-    csv()
-    .fromFile("data.csv")
-    .then(async (jsonObj)=>{
-        jsonData = jsonObj;
-        console.log("data csv");
-        let column = Object.keys(jsonData[0]);
-    for(let i = 0;i<column.length;i++) {
-        let columnText = column[i].replace(/\s/g, '-').toLowerCase()
-        headersData.push({ editable: true, icon: "headerString", id: columnText, title: column[i], type:'text'});
-    }
-
-    for(let j = 1;j<jsonData.length;j++) {
-        let objData = {}
-        for(let k = 0;k<column.length;k++) {
-            let columnText = column[k].replace(/\s/g, '-').toLowerCase()
-            objData[columnText] = jsonData[j][column[k]];
+        if (!req.file?.buffer || req.file?.mimetype != 'text/csv') {
+            return res.status(400).json({ message: 'Invalid csv file' })
         }
-        rowData.push(objData);
-        objData = {}
-    }
-    
-        try {
-            const id = req.params.id
 
-            const spreadsheet = await Spreadsheet.findById(id)
-
-            if (!spreadsheet) {
-                return res.status(404).json({ message: 'Spreadsheet not found' })
+        const buffer = req.file.buffer.toString();
+        fs.writeFile('data.csv', buffer, (err) => {
+            if (err) {
+                return res.status(500).send('Error while saving the CSV file.');
             }
+        });
 
-            spreadsheet.name = name;
+        const columns = []
+        const duplicateColumns = []
+        const rows = []
+        const jsonData = await csv().fromFile("data.csv")
 
-            spreadsheet.description = description;
+        Object.keys(jsonData[0]).forEach((key) => {
+            if (spreadsheet.columns.findIndex(({ id }) => (key.toLowerCase().split(' ').join('-') == id)) != -1) {
+                duplicateColumns.push(key.toLowerCase().split(' ').join('-') == id)
+                return
+            }
+            columns.push({
+                title: key,
+                id: key.toLowerCase().split(' ').join('-'),
+                editable: true,
+                icon: 'headerString',
+                type: 'text',
+            })
+        })
 
-            spreadsheet.columns = headersData;
+        jsonData.forEach((obj) => {
+            const row = {}
+            Object.entries(obj).forEach(([key, value]) => {
+                row[key.toLowerCase().split(' ').join('-')] = value
+            })
+            rows.push(row)
+        })
 
-            spreadsheet.rows = rowData;
 
-            await spreadsheet.save()
+        const oldRows = spreadsheet.rows.map((row) => {
+            const newRow = row
+            columns.forEach((col) => {
+                newRow[col['id']] = ''
+            })
+            return newRow
+        })
 
-        } catch (error) {
-            console.log(error.message)
-            res.sendStatus(500)
-        }
-    })
+        const newRows = rows.map((row) => {
+            const newRow = row
+            spreadsheet.columns.forEach((col) => {
+                if (duplicateColumns.findIndex((key) => (key == col['id'])) != -1) {
+                    return
+                }
+                newRow[col['id']] = ''
+            })
+            return newRow
+        })
 
-      res.status(201).json({ message: 'Import CSV Successfully' });
+        spreadsheet.columns = [...spreadsheet.columns, ...columns]
+        spreadsheet.rows = [...oldRows, ...newRows]
 
+        await spreadsheet.save()
+
+        res.status(200).json({ message: 'Csv imported successfully' })
+
+    } catch (error) {
+        console.log(error.message)
+        res.sendStatus(500)
+    }
 }
 
 const getSpreadsheet = async (req, res) => {

@@ -119,7 +119,7 @@ const importCsv = async (req, res) => {
 
         await spreadsheet.save()
 
-        res.status(200).json({ message: 'Csv imported successfully' })
+        res.status(200).json({ message: 'Csv imported successfully', spreadsheet })
 
     } catch (error) {
         console.log(error.message)

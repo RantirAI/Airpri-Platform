@@ -461,7 +461,7 @@ const Spreadsheet = () => {
                   ))
                 }
               </div>
-              <DataEditor className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} getCellsForSelection={true}
+              <DataEditor height={'1000vh'} width={'100vw'} className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} getCellsForSelection={true}
                 keybindings={{ search: true }} onCellEdited={(i, j) => {
                   (async () => {
                     try {

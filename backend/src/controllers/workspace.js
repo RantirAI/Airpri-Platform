@@ -147,7 +147,7 @@ const getWorkspace = async (req, res) => {
             return res.status(404).json({ message: 'Workspace not found' })
         }
 
-        const spreadsheets = await Spreadsheet.find({ workspace: id, archived: archived != undefined ? true : false })
+        const spreadsheets = await Spreadsheet.find({ workspace: id, archived: archived != undefined ? true : false }).select('-rows').select('-columns')
 
         return res.status(200).json({ spreadsheets, workspace })
     } catch (error) {

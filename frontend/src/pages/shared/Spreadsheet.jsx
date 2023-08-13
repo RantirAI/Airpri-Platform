@@ -250,7 +250,7 @@ const Spreadsheet = () => {
                                         ))
                                     }
                                 </div> */}
-                                <DataEditor className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} />
+                                <DataEditor width={'100%'} height={spreadsheetData?.rows?.length > 15 ? '80vh' : (spreadsheetData?.rows?.length  * 40) + 40 } className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} />
                             </div>
                             :
                             <div className='flex flex-col items-center py-[40px]'>

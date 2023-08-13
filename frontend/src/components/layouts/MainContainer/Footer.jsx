@@ -11,7 +11,7 @@ const Footer = () => {
   }, [pathname])
 
   return (
-    <footer className='w-full mt-auto py-[48px] px-[12px] bg-white dark:bg-[#111928] rounded-[8px] '>
+    <footer className='w-full mt-auto py-[48px] px-[12px] bg-white dark:bg-[#111928] rounded-[8px] mt-8'>
       <div className='flex justify-between items-center text-gray-500 dark:text-white'>
         <p className='text-base font-normal'>
           © 2023 Rantir, Inc. All rights reserved.

@@ -225,6 +225,13 @@ const archiveSpreadsheet = async (req, res) => {
 const autosave = async (req, res) => {
     try {
         const id = req.params.id;
+        if (!id) {
+            return res.status(400).json({ message: 'Spreadsheet id is required' })
+        }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid spreadsheet id' })
+        }
+        
         const { cell, insertNewRow } = req.body;
         const index = cell?.index;
         const data = cell?.data;

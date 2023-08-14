@@ -50,6 +50,13 @@ const createSpreadsheet = async (req, res) => {
 const importCsv = async (req, res) => {
     try {
         const id = req.params.id
+        if (!id) {
+            return res.status(400).json({ message: 'Spreadsheet id is required' })
+        }
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: 'Invalid spreadsheet id' })
+        }
+
         const spreadsheet = await Spreadsheet.findById(id)
 
         if (!spreadsheet) {

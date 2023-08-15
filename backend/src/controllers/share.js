@@ -859,19 +859,74 @@ const getWorkspace = async (req, res) => {
 }
 
 const getSpreadsheet = async (req, res) => {
-    try {
-        const { id } = req.params
-        const spreadsheet = await Spreadsheet.findOne({ _id: id, access: 'public' })
+  try {
+      const id = req.params.id;
+      if (!id) {
+          return res.status(400).json({ message: 'Spreadsheet id is required' })
+      }
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+          return res.status(400).json({ message: 'Invalid spreadsheet id' })
+      }
 
-        if (!spreadsheet) {
-            return res.status(404).json({ message: 'Spreadsheet not found' })
-        }
+      const page = req.query.page ? parseInt(req.query.page) : req.query.page
 
-        res.status(200).json({ spreadsheet })
+      if (page != undefined || page != null) {
 
-    } catch (error) {
-        res.sendStatus(500)
-    }
+          const pageSize = 500
+
+          const pipeline = [
+              { $match: { _id: new mongoose.Types.ObjectId(id) } },
+              {
+                  $addFields: {
+                      totalRows: { $size: '$rows' }
+                  }
+              },
+              {
+                  $project: {
+                      _id: 0,
+                      workspace: 1,
+                      columns: 1,
+                      access: 1,
+                      archived: 1,
+                      name: 1,
+                      description: 1,
+                      rows: { $slice: ['$rows', (page - 1) * pageSize, pageSize] },
+                      totalRows: 1
+                  }
+              }
+          ];
+
+          const paginatedSpreadsheet = await Spreadsheet.aggregate(pipeline);
+
+          if (!paginatedSpreadsheet || paginatedSpreadsheet.length === 0) {
+              return res.status(404).json({ message: 'Spreadsheet not found' });
+          }
+
+          const totalRows = paginatedSpreadsheet[0].totalRows;
+          const totalPages = Math.ceil(totalRows / pageSize);
+
+          paginatedSpreadsheet[0].currentPage = page;
+          paginatedSpreadsheet[0].pageSize = pageSize;
+          paginatedSpreadsheet[0].totalRows = totalRows;
+          paginatedSpreadsheet[0].totalPages = totalPages;
+
+          return res.status(200).json({ spreadsheet: paginatedSpreadsheet[0] });
+
+      } else {
+
+
+          const spreadsheet = await Spreadsheet.findById(id).populate('workspace')
+
+          if (!spreadsheet) {
+              return res.status(404).json({ message: 'Spreadsheet not found' })
+          }
+
+          return res.status(200).json({ spreadsheet })
+      }
+  } catch (error) {
+      console.log(error.message)
+      res.sendStatus(500)
+  }
 }
 
 

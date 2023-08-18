@@ -308,7 +308,7 @@ const uploadS3File = async (req, res) => {
             res.status(200).send({message: "File Uploaded Successfully", location: data.Location});
         });
     } else {
-        res.status(404).json({ message: 'Invalid file type. Only PDF, JPEG, PNG, and DOCX files are allowed'})
+        res.status(400).json({ message: 'Invalid file type. Only PDF, JPEG, PNG, and DOCX files are allowed'})
     }
 
 }

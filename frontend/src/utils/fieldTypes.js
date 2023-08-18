@@ -66,4 +66,9 @@ export default [
         value: GridCellKind.Custom,
         label: 'JSON'
     },
+    {
+        icon: GridColumnIcon.HeaderImage,
+        value: GridCellKind.Custom,
+        label: 'Attachment'
+    },
 ]

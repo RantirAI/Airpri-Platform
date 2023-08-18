@@ -4,8 +4,9 @@ import { BiSolidLockAlt } from 'react-icons/bi'
 import { BsTextIndentLeft } from 'react-icons/bs'
 import { CiTextAlignLeft } from 'react-icons/ci'
 import { GoNumber } from 'react-icons/go'
+import { GrAttachment } from 'react-icons/gr'
 import { HiOutlineMailOpen } from 'react-icons/hi'
-import { ImListNumbered, ImTextColor } from 'react-icons/im'
+import { ImAttachment, ImListNumbered, ImTextColor } from 'react-icons/im'
 import { LuCheckSquare, LuFileJson } from 'react-icons/lu'
 import { MdDateRange, MdFormatColorFill } from 'react-icons/md'
 import { TbCalendarTime } from 'react-icons/tb'
@@ -52,6 +53,9 @@ const FieldTypeIcon = ({type}) => (
                                                             :
                                                             type == 'JSON' ?
                                                                 < LuFileJson />
+                                                                :
+                                                            type == 'Attachment' ?
+                                                                <ImAttachment />
                                                                 :
                                                                 ''
         }

@@ -53,6 +53,7 @@ const ButtonSpreadsheet = () => {
     const [sharedSpreadsheetData, setSharedSpreadsheetData] = useState(null)
     const [loadingMore, setLoadingMore] = useState(false)
     const [currPage, setCurrPage] = useState(1)
+    const [fetchAll, setFetchAll] = useState(false)
     const [endReached, setEndReached] = useState(false)
 
     const dispatch = useDispatch()
@@ -61,7 +62,7 @@ const ButtonSpreadsheet = () => {
     const bodyRef = useRef()
 
 
-    const getContent = useCallback((cell) => {
+    const getContent = (cell) => {
         if (sharedSpreadsheetData && !loading) {
             const [col, row] = cell;
             const dataRow = sharedSpreadsheetData['rows'][row];
@@ -111,7 +112,7 @@ const ButtonSpreadsheet = () => {
                 data: d,
             };
         }
-    }, [sharedSpreadsheetData])
+    }
 
     useEffect(() => {
         if (spreadsheetData) {
@@ -130,19 +131,15 @@ const ButtonSpreadsheet = () => {
             async () => {
                 if (endReached) return
                 try {
-                    if (currPage == 1) {
+                    if (currPage == 1 && !fetchAll) {
                         setLoading(true)
                     } else {
                         setLoadingMore(true)
                     }
-                    // const response = await Axios.get(`/spreadsheet/${spreadsheetId}`)
-                    const response = await Axios.get(`/spreadsheet/${spreadsheetId}?page=${currPage}`)
+                    const response = await Axios.get(fetchAll ? `/spreadsheet/${spreadsheetId}` : `/spreadsheet/${spreadsheetId}?page=${currPage}`)
                     console.log('fetched new', response.data.spreadsheet)
                     console.log('see old', spreadsheetData)
-                    if (spreadsheetData) {
-                        console.log({ ...spreadsheetData, rows: [...spreadsheetData.rows, ...response.data.spreadsheet.rows] })
-                    }
-                    if (spreadsheetData) {
+                    if (spreadsheetData && !fetchAll) {
                         setSpreadsheetData({ ...spreadsheetData, rows: [...spreadsheetData.rows, ...response.data.spreadsheet.rows] })
                     } else {
                         console.log(response.data.spreadsheet, 'hereee')
@@ -159,7 +156,7 @@ const ButtonSpreadsheet = () => {
                 }
             }
         )()
-    }, [currPage, spreadsheetId])
+    }, [currPage, spreadsheetId, fetchAll])
 
     return (
         <div className='bg-[#111928] p-2.5 min-h-screen flex flex-col'>
@@ -297,7 +294,7 @@ const ButtonSpreadsheet = () => {
                                 ))
                             }
                         </div> */}
-                                <DataEditor width={'100%'} height={sharedSpreadsheetData?.rows?.length > 15 ? '60vh' : (sharedSpreadsheetData?.rows?.length  * 40) + 40 } className='w-full min-h-full data-editor' getCellContent={getContent} columns={sharedSpreadsheetData?.columns} rows={sharedSpreadsheetData?.rows?.length} />
+                                <DataEditor width={'100%'} height={sharedSpreadsheetData?.rows?.length > 15 ? '60vh' : (sharedSpreadsheetData?.rows?.length * 40) + 40} className='w-full min-h-full data-editor' getCellContent={getContent} columns={sharedSpreadsheetData?.columns} rows={sharedSpreadsheetData?.rows?.length} />
                                 {
                                     loadingMore &&
                                     <div className='flex flex-row items-center justify-center my-1 text-center text-xs text-[14px] text-gray-700'>
@@ -308,17 +305,26 @@ const ButtonSpreadsheet = () => {
                                     </div>
                                 }
                                 {
-                                    (!loadingMore && !endReached) &&
-                                    <Button onClick={() => {
-                                        if (loadingMore) return
-                                        setCurrPage(currPage + 1)
-                                        console.log('fetch new', currPage)
-                                    }} type="button" className='bg-[#1ABFAB] w-max my-2 block mx-auto' size='xs' >
-                                        Load more data
-                                    </Button>
-                                }                            
+                                    (!loadingMore && !endReached && !fetchAll) &&
+                                    <div className='flex flex-row items-center my-1 gap-2 justify-center'>
+                                        <Button onClick={() => {
+                                            if (loadingMore) return
+                                            setCurrPage(currPage + 1)
+                                            console.log('fetch new', currPage)
+                                        }} type="button" className='bg-[#1ABFAB] w-max' size='xs' >
+                                            Load more rows
+                                        </Button>
+                                        <Button onClick={() => {
+                                            if (loadingMore) return
+                                            setFetchAll(true)
+                                        }} type="button" className='bg-[#1ABFAB] w-max' size='xs' >
+                                            Load all rows
+                                        </Button>
+                                    </div>
+
+                                }
                                 {
-                                    endReached &&
+                                    ((endReached || fetchAll) && !loadingMore) &&
                                     <p className='text-center text-xs text-[14px] my-1 italic text-gray-700'>
                                         The end...
                                     </p>

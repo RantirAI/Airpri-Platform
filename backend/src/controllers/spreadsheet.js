@@ -3,6 +3,15 @@ const mongoose = require('mongoose')
 const Workspace = require('../models/Workspace')
 const csv = require('csvtojson')
 const fs = require('fs');
+const AWS = require('aws-sdk');
+
+AWS.config.update({
+    accessKeyId: "",
+    secretAccessKey: "",
+    region: '',
+});
+
+const s3 = new AWS.S3();
 
 
 const createSpreadsheet = async (req, res) => {
@@ -277,6 +286,33 @@ const archiveSpreadsheet = async (req, res) => {
     }
 }
 
+const uploadS3File = async (req, res) => {
+    const file = req.file;
+
+    const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+    if (allowedMimeTypes.includes(file.mimetype)) {
+        const uniqueFileName = Date.now() + '-' + file.originalname;
+        
+        const params = {
+            Bucket: 'airpris3',
+            Key: uniqueFileName,
+            Body: file.buffer,
+        };
+
+        s3.upload(params, (err, data) => {
+            if (err) {
+            return res.status(500).send('Error uploading file to S3.');
+            }
+        
+            res.status(200).send({message: "File Uploaded Successfully", location: data.Location});
+        });
+    } else {
+        res.status(404).json({ message: 'Invalid file type. Only PDF, JPEG, PNG, and DOCX files are allowed'})
+    }
+
+}
+
 const autosave = async (req, res) => {
     try {
         const id = req.params.id;
@@ -329,6 +365,7 @@ module.exports = {
     updateSpreadsheet,
     deleteSpreadsheet,
     archiveSpreadsheet,
+    uploadS3File,
     importCsv,
     autosave
 }

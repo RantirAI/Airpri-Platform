@@ -47,7 +47,7 @@ const ScrollSpreadsheet = () => {
     const [refresh, setRefresh] = useState(false)
 
     // const { data, loading, error } = useFetch(`/spreadsheet/${spreadsheetId}?page=1`, [spreadsheetId, refresh])
-    
+
     const [loading, setLoading] = useState(true)
     const [spreadsheetData, setSpreadsheetData] = useState(null)
     const [sharedSpreadsheetData, setSharedSpreadsheetData] = useState(null)
@@ -167,7 +167,7 @@ const ScrollSpreadsheet = () => {
                         setLoadingMore(true)
                     }
                     // const response = await Axios.get(`/spreadsheet/${spreadsheetId}`)
-                    const response = await Axios.get(`/spreadsheet/${spreadsheetId}?page=${currPage}`)
+                    const response = await Axios.get(`/share/spreadsheet/${spreadsheetId}?page=${currPage}`)
                     console.log('fetched new', response.data.spreadsheet)
                     console.log('see old', spreadsheetData)
                     if (spreadsheetData) {

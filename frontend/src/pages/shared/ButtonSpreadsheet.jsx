@@ -136,7 +136,7 @@ const ButtonSpreadsheet = () => {
                     } else {
                         setLoadingMore(true)
                     }
-                    const response = await Axios.get(fetchAll ? `/spreadsheet/${spreadsheetId}` : `/spreadsheet/${spreadsheetId}?page=${currPage}`)
+                    const response = await Axios.get(fetchAll ? `/share/spreadsheet/${spreadsheetId}` : `/share/spreadsheet/${spreadsheetId}?page=${currPage}`)
                     console.log('fetched new', response.data.spreadsheet)
                     console.log('see old', spreadsheetData)
                     if (spreadsheetData && !fetchAll) {

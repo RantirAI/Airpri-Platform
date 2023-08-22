@@ -69,23 +69,27 @@ const ViewAndUploadAttachmentModal = ({ cell, setCell, showModal, spreadsheetDat
         <Modal dismissible={!submitting} show={showModal} onClose={() => {
             setCell(null)
             setShowFileViewer(false)
-        }} size='5xl' >
-            <Modal.Header>View and Upload attachment</Modal.Header>
+        }} size={!link ? 'md' : '5xl'} >
+            <Modal.Header>{link && 'View and '}Upload attachment</Modal.Header>
             <Modal.Body>
-                <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mb-8 flex justify-center w-max mx-auto' type='button' onClick={() => {
-                    setShowFileViewer(!showFileViewer)
-                }} size='lg'>
-                    <MdOutlinePreview className='mr-2 text-lg ' />
-                    <span>
-                        {
-                            showFileViewer ? 'Close file' : 'View file'
-                        }
-                    </span>
-                </Button>
+                {
+                    link &&
+                    <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mb-8 flex justify-center w-max mx-auto' type='button' onClick={() => {
+                        setShowFileViewer(!showFileViewer)
+                    }} size='lg'>
+                        <MdOutlinePreview className='mr-2 text-lg ' />
+                        <span>
+                            {
+                                showFileViewer ? 'Close file' : 'View file'
+                            }
+                        </span>
+                    </Button>
+                }
+
 
                 {
                     showFileViewer &&
-                    <div className="overflow-y-auto max-h-[50vh]">
+                    <div className="overflow-y-auto max-h-[50vh] mb-8 pb-8 border-solid border-gray-200 border-0 border-b-2">
                         {
                             link?.endsWith('docx') ?
                                 <FileViewer fileType="docx" filePath={link} />
@@ -103,14 +107,14 @@ const ViewAndUploadAttachmentModal = ({ cell, setCell, showModal, spreadsheetDat
                 }
 
 
-                <form onSubmit={handleSubmit} className='border-solid border-gray-200 border-0 border-t-2 pt-8 mt-8'>
+                <form onSubmit={handleSubmit} className=''>
                     <TextInput
                         id='file'
                         placeholder='Select only pdf/doc/img file'
                         required
                         ref={fileRef}
                         type='file'
-                        className='!p-0 text-red-400'
+                        className='!p-0 w-max'
                     />
                     <Button className='bg-[#1ABFAB] text-white dark:text-gray-900 mt-[20px] flex justify-center w-max' type='submit' onClick={handleSubmit}>
                         {

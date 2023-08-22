@@ -20,6 +20,10 @@ const ColumnSchema = new Schema({
     type: {
         type: String,
         required: true
+    },
+    label: {
+        type: String,
+        required: true
     }
 })
 
@@ -46,7 +50,8 @@ const SpreadsheetSchema = new Schema({
                 id: "name",
                 editable: true,
                 icon: "headerString",
-                type: "text"
+                type: "text",
+                label: 'Text'
             },
         ],
     },

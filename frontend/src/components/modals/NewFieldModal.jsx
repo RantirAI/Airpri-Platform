@@ -48,7 +48,8 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, se
                     id: fieldNameRef.current.value.toLowerCase().split(' ').join('-'),
                     editable: true,
                     icon: fieldType?.icon,
-                    type: fieldType?.value
+                    type: fieldType?.value,
+                    label: fieldType?.label
                 }],
                 rows: newRows
             }, id)

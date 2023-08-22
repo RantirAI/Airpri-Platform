@@ -133,7 +133,7 @@ const Spreadsheet = () => {
             kind: GridCellKind.Image,
             allowOverlay: false,
             displayData: ['https://airpris3.s3.us-east-2.amazonaws.com/1692663251562-ph_file-fill.png'],
-            data: 'https://airpris3.s3.us-east-2.amazonaws.com/1692663251562-ph_file-fill.png',
+            data: ['https://airpris3.s3.us-east-2.amazonaws.com/1692663251562-ph_file-fill.png'],
           };
         }}
         

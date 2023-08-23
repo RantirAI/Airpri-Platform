@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import { editSpreadsheet } from '../../services/spreadsheet'
 import FieldTypeIcon from '../FieldTypeIcon'
 import renderFieldTypeIcon from '../FieldTypeIcon'
+import fieldTypes from '../../utils/fieldTypes'
 
 const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, setRefresh }) => {
     const fieldNameRef = useRef(null)
@@ -47,7 +48,8 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, se
                     id: fieldNameRef.current.value.toLowerCase().split(' ').join('-'),
                     editable: true,
                     icon: fieldType?.icon,
-                    type: fieldType?.value
+                    type: fieldType?.value,
+                    label: fieldType?.label
                 }],
                 rows: newRows
             }, id)
@@ -98,73 +100,7 @@ const NewFieldModal = ({ showModal, setShowModal, id, columns, rows, refresh, se
                         showDropdown &&
                         <div className='w-full max-h-[130px] shadow-md rounded-md right-0 left-0 top-[42px] overflow-y-scroll flex flex-col absolute z-30 bg-white'>
                             {
-                                [
-                                    {
-                                        icon: GridColumnIcon.HeaderString,
-                                        value: GridCellKind.Text,
-                                        label: 'Text'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderTextTemplate,
-                                        value: GridCellKind.Text,
-                                        label: 'Long Text'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderTextTemplate,
-                                        value: GridCellKind.Text,
-                                        label: 'Rich Text'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderUri,
-                                        value: GridCellKind.Uri,
-                                        label: 'Link/Slug'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderEmail,
-                                        value: GridCellKind.Text,
-                                        label: 'Email'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderCode,
-                                        value: GridCellKind.Protected,
-                                        label: 'Password'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderNumber,
-                                        value: GridCellKind.Number,
-                                        label: 'Number'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderJoinStrings,
-                                        value: GridCellKind.Bubble,
-                                        label: 'Enumeration'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderBoolean,
-                                        value: GridCellKind.Boolean,
-                                        label: 'Boolean'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderImage,
-                                        value: GridCellKind.Custom,
-                                        label: 'Color'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderDate,
-                                        value: GridCellKind.Custom,
-                                        label: 'Date'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderTime,
-                                        value: GridCellKind.Custom,
-                                        label: 'Time'
-                                    },
-                                    {
-                                        icon: GridColumnIcon.HeaderCode,
-                                        value: GridCellKind.Custom,
-                                        label: 'JSON'
-                                    },
-                                ].map((ft) => (
+                            fieldTypes.map((ft) => (
                                     <button className='p-2 flex flex-row justify-between' onClick={() => {
                                         setFieldType(ft)
                                     }} >

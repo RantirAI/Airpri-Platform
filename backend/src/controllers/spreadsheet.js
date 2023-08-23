@@ -6,9 +6,9 @@ const fs = require('fs');
 const AWS = require('aws-sdk');
 
 AWS.config.update({
-    accessKeyId: "AKIAQMMHMEX35ZWOCP7C",
-    secretAccessKey: "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",
-    region: 'us-east-2',
+accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+region: process.env.AWS_REGION,
 });
 
 const s3 = new AWS.S3();
@@ -99,6 +99,7 @@ const importCsv = async (req, res) => {
                 editable: true,
                 icon: 'headerString',
                 type: 'text',
+                label: 'Text'
             })
         })
 
@@ -251,7 +252,7 @@ const updateSpreadsheet = async (req, res) => {
 const deleteSpreadsheet = async (req, res) => {
     try {
         const id = req.params.id
-        const spreadsheet = await Spreadsheet.findById(id)
+        const spreadsheet = await Spreadsheet.findById(id).select('-columns').select('-rows')
 
         if (!spreadsheet) {
             return res.status(404).json({ message: 'Spreadsheet not found' })
@@ -269,7 +270,7 @@ const deleteSpreadsheet = async (req, res) => {
 const archiveSpreadsheet = async (req, res) => {
     try {
         const id = req.params.id
-        const spreadsheet = await Spreadsheet.findById(id)
+        const spreadsheet = await Spreadsheet.findById(id).select('-columns').select('-rows')
 
         if (!spreadsheet) {
             return res.status(404).json({ message: 'Spreadsheet not found' })
@@ -288,6 +289,9 @@ const archiveSpreadsheet = async (req, res) => {
 
 const uploadS3File = async (req, res) => {
     const file = req.file;
+    if(!file){
+        return res.status(400).json({message: 'Invalid file'})
+    }
 
     const currentUrl = req.get('host');
 
@@ -300,6 +304,7 @@ const uploadS3File = async (req, res) => {
             Bucket: 'airpris3',
             Key: uniqueFileName,
             Body: file.buffer,
+            ResponseContentDisposition: 'inline'
         };
 
         s3.upload(params, (err, data) => {
@@ -310,7 +315,7 @@ const uploadS3File = async (req, res) => {
             res.status(200).send({message: "File Uploaded Successfully", location: currentUrl+"/api/v1/spreadsheet/pdf/"+data.Key});
         });
     } else {
-        res.status(404).json({ message: 'Invalid file type. Only PDF, JPEG, PNG, and DOCX files are allowed'})
+        res.status(400).json({ message: 'Invalid file type. Only PDF, JPEG, PNG, and DOCX files are allowed'})
     }
 
 }

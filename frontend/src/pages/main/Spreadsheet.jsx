@@ -19,7 +19,7 @@ import DeleteSpreadsheetModal from '../../components/modals/DeleteSpreadsheetMod
 import ArchiveSpreadsheetModal from '../../components/modals/ArchiveSpreadsheetModal'
 import { autosave, editSpreadsheet, importCsv } from '../../services/spreadsheet'
 import "@glideapps/glide-data-grid/dist/index.css";
-import { DataEditor, GridCellKind, GridColumnIcon } from '@glideapps/glide-data-grid';
+import { DataEditor, GridCellKind, GridColumnIcon, useCustomCells } from '@glideapps/glide-data-grid';
 import { toast } from 'react-toastify';
 import { LuNetwork, LuSheet, LuTextCursorInput } from 'react-icons/lu'
 import { FaWpforms } from 'react-icons/fa'
@@ -37,6 +37,7 @@ import exportFromJSON from 'export-from-json'
 import EditFieldsModal from '../../components/modals/EditFieldsModal'
 import ShareSpreadsheetModal from '../../components/modals/ShareSpreadsheetModal'
 import ImportingCSVModal from '../../components/modals/ImportingCSVModal'
+import ViewAndUploadAttachmentModal from '../../components/modals/ViewAndUploadAttachmentModal'
 
 
 const Spreadsheet = () => {
@@ -48,6 +49,7 @@ const Spreadsheet = () => {
   const [showNewFieldModal, setShowNewFieldModal] = useState(false)
   const [showEditFieldsModal, setShowEditFieldsModal] = useState(false)
   const [showShareModal, setShowShareModal] = useState(false)
+  const [currAttachment, setCurrAttachment] = useState(null)
 
   const { workspaceId } = useParams()
   const { spreadsheetId } = useParams()
@@ -72,7 +74,6 @@ const Spreadsheet = () => {
   const navigate = useNavigate()
 
 
-
   const getContent = useCallback((cell) => {
     if (spreadsheetData && !loading) {
       const [col, row] = cell;
@@ -81,6 +82,7 @@ const Spreadsheet = () => {
       // const indexes = ["email", "first-name", "last-name", "photo", "opt-in", "title", "more-info", "manager", "hired", "level"];
       // console.log(dataRow)
       const indexes = spreadsheetData['columns'].map(_ => _.id)
+      const labels = spreadsheetData['columns'].map(_ => _.label)
       const d = dataRow[indexes[col]]
       // console.log(d, indexes[col])
       // if (indexes[col] == 'photo') {
@@ -116,43 +118,33 @@ const Spreadsheet = () => {
       //   };
       // }
       // if (indexes)
-      return {
-        kind: GridCellKind.Text,
-        allowOverlay: true,
-        displayData: d,
-        data: d,
-      };
-    }
-  }, [spreadsheetData])
 
 
-  // const data = [
-  //   {
-  //     "email": "lorem@mail.com",
-  //     "first-name": "lorem",
-  //     "last-name": "dolor",
-  //     "photo": "https://images.unsplash.com/photo-1687084626949-93a5e1555fcf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80",
-  //     "opt-in": false,
-  //     "title": 'Chief lorem dolor',
-  //     "more-info": "https://www.sit-amet.com.ng",
-  //     "manager": "lorem amet",
-  //     "hired": "today",
-  //     "level": "level 2"
-  //   },
-  // ];
-
-  // const columns = [
-  //   { title: "Email", id: 'email', editable: true, icon: GridColumnIcon.HeaderString },
-  //   { title: "First Name", id: 'first-name', icon: GridColumnIcon.HeaderString },
-  //   { title: "Last Name", id: 'last-name', icon: GridColumnIcon.HeaderString },
-  //   { title: "Photo", id: 'photo', icon: GridColumnIcon.HeaderImage },
-  //   { title: "Opt-In", id: 'opt-in', icon: GridColumnIcon.HeaderBoolean },
-  //   { title: "Title", id: 'title', icon: GridColumnIcon.HeaderString },
-  //   { title: "More Info", id: 'more-info', icon: GridColumnIcon.HeaderUri },
-  //   { title: "Manager", id: 'manager', icon: GridColumnIcon.HeaderReference },
-  //   { title: "Hired", id: 'hired', icon: GridColumnIcon.HeaderDate },
-  //   { title: "Level", id: 'level' },
-  // ];
+      if (labels[col] == 'Attachment') {
+        if (d?.endsWith('png') || d?.endsWith('jpg') || d?.endsWith('jpeg')) {
+          return {
+            kind: GridCellKind.Image,
+            allowOverlay: false,
+            displayData: [d],
+            data: [d],
+          };
+        } else if (d?.endsWith('doc') || d?.endsWith('docx') || d?.endsWith('pdf')) {
+          return {
+            kind: GridCellKind.Image,
+            allowOverlay: false,
+            displayData: ['https://airpris3.s3.us-east-2.amazonaws.com/1692663251562-ph_file-fill.png'],
+            data: ['https://airpris3.s3.us-east-2.amazonaws.com/1692663251562-ph_file-fill.png'],
+          };
+        }}
+        
+        return {
+          kind: GridCellKind.Text,
+          allowOverlay: true,
+          displayData: d,
+          data: d,
+        };
+      }
+    }, [spreadsheetData])
 
 
   const handleImportCsv = async (e) => {
@@ -413,7 +405,7 @@ const Spreadsheet = () => {
                                   ...spreadsheetData,
                                   rows: [...spreadsheetData.rows, newRow]
                                 })
-                                await autosave({insertNewRow: true}, spreadsheetId)
+                                await autosave({ insertNewRow: true }, spreadsheetId)
                               } catch (error) {
                                 toast.error(error.message)
                               } finally {
@@ -461,22 +453,37 @@ const Spreadsheet = () => {
                   ))
                 }
               </div>
-              <DataEditor width={'100%'} height={spreadsheetData?.rows?.length > 15 ? '80vh' : (spreadsheetData?.rows?.length  * 40) + 40 } className='w-full min-h-full data-editor' getCellContent={getContent} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows?.length} getCellsForSelection={true}
-                keybindings={{ search: true }} onCellEdited={(i, j) => {
+              <DataEditor
+              onCellClicked={(cell) => {
+                const [col, row] = cell;
+                const dataRow = spreadsheetData['rows'][row];
+                const labels = spreadsheetData['columns'].map(_ => _.label)
+                if (labels[col] == 'Attachment') {
+                  setCurrAttachment(cell)
+                }
+              }} 
+              width={'100%'} height={spreadsheetData?.rows?.length > 15 ? '80vh' : (spreadsheetData?.rows?.length * 40) + 40} 
+              className='w-full min-h-full data-editor' getCellContent={getContent} 
+              columns={spreadsheetData?.columns} 
+              rows={spreadsheetData?.rows?.length} 
+              getCellsForSelection={true}
+              keybindings={{ search: true }} 
+              onCellEdited={(i, j) => {
                   (async () => {
                     try {
                       const dataa = spreadsheetData
                       dataa.rows[i[1]][dataa.columns[i[0]]['id']] = j.data
                       setSpreadsheetData(dataa)
                       setSaving(true)
-                      await autosave({cell : {index: i, data: j.data}}, spreadsheetId)
+                      await autosave({ cell: { index: i, data: j.data } }, spreadsheetId)
                     } catch (error) {
                       toast.error(error.message)
                     } finally {
                       setSaving(false)
                     }
                   })()
-                }} />
+                }} 
+            />
             </div>
             :
             <div className='flex flex-col items-center py-[40px]'>
@@ -497,12 +504,13 @@ const Spreadsheet = () => {
 
       <DuplicateSpreadsheetModal showModal={showDuplicateSpreadsheetModal} setShowModal={setShowDuplicateSpreadsheetModal} spreadsheet={spreadsheetData} />
       <SpreadsheetSettingsModal showModal={showSpreadsheetSettingsModal} setShowModal={setShowSpreadsheetSettingsModal} spreadsheet={spreadsheetData} refresh={refresh} setRefresh={setRefresh} />
-      <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetData?._id} />
-      <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetData?._id} />
-      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetData?._id} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} refresh={refresh} setRefresh={setRefresh} />
+      <DeleteSpreadsheetModal showModal={showDeleteSpreadsheetModal} setShowModal={setShowDeleteSpreadsheetModal} id={spreadsheetId} />
+      <ArchiveSpreadsheetModal showModal={showArchiveSpreadsheetModal} setShowModal={setShowArchiveSpreadsheetModal} id={spreadsheetId} />
+      <NewFieldModal showModal={showNewFieldModal} setShowModal={setShowNewFieldModal} id={spreadsheetId} columns={spreadsheetData?.columns} rows={spreadsheetData?.rows} refresh={refresh} setRefresh={setRefresh} />
       <EditFieldsModal showModal={showEditFieldsModal} setShowModal={setShowEditFieldsModal} spreadsheetData={spreadsheetData} refresh={refresh} setRefresh={setRefresh} setSpreadsheetData={setSpreadsheetData} />
-      <ShareSpreadsheetModal showModal={showShareModal} setShowModal={setShowShareModal} id={spreadsheetData?._id} privateAccess={spreadsheetData?.access == "private"} />
+      <ShareSpreadsheetModal showModal={showShareModal} setShowModal={setShowShareModal} id={spreadsheetId} privateAccess={spreadsheetData?.access == "private"} />
       <ImportingCSVModal showModal={importingCSV} />
+      <ViewAndUploadAttachmentModal cell={currAttachment} setCell={setCurrAttachment} showModal={currAttachment != null} spreadsheetData={spreadsheetData} setSpreadsheetData={setSpreadsheetData} setSaving={setSaving} />
 
     </MainContainer >
   )

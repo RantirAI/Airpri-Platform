@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
@@ -16,6 +17,8 @@ import Spreadsheets from './pages/main/Spreadsheets'
 import Spreadsheet from './pages/main/Spreadsheet'
 import SharedSpreadsheet from './pages/shared/Spreadsheet'
 import SharedWorkspace from './pages/shared/Workspace'
+import ScrollSpreadsheet from './pages/shared/ScrollSpreadsheet'
+import ButtonSpreadsheet from './pages/shared/ButtonSpreadsheet'
 
 const index = () => {
 
@@ -70,6 +73,8 @@ const index = () => {
                 }
                 
                 <Route path='/share/spreadsheet/:spreadsheetId' element={<SharedSpreadsheet />} />
+                <Route path='/share/scroll/spreadsheet/:spreadsheetId' element={<ScrollSpreadsheet />} />
+                <Route path='/share/button/spreadsheet/:spreadsheetId' element={<ButtonSpreadsheet />} />
                 <Route path='/share/workspace/:workspaceId' element={<SharedWorkspace />} />
 
                 <Route path='*' element={<NotFound />} />

@@ -49,6 +49,7 @@ const Field = ({ col, cols, setCols, rows, setRows }) => {
                                     const index = cols.findIndex((_) => _.id == col.id)
                                     all[index]['icon'] = ft.icon
                                     all[index]['type'] = ft.value
+                                    all[index]['label'] = ft.label
                                     setCols(all)
                                 }} >
                                     <p className='flex flex-row gap-1 items-center'>

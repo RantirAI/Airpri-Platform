@@ -6,9 +6,9 @@ const fs = require('fs');
 const AWS = require('aws-sdk');
 
 AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
+accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+region: process.env.AWS_REGION,
 });
 
 const s3 = new AWS.S3();
@@ -293,6 +293,8 @@ const uploadS3File = async (req, res) => {
         return res.status(400).json({message: 'Invalid file'})
     }
 
+    const currentUrl = req.get('host');
+
     const allowedMimeTypes = ['application/pdf', 'image/jpeg', 'image/png', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
     if (allowedMimeTypes.includes(file.mimetype)) {
@@ -307,15 +309,35 @@ const uploadS3File = async (req, res) => {
 
         s3.upload(params, (err, data) => {
             if (err) {
-            return res.status(500).send('Error uploading file to S3.');
+                return res.status(500).send('Error uploading file to S3.');
             }
-        
-            res.status(200).send({message: "File Uploaded Successfully", location: data.Location});
+            
+            res.status(200).send({message: "File Uploaded Successfully", location: currentUrl+"/api/v1/spreadsheet/pdf/"+data.Key});
         });
     } else {
         res.status(400).json({ message: 'Invalid file type. Only PDF, JPEG, PNG, and DOCX files are allowed'})
     }
 
+}
+
+const getPDFFile = async (req, res) => {
+    const id = req.params.string;
+
+    console.log("isi id ",id)
+
+    try {
+        const s3Params = {
+          Bucket: 'airpris3',
+          Key: id
+        };
+    
+        const s3Response = await s3.getObject(s3Params).promise();
+        res.set('Content-Type', 'application/pdf');
+        res.send(s3Response.Body);
+      } catch (error) {
+        console.error(error);
+        res.status(500).send('Error fetching or serving PDF from S3.');
+    }
 }
 
 const autosave = async (req, res) => {
@@ -372,5 +394,6 @@ module.exports = {
     archiveSpreadsheet,
     uploadS3File,
     importCsv,
+    getPDFFile,
     autosave
 }
